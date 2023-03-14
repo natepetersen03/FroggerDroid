@@ -41,6 +41,13 @@ allprojects {
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
         maven { url "https://jitpack.io" }
     }
+
+    // jank fix with conflict between these two that would stop Android launcher
+    configurations.all {
+        resolutionStrategy.dependencySubstitution {
+            substitute module('org.hamcrest:hamcrest-core:1.1') with module('junit:junit:4.10')
+        }
+    }
 }
 
 project(":desktop") {

@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import com.x20.frogger.data.TileDatabase;
 import com.x20.frogger.data.TileStruct;
+import com.x20.frogger.game.TileMap;
 
 import junit.runner.Version;
 
@@ -18,27 +19,57 @@ import org.junit.Test;
 public class Test_TileDatabase {
     @Test
     public void checkInitialization() {
-        TileDatabase database = TileDatabase.getInstance();
+        TileDatabase.initDatabase();
         try {
-            TileStruct roadTile = database.getDatabase().get("road");
+            TileStruct roadTile = TileDatabase.getDatabase().get("road");
             assertEquals(roadTile.getTile().isSolid(), false);
         } catch (NullPointerException e) {
             Assert.fail("Database failed to initialize");
         }
 
         try {
-            TileStruct waterTile = database.getDatabase().get("water");
+            TileStruct waterTile = TileDatabase.getDatabase().get("water");
             assertEquals(waterTile.getTile().isDamaging(), true);
         } catch (NullPointerException e) {
             Assert.fail("Database failed to initialize");
         }
 
         try {
-            TileStruct ghostTile = database.getDatabase().get("iron");
+            TileStruct ghostTile = TileDatabase.getDatabase().get("iron");
             assertEquals(ghostTile.getTile().isDamaging(), true);
             Assert.fail("Ghost tile is in database");
         } catch (NullPointerException e) {
             System.out.println("Ghost tile not in database");
         }
+    }
+
+    @Test
+    public void testStringToMap() {
+        TileMap map = TileMap.getInstance();
+        map.generateTileMapFromStringArray(new String[] {
+            "rrrrr",
+            "wwwww",
+            "sssss",
+            "ggggg"
+        });
+        assertEquals(map.getTileStruct(0,0).getTile().getName(), "goal");
+        assertEquals(map.getTileStruct(3,2).getTile().getName(), "water");
+    }
+
+    @Test
+
+    public void testMapToString() {
+        TileMap map = TileMap.getInstance();
+        String[] strMap = new String[] {
+            "rrrrr",
+            "wwwww",
+            "swsws",
+            "rgrrr"
+        };
+        map.generateTileMapFromStringArray(strMap);
+        String[] generated = map.generateStringArrayFromTileMap();
+        assertEquals(map.getTileStruct(1,0).getTile().getName(), "goal");
+        System.out.println(map.toString());
+        Assert.assertArrayEquals(strMap, generated);
     }
 }
