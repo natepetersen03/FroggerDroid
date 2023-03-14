@@ -19,7 +19,7 @@ android {
         }
     }
     defaultConfig {
-        applicationId "com.0x20.frogger"
+        applicationId "com.x20.frogger"
         minSdkVersion 14
         targetSdkVersion 33
         versionCode 1
@@ -84,7 +84,7 @@ task run(type: Exec) {
     }
 
     def adb = path + "/platform-tools/adb"
-    commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.0x20.frogger/com.0x20.frogger.AndroidLauncher'
+    commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.x20.frogger/com.x20.frogger.AndroidLauncher'
 }
 
 eclipse.project.name = appName + "-android"

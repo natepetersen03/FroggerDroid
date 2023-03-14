@@ -1,4 +1,4 @@
-package com.example.froggerdroid.data;
+package com.x20.frogger.data;
 
 public interface Serializable {
     // todo: design save-data system

@@ -4,7 +4,7 @@ sourceCompatibility = '1.7'
 [compileJava, compileTestJava]*.options*.encoding = 'UTF-8'
 
 ext {
-	mainClassName = "com.0x20.frogger.IOSLauncher"
+	mainClassName = "com.x20.frogger.IOSLauncher"
 }
 
 launchIPhoneSimulator.dependsOn build

@@ -1,6 +1,6 @@
-package com.example.froggerdroid.data;
+package com.x20.frogger.data;
 
-public interface Controls {
+public class Controls {
     public enum MOVE {
         RIGHT, UP, LEFT, DOWN
     }

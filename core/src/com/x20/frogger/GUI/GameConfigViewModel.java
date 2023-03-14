@@ -2,36 +2,35 @@ package com.x20.frogger.GUI;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.x20.frogger.data.DataEnums;
+import com.x20.frogger.game.GameConfig;
 
 public class GameConfigViewModel {
 
-    // these fields would go in a data class somewhere else
-    private static DataEnums.Difficulty difficulty;
-    private static DataEnums.Character character;
-    private static String name;
     private static Button goButton;
     public void setGoButton(Button button) {
         goButton = button;
     }
 
     public static void setDifficulty(DataEnums.Difficulty difficulty) {
-        GameConfigViewModel.difficulty = difficulty;
+        GameConfig.setDifficulty(difficulty);
         checkValid();
     }
 
     public static void setCharacter(DataEnums.Character character) {
-        GameConfigViewModel.character = character;
+        GameConfig.setCharacter(character);
         checkValid();
     }
 
     public static void setName(String name) {
-        GameConfigViewModel.name = name;
+        GameConfig.setName(name);
         checkValid();
     }
 
     private static void checkValid() {
         boolean valid = false;
-        if (character != null && difficulty != null && isValidName(name)) {
+        if (GameConfig.getCharacter() != null
+                && GameConfig.getDifficulty() != null
+                && isValidName(GameConfig.getName())) {
             valid = true;
         }
         try {
