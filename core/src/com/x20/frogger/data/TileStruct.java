@@ -11,4 +11,12 @@ public class TileStruct {
         this.tile = tile;
         this.renderData = renderData;
     }
+
+    public Tile getTile() {
+        return tile;
+    }
+
+    public TileRenderData getRenderData() {
+        return renderData;
+    }
 }

@@ -11,7 +11,8 @@ public class TileDatabase {
 
     private static TileDatabase instance;
     private static Map<String, TileStruct> database;
-    {
+
+    private TileDatabase() {
         database = new HashMap<String, TileStruct>();
         database.put("road",
             new TileStruct(
@@ -33,10 +34,12 @@ public class TileDatabase {
                 new Tile("safe", false, false, 0.1f),
                 new TileRenderData(0, 0)
             ));
+
+        System.out.println("Tile database initialized");
     }
 
-    private TileDatabase() {
-        System.out.println("Tile database initialized");
+    public Map<String, TileStruct> getDatabase() {
+        return database;
     }
 
     public static synchronized TileDatabase getInstance() {

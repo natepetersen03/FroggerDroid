@@ -33,4 +33,52 @@ public class TileRenderData {
         this.frames = Math.max(frames, 1);
         this.fps = Math.max(fps, 0);
     }
+
+    public int getTextureX() {
+        return textureX;
+    }
+
+    public void setTextureX(int textureX) {
+        this.textureX = textureX;
+    }
+
+    public int getTextureY() {
+        return textureY;
+    }
+
+    public void setTextureY(int textureY) {
+        this.textureY = textureY;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    public int getFrames() {
+        return frames;
+    }
+
+    public void setFrames(int frames) {
+        this.frames = frames;
+    }
+
+    public int getFps() {
+        return fps;
+    }
+
+    public void setFps(int fps) {
+        this.fps = fps;
+    }
 }
