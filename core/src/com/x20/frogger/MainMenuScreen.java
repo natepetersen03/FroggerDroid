@@ -84,7 +84,7 @@ public class MainMenuScreen extends ScreenAdapter {
     }
 
     private void constructGUI() {
-        stage = new Stage(new ScreenViewport());
+        stage = new Stage(new ExtendViewport(500, 480));
 
         Gdx.input.setInputProcessor(stage);
         GameConfigViewModel gameConfigViewModel = new GameConfigViewModel();
