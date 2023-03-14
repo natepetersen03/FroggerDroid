@@ -149,27 +149,13 @@ public class GameScreen implements Screen {
     }
 
     private TiledMap constructMap() {
-        TiledMap tileMap = new TiledMap();
         int mapWidth = Gdx.graphics.getWidth()/tileSize;
         int mapHeight = Gdx.graphics.getHeight()/tileSize;
-        System.out.println(mapWidth);
-        System.out.println(mapHeight);
-        TiledMapTileSet tileSet = new TiledMapTileSet();
-        tileSet.putTile(0, new GrassTile());
 
-        TiledMapTileLayer mapLayer = new TiledMapTileLayer(mapWidth, mapHeight, tileSize, tileSize);
+        MapGenerator mapGenerator = new MapGenerator(mapWidth, mapHeight);
+        mapGenerator.createMap1();
 
-        for (int row = 0; row < mapHeight; row++) {
-            for (int col = 0; col < mapWidth; col++) {
-                TiledMapTileLayer.Cell cell = new TiledMapTileLayer.Cell();
-                cell.setTile(tileSet.getTile(0));
-                mapLayer.setCell(col, row, cell);
-            }
-        }
-
-        tileMap.getLayers().add(mapLayer);
-
-        return tileMap;
+        return mapGenerator.returnMap();
     }
 
     private void constructUI() {
