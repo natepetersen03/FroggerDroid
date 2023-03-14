@@ -46,8 +46,8 @@ public class MainMenuScreen extends ScreenAdapter {
         constructGUI();
     }
 
-    private void switchToGameScreen() {
-        game.setScreen(new GameScreen(game));
+    private void switchToGameConfigScreen() {
+        game.setScreen(new GameConfigScreen(game));
         this.dispose();
     }
 
@@ -93,18 +93,8 @@ public class MainMenuScreen extends ScreenAdapter {
         table.setTouchable(enabled);
         table.setFillParent(true);
 
-        Label label = new Label("New Game", skin, "dark-bg");
-        setGameLabel(table, label);
-
-        table.row();
-        TextField textField = new TextField(null, skin);
-        setNameField(table, textField);
-
-        table.row();
-        setSpriteButtons(table);
-
-        table.row();
-        setDifficulty(table, label);
+        Label label = new Label("WORK IN PROGRESS", skin, "dark-bg");
+        setTitleLabel(table, label);
 
         table.row();
         TextButton textButton = new TextButton("Play", skin);
@@ -115,142 +105,7 @@ public class MainMenuScreen extends ScreenAdapter {
         stage.addActor(table);
     }
 
-    private void setSpriteButtons(Table table) {
-        ImageButton steveButton = new ImageButton(skin, "steve");
-        table.add(steveButton)
-                .padTop(3.0f)
-                .padBottom(3.0f)
-                .minSize(96.0f);
-
-        ImageButton alexButton = new ImageButton(skin, "alex");
-        table.add(alexButton)
-                .padTop(3.0f)
-                .padBottom(3.0f)
-                .minWidth(100.0f)
-                .minHeight(96.0f);
-
-        ImageButton endermanButton = new ImageButton(skin, "enderman");
-        table.add(endermanButton)
-                .padTop(3.0f)
-                .padBottom(3.0f)
-                .minSize(96.0f);
-
-        // Radio button group
-        ButtonGroup<ImageButton> characterButtons = new ButtonGroup(
-                steveButton,
-                alexButton,
-                endermanButton
-        );
-        characterButtons.setMinCheckCount(1);
-        characterButtons.setMaxCheckCount(1);
-        characterButtons.setUncheckLast(true);
-
-        final CharacterRadio characterRadio = new CharacterRadio();
-        final EnumHandler<DataEnums.Character> cHandler = new EnumHandler<>(characterRadio);
-        steveButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                cHandler.act(DataEnums.Character.STEVE);
-            }
-        });
-        alexButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                cHandler.act(DataEnums.Character.ALEX);
-            }
-        });
-        endermanButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                cHandler.act(DataEnums.Character.ENDERMAN);
-            }
-        });
-    }
-
-    private void setDifficulty(Table table, Label label) {
-        label = new Label("Difficulty", skin, "dark-bg");
-        label.setAlignment(Align.center);
-        table.add(label)
-                .spaceTop(32.0f)
-                .spaceBottom(8.0f)
-                .fillX()
-                .minWidth(250.0f)
-                .minHeight(42.0f)
-                .colspan(3);
-
-        table.row();
-        CheckBox easyBox = new CheckBox("Easy", skin);
-        table.add(easyBox)
-                .padRight(3.0f)
-                .minHeight(42.0f)
-                .prefWidth(128.0f);
-
-        CheckBox normalBox = new CheckBox("Normal", skin);
-        table.add(normalBox)
-                .padLeft(3.0f)
-                .padRight(3.0f)
-                .minHeight(42.0f)
-                .prefWidth(128.0f);
-
-        CheckBox hardBox = new CheckBox("Hard", skin);
-        table.add(hardBox)
-                .padLeft(3.0f)
-                .minHeight(42.0f)
-                .prefWidth(128.0f);
-
-
-        // Radio button group
-        ButtonGroup<CheckBox> difficultyButtons = new ButtonGroup(
-                easyBox,
-                normalBox,
-                hardBox
-        );
-        difficultyButtons.setMinCheckCount(1);
-        difficultyButtons.setMaxCheckCount(1);
-        difficultyButtons.setUncheckLast(true);
-
-        final DifficultyRadio difficultyRadio = new DifficultyRadio();
-        final EnumHandler<DataEnums.Difficulty> dHandler = new EnumHandler<>(difficultyRadio);
-
-        easyBox.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                dHandler.act(DataEnums.Difficulty.EASY);
-            }
-        });
-        normalBox.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                dHandler.act(DataEnums.Difficulty.NORMAL);
-            }
-        });
-        hardBox.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                dHandler.act(DataEnums.Difficulty.HARD);
-            }
-        });
-    }
-
-    private void setNameField(Table table, TextField textField) {
-        textField.setMessageText("Name");
-        table.add(textField)
-                .spaceTop(8.0f)
-                .spaceBottom(32.0f)
-                .fillX()
-                .minHeight(42.0f)
-                .colspan(3);
-        textField.getStyle().cursor.setMinWidth(3);
-        textField.setTextFieldListener(new TextField.TextFieldListener() {
-            @Override
-            public void keyTyped(TextField textField, char c) {
-                GameConfigViewModel.setName(textField.getText());
-            }
-        });
-    }
-
-
-    private void setGameLabel(Table table, Label label) {
+    private void setTitleLabel(Table table, Label label) {
         label.setAlignment(Align.center);
         table.add(label)
                 .spaceBottom(8.0f)
@@ -267,11 +122,10 @@ public class MainMenuScreen extends ScreenAdapter {
                 .fillX()
                 .minHeight(44.0f)
                 .colspan(3);
-        textButton.setDisabled(true);
         textButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                switchToGameScreen();
+                switchToGameConfigScreen();
             }
         });
     }
