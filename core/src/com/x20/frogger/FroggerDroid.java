@@ -40,11 +40,7 @@ public class FroggerDroid extends Game {
         parameter.genMipMaps = false;
 
         assetManager.load("mc-style.atlas", TextureAtlas.class);
-
-        assetManager.load("drop.png", Texture.class);
-        assetManager.load("bucket.png", Texture.class);
-        assetManager.load("drop.wav", Sound.class);
-        assetManager.load("rain.wav", Music.class);
+        assetManager.load("grass.png", Texture.class);
         // end game init
 
         skinGUI = FTFSkinLoader.loadFTFSkin("mc-style.json");

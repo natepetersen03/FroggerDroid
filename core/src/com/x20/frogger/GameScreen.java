@@ -10,6 +10,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.Map;
+import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -26,6 +34,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.x20.frogger.GUI.GameConfigViewModel;
 import com.x20.frogger.data.DataEnums;
 import com.x20.frogger.game.GameConfig;
+import com.x20.frogger.graphics.GrassTile;
 
 public class GameScreen implements Screen {
     private final FroggerDroid game;
@@ -51,8 +60,11 @@ public class GameScreen implements Screen {
     private float tableHeight;
     private int score;
     private float maxY;
+    private float unitScale;
 
     private Sprite character;
+    private TiledMap tileMap;
+    TiledMapRenderer renderer;
 
     public GameScreen(final FroggerDroid game) {
         this.game = game;
@@ -64,9 +76,11 @@ public class GameScreen implements Screen {
         this.skin = game.getSkinGUI();
         this.score = 0;
         this.maxY = 0;
+        this.tileSize = 64;
+        this.unitScale = 1 / tileSize;
         constructUI();
 
-        this.tileSize = 64;
+        this.tileMap = constructMap();
 
         TextureAtlas atlas = game.getAssetManager().get("mc-style.atlas");
         TextureRegion region = atlas.findRegion(GameConfigViewModel.getCharacterAtlas());
@@ -77,6 +91,9 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         game.getAssetManager().finishLoading();
+        //TODO:
+        // figure out what unit scale is
+        renderer = new OrthogonalTiledMapRenderer(tileMap, 1);
     }
 
     @Override
@@ -84,6 +101,11 @@ public class GameScreen implements Screen {
         if (!paused) {
             Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+
+
+            viewport.apply(true);
+            renderer.setView(camera);
+            renderer.render();
 
             stage.act();
             stage.draw();
@@ -124,6 +146,30 @@ public class GameScreen implements Screen {
                     + "[#FFFFFF])  Lives: [#ADD8E6]" + getLives(GameConfig.getDifficulty())
                     + "  [#FFFFFF]Score: [#A020F0]" + score);
         }
+    }
+
+    private TiledMap constructMap() {
+        TiledMap tileMap = new TiledMap();
+        int mapWidth = Gdx.graphics.getWidth()/tileSize;
+        int mapHeight = Gdx.graphics.getHeight()/tileSize;
+        System.out.println(mapWidth);
+        System.out.println(mapHeight);
+        TiledMapTileSet tileSet = new TiledMapTileSet();
+        tileSet.putTile(0, new GrassTile());
+
+        TiledMapTileLayer mapLayer = new TiledMapTileLayer(mapWidth, mapHeight, tileSize, tileSize);
+
+        for (int row = 0; row < mapHeight; row++) {
+            for (int col = 0; col < mapWidth; col++) {
+                TiledMapTileLayer.Cell cell = new TiledMapTileLayer.Cell();
+                cell.setTile(tileSet.getTile(0));
+                mapLayer.setCell(col, row, cell);
+            }
+        }
+
+        tileMap.getLayers().add(mapLayer);
+
+        return tileMap;
     }
 
     private void constructUI() {
