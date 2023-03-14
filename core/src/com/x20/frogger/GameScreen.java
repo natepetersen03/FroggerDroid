@@ -1,20 +1,31 @@
 package com.x20.frogger;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.TimeUtils;
-
-import java.util.Iterator;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.x20.frogger.GUI.GameConfigViewModel;
+import com.x20.frogger.data.DataEnums;
+import com.x20.frogger.game.GameConfig;
 
 public class GameScreen implements Screen {
     private final FroggerDroid game;
@@ -31,121 +42,200 @@ public class GameScreen implements Screen {
     private boolean paused;
     private int dropsGathered;
 
+    private Stage stage;
+    private Skin skin;
+    private Viewport viewport;
+    Label updateLabel;
+
+    private int tileSize;
+    private float tableHeight;
+    private int score;
+    private float maxY;
+
+    private Sprite character;
+
     public GameScreen(final FroggerDroid game) {
         this.game = game;
+        this.camera = new OrthographicCamera();
+        this.camera.setToOrtho(false, 800, 480);
+        this.viewport = new ExtendViewport(800, 400, camera);
+        this.stage = new Stage(viewport);
 
-        // textures are 64x64
-        dropImage = game.getAssetManager().get("drop.png", Texture.class);
-        bucketImage = game.getAssetManager().get("bucket.png", Texture.class);
+        this.skin = game.getSkinGUI();
+        this.score = 0;
+        this.maxY = 0;
+        constructUI();
 
-        // placeholder sounds
-        dropSound = game.getAssetManager().get("drop.wav", Sound.class);
-        rainMusic = game.getAssetManager().get("rain.wav", Music.class);
-        rainMusic.setLooping(true);
+        this.tileSize = 64;
 
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 480);
-
-        bucket = new Rectangle();
-        bucket.x = 800 / 2 - 64 / 2;
-        bucket.y = 20;
-        bucket.width = 64;
-        bucket.height = 64;
-
-        raindrops = new Array<Rectangle>();
-        spawnRaindrop();
+        TextureAtlas atlas = game.getAssetManager().get("mc-style.atlas");
+        TextureRegion region = atlas.findRegion(GameConfigViewModel.getCharacterAtlas());
+        this.character = new Sprite(region);
+        character.setPosition(Gdx.graphics.getWidth()/2 - character.getWidth()/2, 0);
     }
 
     @Override
     public void show() {
-        // start rain music when screen is shown
-        rainMusic.play();
+        game.getAssetManager().finishLoading();
     }
 
     @Override
     public void render(float delta) {
         if (!paused) {
+            Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+
+            stage.act();
+            stage.draw();
+
             update();
 
-            // clear the screen with a dark blue background
-            ScreenUtils.clear(0, 0, 0.2f, 1);
-            camera.update();
-            // use the coordinate system provided by the camera
-            game.getBatch().setProjectionMatrix(camera.combined);
-            // parallel draw calls
             game.getBatch().begin();
-            game.getBatch().draw(bucketImage, bucket.x, bucket.y);
-            for (Rectangle raindrop: raindrops) {
-                game.getBatch().draw(dropImage, raindrop.x, raindrop.y);
-            }
+            character.draw(game.getBatch());
             game.getBatch().end();
         }
     }
 
     @Override
     public void resize(int width, int height) {
-
+        stage.getViewport().update(width, height, true);
     }
 
     public void update() {
-        // touch input snapping
-        if (Gdx.input.isTouched()) {
-            touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
-            // transform screen coordinates into camera-space coordinates
-            camera.unproject(touchPos);
-            bucket.x = touchPos.x - bucket.width / 2;
-        }
-
-        // keyboard input
-        if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-            bucket.x -= 200 * Gdx.graphics.getDeltaTime();
-        }
-        if (Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-            bucket.x += 200 * Gdx.graphics.getDeltaTime();
-        }
-
         // bounds restriction
-        if (bucket.x < 0) {
-            bucket.x = 0;
+        if (character.getX() < 0) {
+            character.setX(0);
         }
-        if (bucket.x > 800 - bucket.width) {
-            bucket.x = 800 - bucket.width;
-        }
-
-        // rectangle update
-        for (Iterator<Rectangle> iter = raindrops.iterator(); iter.hasNext();) {
-            Rectangle raindrop = iter.next();
-            raindrop.y -= 200 * Gdx.graphics.getDeltaTime();
-            if (raindrop.y + raindrop.height < 0) {
-                iter.remove();
-            }
-
-            if (raindrop.overlaps(bucket)) {
-                dropsGathered++;
-                dropSound.play();
-                iter.remove();
-            }
+        if (character.getX() > Gdx.graphics.getWidth() - character.getWidth()) {
+            character.setX(Gdx.graphics.getWidth() - character.getWidth());
         }
 
-        // raindrop spawn
-        if (TimeUtils.nanoTime() - lastDropTime > 1000000000) {
-            spawnRaindrop();
+        if (character.getY() < 0) {
+            character.setY(0);
+        }
+        if (character.getY() > Gdx.graphics.getHeight() - character.getHeight() - tableHeight) {
+            character.setY(Gdx.graphics.getHeight() - character.getHeight() - tableHeight);
+        }
+
+        if (maxY < character.getY()) {
+            maxY = character.getY();
+            score += 1;
+            updateLabel.setText("([#00FF00]" + GameConfig.getName()
+                    + "[#FFFFFF])  Lives: [#ADD8E6]" + getLives(GameConfig.getDifficulty())
+                    + "  [#FFFFFF]Score: [#A020F0]" + score);
         }
     }
 
-    private void spawnRaindrop() {
-        Rectangle raindrop = new Rectangle();
-        raindrop.width = 64;
-        raindrop.height = 64;
-        raindrop.x = MathUtils.random(0, 800 - raindrop.width);
-        raindrop.y = 480;
-        raindrops.add(raindrop);
-        lastDropTime = TimeUtils.nanoTime();
+    private void constructUI() {
+
+        stage = new Stage(new ExtendViewport(500, 480));
+        Gdx.input.setInputProcessor(stage);
+
+        Table table = new Table();
+        table.align(Align.top);
+        table.setFillParent(true);
+
+        Label label = new Label("Frogger! ", skin, "dark-bg");
+        label.setAlignment(Align.top);
+        table.add(label).growX();
+
+        table.row();
+        skin.getFont("Pixelify").getData().markupEnabled = true;
+        updateLabel = new Label("([#00FF00]" + GameConfig.getName()
+                + "[#FFFFFF])  Lives: [#ADD8E6]" + getLives(GameConfig.getDifficulty())
+                + "  [#FFFFFF]Score: [#A020F0]" + score, skin, "dark-bg");
+        updateLabel.setAlignment(Align.top);
+        this.tableHeight = 200;
+        table.add(updateLabel).growX();
+        stage.addActor(table);
+
+        Table moveTable = new Table();
+        setButtons(moveTable);
+        stage.addActor(moveTable);
+
+    }
+
+    private void setButtons(Table table) {
+        table.setColor(skin.getColor("white"));
+        table.padLeft(0.0f);
+        table.padRight(10.0f);
+        table.padTop(0.0f);
+        table.padBottom(10.0f);
+        table.align(Align.bottomRight);
+        table.setFillParent(true);
+
+        table.add();
+
+        ImageButton upButton = new ImageButton(skin, "up");
+        table.add(upButton);
+
+        table.add();
+
+        table.row();
+        ImageButton leftButton = new ImageButton(skin, "left");
+        table.add(leftButton);
+
+        ImageButton centerButton = new ImageButton(skin, "center");
+        table.add(centerButton);
+
+        ImageButton rightButton = new ImageButton(skin, "right");
+        table.add(rightButton);
+
+        table.row();
+        table.add();
+
+        ImageButton downButton = new ImageButton(skin, "down");
+        table.add(downButton);
+
+        table.add();
+        addMovementListeners(upButton, leftButton, rightButton, downButton);
+    }
+
+    private void addMovementListeners(ImageButton up, ImageButton left, ImageButton right, ImageButton down) {
+        up.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                character.setY(character.getY() + tileSize);
+            }
+        });
+
+        right.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                character.setX(character.getX() + tileSize);
+            }
+        });
+
+        left.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                character.setX(character.getX() - tileSize);
+            }
+        });
+
+        down.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                character.setY(character.getY() - tileSize);
+            }
+        });
+    }
+
+    private String getLives(DataEnums.Difficulty difficulty) {
+        switch(difficulty){
+            case EASY:
+                return "10";
+            case HARD:
+                return "1";
+            case NORMAL:
+                return "5";
+        }
+        return "NULL";
     }
 
     @Override
     public void dispose() {
-        // now handled in Drop.java by the AssetManager
+        // now handled in FroggerDroid.java by the AssetManager
     }
 
     @Override

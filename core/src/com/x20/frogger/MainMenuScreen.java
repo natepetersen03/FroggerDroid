@@ -81,7 +81,6 @@ public class MainMenuScreen extends ScreenAdapter {
     @Override
     public void dispose() {
         stage.dispose();
-        skin.dispose();
     }
 
     private void constructGUI() {
@@ -95,34 +94,28 @@ public class MainMenuScreen extends ScreenAdapter {
         table.setFillParent(true);
 
         Label label = new Label("New Game", skin, "dark-bg");
-        label.setAlignment(Align.center);
-        table.add(label)
-                .spaceBottom(8.0f)
-                .fillX()
-                .minWidth(300.0f)
-                .minHeight(42.0f)
-                .colspan(3);
+        setGameLabel(table, label);
 
         table.row();
         TextField textField = new TextField(null, skin);
-        TextField.TextFieldStyle t = textField.getStyle();
-        t.cursor = skin.getDrawable("cursor");
-        t.cursor.setMinWidth(3f);
-        textField.setMessageText("Name");
-        table.add(textField)
-                .spaceTop(8.0f)
-                .spaceBottom(32.0f)
-                .fillX()
-                .minHeight(42.0f)
-                .colspan(3);
-        textField.setTextFieldListener(new TextField.TextFieldListener() {
-            @Override
-            public void keyTyped(TextField textField, char c) {
-                GameConfigViewModel.setName(textField.getText());
-            }
-        });
+        setNameField(table, textField);
 
         table.row();
+        setSpriteButtons(table);
+
+        table.row();
+        setDifficulty(table, label);
+
+        table.row();
+        TextButton textButton = new TextButton("Play", skin);
+        setPlayButton(table, textButton);
+
+        gameConfigViewModel.setGoButton(textButton);
+
+        stage.addActor(table);
+    }
+
+    private void setSpriteButtons(Table table) {
         ImageButton steveButton = new ImageButton(skin, "steve");
         table.add(steveButton)
                 .padTop(3.0f)
@@ -172,8 +165,9 @@ public class MainMenuScreen extends ScreenAdapter {
                 cHandler.act(DataEnums.Character.ENDERMAN);
             }
         });
+    }
 
-        table.row();
+    private void setDifficulty(Table table, Label label) {
         label = new Label("Difficulty", skin, "dark-bg");
         label.setAlignment(Align.center);
         table.add(label)
@@ -203,6 +197,7 @@ public class MainMenuScreen extends ScreenAdapter {
                 .padLeft(3.0f)
                 .minHeight(42.0f)
                 .prefWidth(128.0f);
+
 
         // Radio button group
         ButtonGroup<CheckBox> difficultyButtons = new ButtonGroup(
@@ -235,9 +230,37 @@ public class MainMenuScreen extends ScreenAdapter {
                 dHandler.act(DataEnums.Difficulty.HARD);
             }
         });
+    }
 
-        table.row();
-        TextButton textButton = new TextButton("Play", skin);
+    private void setNameField(Table table, TextField textField) {
+        textField.setMessageText("Name");
+        table.add(textField)
+                .spaceTop(8.0f)
+                .spaceBottom(32.0f)
+                .fillX()
+                .minHeight(42.0f)
+                .colspan(3);
+        textField.getStyle().cursor.setMinWidth(3);
+        textField.setTextFieldListener(new TextField.TextFieldListener() {
+            @Override
+            public void keyTyped(TextField textField, char c) {
+                GameConfigViewModel.setName(textField.getText());
+            }
+        });
+    }
+
+
+    private void setGameLabel(Table table, Label label) {
+        label.setAlignment(Align.center);
+        table.add(label)
+                .spaceBottom(8.0f)
+                .fillX()
+                .minWidth(300.0f)
+                .minHeight(42.0f)
+                .colspan(3);
+    }
+
+    public void setPlayButton(Table table, TextButton textButton) {
         table.add(textButton)
                 .spaceTop(32.0f)
                 .spaceBottom(4.0f)
@@ -251,9 +274,5 @@ public class MainMenuScreen extends ScreenAdapter {
                 switchToGameScreen();
             }
         });
-
-        gameConfigViewModel.setGoButton(textButton);
-
-        stage.addActor(table);
     }
 }

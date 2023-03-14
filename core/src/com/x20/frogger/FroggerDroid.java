@@ -1,5 +1,6 @@
 package com.x20.frogger;
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.x20.frogger.utils.FTFSkinLoader;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
@@ -38,6 +39,8 @@ public class FroggerDroid extends Game {
         parameter.magFilter = Texture.TextureFilter.Nearest;
         parameter.genMipMaps = false;
 
+        assetManager.load("mc-style.atlas", TextureAtlas.class);
+
         assetManager.load("drop.png", Texture.class);
         assetManager.load("bucket.png", Texture.class);
         assetManager.load("drop.wav", Sound.class);
@@ -56,6 +59,7 @@ public class FroggerDroid extends Game {
     public void dispose() {
         batch.dispose();
         assetManager.dispose();
+        skinGUI.dispose();
     }
 
 }
