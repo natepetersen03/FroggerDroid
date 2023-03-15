@@ -6,8 +6,6 @@ import com.x20.frogger.data.TileDatabase;
 import com.x20.frogger.data.TileStruct;
 import com.x20.frogger.game.TileMap;
 
-import junit.runner.Version;
-
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -16,7 +14,7 @@ import org.junit.Test;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
-public class Test_TileDatabase {
+public class TestTileDatabase {
     @Test
     public void checkInitialization() {
         TileDatabase.initDatabase();
@@ -52,8 +50,8 @@ public class Test_TileDatabase {
             "sssss",
             "ggggg"
         });
-        assertEquals(map.getTileStruct(0,0).getTile().getName(), "goal");
-        assertEquals(map.getTileStruct(3,2).getTile().getName(), "water");
+        assertEquals(map.getTileStruct(0, 0).getTile().getName(), "goal");
+        assertEquals(map.getTileStruct(3, 2).getTile().getName(), "water");
     }
 
     @Test
@@ -68,7 +66,7 @@ public class Test_TileDatabase {
         };
         map.generateTileMapFromStringArray(strMap);
         String[] generated = map.generateStringArrayFromTileMap();
-        assertEquals(map.getTileStruct(1,0).getTile().getName(), "goal");
+        assertEquals(map.getTileStruct(1, 0).getTile().getName(), "goal");
         System.out.println(map.toString());
         Assert.assertArrayEquals(strMap, generated);
     }

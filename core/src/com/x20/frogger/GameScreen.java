@@ -10,14 +10,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.Map;
-import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -29,14 +25,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.badlogic.gdx.math.MathUtils;
 import com.x20.frogger.GUI.GameConfigViewModel;
 import com.x20.frogger.data.DataEnums;
 import com.x20.frogger.game.GameConfig;
-import com.x20.frogger.graphics.GrassTile;
+
 import java.util.Iterator;
 
 public class GameScreen implements Screen {
@@ -55,7 +49,7 @@ public class GameScreen implements Screen {
     private Stage stage;
     private Skin skin;
     private Viewport viewport;
-    Label updateLabel;
+    private Label updateLabel;
 
     private int tileSize;
     private float tableHeight;
@@ -65,7 +59,7 @@ public class GameScreen implements Screen {
 
     private Sprite character;
     private TiledMap tileMap;
-    TiledMapRenderer renderer;
+    private TiledMapRenderer renderer;
 
     public GameScreen(final FroggerDroid game) {
         this.game = game;
@@ -85,12 +79,12 @@ public class GameScreen implements Screen {
         this.tileMap = constructMap();
 
         DataEnums.VehicleType[] vehicleTypes = {
-                DataEnums.VehicleType.IRON_GOLEM,
-                DataEnums.VehicleType.CREEPER,
-                DataEnums.VehicleType.SKELETON,
-                DataEnums.VehicleType.IRON_GOLEM,
-                DataEnums.VehicleType.SKELETON,
-                DataEnums.VehicleType.CREEPER
+            DataEnums.VehicleType.IRON_GOLEM,
+            DataEnums.VehicleType.CREEPER,
+            DataEnums.VehicleType.SKELETON,
+            DataEnums.VehicleType.IRON_GOLEM,
+            DataEnums.VehicleType.SKELETON,
+            DataEnums.VehicleType.CREEPER
         };
 
         for (int i = 0; i < 6; i++) {
@@ -104,14 +98,13 @@ public class GameScreen implements Screen {
         TextureAtlas atlas = game.getAssetManager().get("mc-style.atlas");
         TextureRegion region = atlas.findRegion(GameConfigViewModel.getCharacterAtlas());
         this.character = new Sprite(region);
-        character.setPosition(Gdx.graphics.getWidth()/2 - character.getWidth()/2, 0);
+        character.setPosition(Gdx.graphics.getWidth() / 2 - character.getWidth() / 2, 0);
     }
 
     @Override
     public void show() {
         game.getAssetManager().finishLoading();
-        //TODO:
-        // figure out what unit scale is
+        // todo: figure out what unit scale is
         renderer = new OrthogonalTiledMapRenderer(tileMap, 1);
     }
 
@@ -137,7 +130,9 @@ public class GameScreen implements Screen {
             character.draw(game.getBatch());
             for (Iterator<Vehicle> iter = vehicles.iterator(); iter.hasNext();) {
                 Vehicle vehicle = iter.next();
-                game.getBatch().draw(vehicle.getVehicleImage(), vehicle.getHitbox().x, vehicle.getHitbox().y);
+                game.getBatch().draw(
+                    vehicle.getVehicleImage(), vehicle.getHitbox().x, vehicle.getHitbox().y
+                );
             }
             game.getBatch().end();
         }
@@ -179,8 +174,8 @@ public class GameScreen implements Screen {
     }
 
     private TiledMap constructMap() {
-        int mapWidth = Gdx.graphics.getWidth()/tileSize;
-        int mapHeight = Gdx.graphics.getHeight()/tileSize;
+        int mapWidth = Gdx.graphics.getWidth() / tileSize;
+        int mapHeight = Gdx.graphics.getHeight() / tileSize;
 
         MapGenerator mapGenerator = new MapGenerator(mapWidth, mapHeight);
         mapGenerator.createMap1();
@@ -261,35 +256,37 @@ public class GameScreen implements Screen {
             int spacing;
             Texture sprite;
             switch (vehicleTypes[y]) {
-                case IRON_GOLEM:
-                    width = 120;
-                    velocity = 60;
-                    spacing = 400;
-                    sprite = game.getAssetManager().get("ironGolem.png", Texture.class);
-                    break;
-                case CREEPER:
-                    width = 60;
-                    velocity = 100;
-                    spacing = 500;
-                    sprite = game.getAssetManager().get("creeper.png", Texture.class);
-                    break;
-                case SKELETON:
-                    width = 100;
-                    velocity = 80;
-                    spacing = 300;
-                    sprite = game.getAssetManager().get("skeleton.png", Texture.class);
-                    break;
-                default:
-                    width = 110;
-                    velocity = 60;
-                    spacing = 400;
-                    sprite = game.getAssetManager().get("creeper.png", Texture.class);
-                    break;
+            case IRON_GOLEM:
+                width = 120;
+                velocity = 60;
+                spacing = 400;
+                sprite = game.getAssetManager().get("ironGolem.png", Texture.class);
+                break;
+            case CREEPER:
+                width = 60;
+                velocity = 100;
+                spacing = 500;
+                sprite = game.getAssetManager().get("creeper.png", Texture.class);
+                break;
+            case SKELETON:
+                width = 100;
+                velocity = 80;
+                spacing = 300;
+                sprite = game.getAssetManager().get("skeleton.png", Texture.class);
+                break;
+            default:
+                width = 110;
+                velocity = 60;
+                spacing = 400;
+                sprite = game.getAssetManager().get("creeper.png", Texture.class);
+                break;
 
             }
 
             for (int x = 0; x < Gdx.graphics.getWidth(); x += spacing) {
-                Vehicle vehicle = new Vehicle(x, 100 + (y + 1)*100, 100, width, velocity, sprite);
+                Vehicle vehicle = new Vehicle(
+                    x, 100 + (y + 1) * 100, 100, width, velocity, sprite
+                );
                 spawnedVehicles.add(vehicle);
             }
         }
@@ -299,17 +296,23 @@ public class GameScreen implements Screen {
 
     public DataEnums.VehicleType generateVehicleType(int x) {
         switch (x) {
-            case 1:
-                return DataEnums.VehicleType.IRON_GOLEM;
-            case 2:
-                return DataEnums.VehicleType.CREEPER;
-            case 3:
-                return DataEnums.VehicleType.SKELETON;
+        case 1:
+            return DataEnums.VehicleType.IRON_GOLEM;
+        case 2:
+            return DataEnums.VehicleType.CREEPER;
+        case 3:
+            return DataEnums.VehicleType.SKELETON;
+        default:
+            return DataEnums.VehicleType.SKELETON;
         }
-        return DataEnums.VehicleType.SKELETON;
     }
 
-    private void addMovementListeners(ImageButton up, ImageButton left, ImageButton right, ImageButton down) {
+    private void addMovementListeners(
+        ImageButton up,
+        ImageButton left,
+        ImageButton right,
+        ImageButton down
+    ) {
         up.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -340,15 +343,16 @@ public class GameScreen implements Screen {
     }
 
     private String getLives(DataEnums.Difficulty difficulty) {
-        switch(difficulty){
-            case EASY:
-                return "10";
-            case HARD:
-                return "1";
-            case NORMAL:
-                return "5";
+        switch (difficulty) {
+        case EASY:
+            return "10";
+        case HARD:
+            return "1";
+        case NORMAL:
+            return "5";
+        default:
+            return "NULL";
         }
-        return "NULL";
     }
 
     @Override

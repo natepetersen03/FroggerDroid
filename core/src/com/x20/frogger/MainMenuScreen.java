@@ -2,30 +2,21 @@ package com.x20.frogger;
 
 import static com.badlogic.gdx.scenes.scene2d.Touchable.enabled;
 
-import com.x20.frogger.GUI.CharacterRadio;
-import com.x20.frogger.GUI.DifficultyRadio;
-import com.x20.frogger.GUI.EnumHandler;
-import com.x20.frogger.GUI.GameConfigViewModel;
-import com.x20.frogger.data.DataEnums;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
-import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
-import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.x20.frogger.GUI.GameConfigViewModel;
 
 public class MainMenuScreen extends ScreenAdapter {
 

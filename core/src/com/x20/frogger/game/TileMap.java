@@ -20,7 +20,7 @@ public class TileMap {
     }
 
     public int[] getDimensions() {
-        return new int[] { tilemap.length, tilemap[0].length };
+        return new int[] {tilemap.length, tilemap[0].length};
     }
 
     public int getWidth() {

@@ -1,5 +1,4 @@
 package com.x20.frogger.game;
-import com.x20.frogger.data.Controls;
 
 public class GameLogic {
     private static GameLogic instance;

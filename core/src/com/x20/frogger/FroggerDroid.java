@@ -1,17 +1,13 @@
 package com.x20.frogger;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.x20.frogger.utils.FTFSkinLoader;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.TextureLoader;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-
-import org.w3c.dom.Text;
+import com.x20.frogger.utils.FTFSkinLoader;
 
 
 public class FroggerDroid extends Game {

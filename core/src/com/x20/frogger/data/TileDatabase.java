@@ -22,35 +22,27 @@ public class TileDatabase {
         keyToChar = new HashMap<String, Character>();
 
         generateEntry(
-            "road",'r',
-            false,false,0,
-            0,0,
-            16,16,
-            1,0
+            new TileID("road", 'r'),
+            new TileProperties(false, false, 0),
+            new TileSpriteData(0, 0, 16, 16, 1, 0)
         );
 
         generateEntry(
-            "water",'w',
-            false,true,0.1f,
-            0,0,
-            16,16,
-            1,0
+            new TileID("water", 'w'),
+            new TileProperties(false, true, 0.1f),
+            new TileSpriteData(0, 0, 16, 16, 1, 0)
         );
 
         generateEntry(
-            "safe",'s',
-            false,false,0f,
-            0,0,
-            16,16,
-            1,0
+            new TileID("safe", 's'),
+            new TileProperties(false, false, 0f),
+            new TileSpriteData(0, 0, 16, 16, 1, 0)
         );
 
         generateEntry(
-            "goal",'g',
-            false,false,0f,
-            0,0,
-            16,16,
-            1,0
+            new TileID("goal", 'g'),
+            new TileProperties(false, false, 0f),
+            new TileSpriteData(0, 0, 16, 16, 1, 0)
         );
 
         init = true;
@@ -78,55 +70,60 @@ public class TileDatabase {
     }
 
     private static void generateEntry(
-        String name, char symbol,
-        boolean isSolid, boolean isDamaging, float xVelocity,
-        int textureX, int textureY, int width, int height, int frames, int fps
+        TileID id,
+        TileProperties properties,
+        TileSpriteData spriteData
     ) {
-        database.put(name,
+        database.put(id.name,
             new TileStruct(
-                new Tile(name, isSolid, isDamaging, xVelocity),
-                new TileRenderData(textureX, textureY, width, height, frames, fps)
+                new Tile(id.name, properties.isSolid, properties.isDamaging, properties.xVelocity),
+                new TileRenderData(
+                    spriteData.textureX, spriteData.textureY,
+                    spriteData.width, spriteData.height,
+                    spriteData.frames, spriteData.fps)
             ));
-        charToKey.put(symbol, name);
-        keyToChar.put(name, symbol);
+        charToKey.put(id.symbol, id.name);
+        keyToChar.put(id.name, id.symbol);
     }
 
-    private static void generateEntry(
-        String name, char symbol,
-        boolean isSolid, boolean isDamaging, float xVelocity,
-        int textureX, int textureY
-    ) {
-        generateEntry(
-            name,
-            symbol,
-            isSolid,
-            isDamaging,
-            xVelocity,
-            textureX,
-            textureY,
-            16,
-            16,
-            1,
-            0
-        );
+    private static class TileID {
+        private String name;
+        private char symbol;
+        public TileID(String name, char symbol) {
+            this.name = name;
+            this.symbol = symbol;
+        }
     }
 
-    private static void generateEntry(
-        String name, char symbol, boolean isSolid,
-        int textureX, int textureY
-    ) {
-        generateEntry(
-            name,
-            symbol,
-            isSolid,
-            false,
-            0,
-            textureX,
-            textureY,
-            16,
-            16,
-            1,
-            0
-        );
+    private static class TileProperties {
+        private boolean isSolid;
+        private boolean isDamaging;
+        private float xVelocity;
+
+        public TileProperties(boolean isSolid, boolean isDamaging, float xVelocity) {
+            this.isSolid = isSolid;
+            this.isDamaging = isDamaging;
+            this.xVelocity = xVelocity;
+        }
+    }
+
+    private static class TileSpriteData {
+        private int textureX;
+        private int textureY;
+        private int width;
+        private int height;
+        private int frames;
+        private int fps;
+
+        public TileSpriteData(
+            int textureX, int textureY, int width, int height, int frames, int fps
+        ) {
+            this.textureX = textureX;
+            this.textureY = textureY;
+            this.width = width;
+            this.height = height;
+            this.frames = frames;
+            this.fps = fps;
+        }
     }
 }

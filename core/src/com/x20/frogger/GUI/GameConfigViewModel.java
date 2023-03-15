@@ -7,15 +7,16 @@ import com.x20.frogger.game.GameConfig;
 public class GameConfigViewModel {
 
     public static String getCharacterAtlas() {
-        switch(GameConfig.getCharacter().toString()){
-            case "Alex":
-                return "button_alex";
-            case "Steve":
-                return "button_steve";
-            case "Enderman":
-                return "button_enderman";
+        switch (GameConfig.getCharacter().toString()) {
+        case "Alex":
+            return "button_alex";
+        case "Steve":
+            return "button_steve";
+        case "Enderman":
+            return "button_enderman";
+        default:
+            return "NULL";
         }
-        return "NULL";
     }
 
     private static Button goButton;

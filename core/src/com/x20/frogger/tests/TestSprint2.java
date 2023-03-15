@@ -14,7 +14,7 @@
 //import org.junit.Before;
 //import org.junit.Test;
 //
-//public class Test_Sprint2 {
+//public class TestSprint2 {
 //
 //            GameLogic gameLogic;
 //

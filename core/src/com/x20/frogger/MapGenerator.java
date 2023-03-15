@@ -1,21 +1,12 @@
 package com.x20.frogger;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.TextureLoader;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.x20.frogger.graphics.GoldTile;
 import com.x20.frogger.graphics.GrassTile;
 import com.x20.frogger.graphics.RoadTile;
 import com.x20.frogger.graphics.WaterTile;
-import com.x20.frogger.utils.FTFSkinLoader;
 
 
 public class MapGenerator {
@@ -47,12 +38,12 @@ public class MapGenerator {
 
     public void createMap1() {
         //generate rows based on percentages of total pixel height
-        int grass1 = (int) (mapHeight*0.1);
-        int road1 = (int) (mapHeight*0.25);
-        int grass2 = (int) (mapHeight*0.05);
-        int water1 = (int) (mapHeight*0.25);
-        int grass3 = (int) (mapHeight*0.05);
-        int gold1 = (int) (mapHeight*0.3);
+        int grass1 = (int) (mapHeight * 0.1);
+        int road1 = (int) (mapHeight * 0.25);
+        int grass2 = (int) (mapHeight * 0.05);
+        int water1 = (int) (mapHeight * 0.25);
+        int grass3 = (int) (mapHeight * 0.05);
+        int gold1 = (int) (mapHeight * 0.3);
 
         // generates rows onto map layer
         generateRow(grass1, 0);

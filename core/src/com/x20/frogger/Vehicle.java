@@ -4,17 +4,19 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 
-import org.w3c.dom.css.Rect;
-
 public class Vehicle {
     private int velocity;
 
     private Texture vehicleImage;
 
-    public  Texture getVehicleImage() { return vehicleImage; }
+    public  Texture getVehicleImage() {
+        return vehicleImage;
+    }
     private Rectangle hitbox;
 
-    public Rectangle getHitbox() { return hitbox; }
+    public Rectangle getHitbox() {
+        return hitbox;
+    }
     public Vehicle(int xPos, int yPos, int height, int width, int velocity, Texture vehicleImage) {
         this.velocity = velocity;
         this.vehicleImage = vehicleImage;
