@@ -48,8 +48,6 @@ public class GameScreen implements Screen {
     private Rectangle bucket;
     private Vector3 touchPos = Vector3.Zero;
     private Array<Vehicle> vehicles;
-    private Array<Vehicle> vehiclesType2;
-    private Array<Vehicle> vehiclesType3;
     private long lastDropTime; // in nanoseconds
     private boolean paused;
     private int dropsGathered;

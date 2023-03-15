@@ -25,11 +25,11 @@ public class Vehicle {
 
     public Rectangle buildHitbox(int height, int width, int xPos, int yPos) {
         Rectangle newHitbox = new Rectangle();
-        hitbox.height = height;
-        hitbox.width = width;
+        newHitbox.height = height;
+        newHitbox.width = width;
 
-        hitbox.x = xPos;
-        hitbox.y = yPos;
+        newHitbox.x = xPos;
+        newHitbox.y = yPos;
         return newHitbox;
     }
 
