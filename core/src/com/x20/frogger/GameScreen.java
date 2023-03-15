@@ -84,10 +84,13 @@ public class GameScreen implements Screen {
             DataEnums.VehicleType.SKELETON,
             DataEnums.VehicleType.IRON_GOLEM,
             DataEnums.VehicleType.SKELETON,
-            DataEnums.VehicleType.CREEPER
+            DataEnums.VehicleType.CREEPER,
+            DataEnums.VehicleType.CREEPER,
+            DataEnums.VehicleType.CREEPER,
+            DataEnums.VehicleType.CREEPER,
         };
 
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < 9; i++) {
             int rand = MathUtils.random(1, 3);
             vehicleTypes[i] = generateVehicleType(rand);
         }
@@ -251,42 +254,27 @@ public class GameScreen implements Screen {
     private Array<Vehicle> spawnVehicles(DataEnums.VehicleType[] vehicleTypes) {
         Array<Vehicle> spawnedVehicles = new Array<Vehicle>();
         for (int y = 0; y < vehicleTypes.length; y++) {
-            int width;
-            int velocity;
-            int spacing;
+            int width = getVehicleWidth(vehicleTypes[y]);
+            int velocity = getVehicleVelocity(vehicleTypes[y]);
+            int spacing = getVehicleSpacing(vehicleTypes[y]);
             Texture sprite;
             switch (vehicleTypes[y]) {
             case IRON_GOLEM:
-                width = 120;
-                velocity = 60;
-                spacing = 400;
                 sprite = game.getAssetManager().get("ironGolem.png", Texture.class);
                 break;
             case CREEPER:
-                width = 60;
-                velocity = 100;
-                spacing = 500;
                 sprite = game.getAssetManager().get("creeper.png", Texture.class);
                 break;
             case SKELETON:
-                width = 100;
-                velocity = 80;
-                spacing = 300;
                 sprite = game.getAssetManager().get("skeleton.png", Texture.class);
                 break;
             default:
-                width = 110;
-                velocity = 60;
-                spacing = 400;
-                sprite = game.getAssetManager().get("creeper.png", Texture.class);
+                sprite = game.getAssetManager().get("grass.png", Texture.class);
                 break;
-
             }
 
-            for (int x = 0; x < Gdx.graphics.getWidth(); x += spacing) {
-                Vehicle vehicle = new Vehicle(
-                    x, 100 + (y + 1) * 100, 100, width, velocity, sprite
-                );
+            for (int x = 0; x < Gdx.graphics.getWidth(); x += spacing*tileSize) {
+                Vehicle vehicle = new Vehicle(x, 2*tileSize + (y + 1)*tileSize, tileSize, width, velocity, sprite);
                 spawnedVehicles.add(vehicle);
             }
         }
@@ -294,7 +282,46 @@ public class GameScreen implements Screen {
         return spawnedVehicles;
     }
 
-    public DataEnums.VehicleType generateVehicleType(int x) {
+    public static int getVehicleWidth(DataEnums.VehicleType vehicleType) {
+        switch (vehicleType) {
+            case IRON_GOLEM:
+                return 140;
+            case CREEPER:
+                return 60;
+            case SKELETON:
+                return 110;
+            default:
+                return 100;
+        }
+    }
+
+
+    public static int getVehicleVelocity(DataEnums.VehicleType vehicleType){
+        switch (vehicleType) {
+        case IRON_GOLEM:
+            return 30;
+        case CREEPER:
+            return 130;
+        case SKELETON:
+            return 80;
+        default:
+            return 100;
+        }
+    }
+
+    public static int getVehicleSpacing(DataEnums.VehicleType vehicleType){
+        switch (vehicleType) {
+        case IRON_GOLEM:
+            return 7;
+        case CREEPER:
+            return 6;
+        case SKELETON:
+            return 4;
+        default:
+            return 10;
+        }
+    }
+    public static DataEnums.VehicleType generateVehicleType(int x) {
         switch (x) {
         case 1:
             return DataEnums.VehicleType.IRON_GOLEM;
