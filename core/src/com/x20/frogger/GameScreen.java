@@ -259,34 +259,22 @@ public class GameScreen implements Screen {
     private Array<Vehicle> spawnVehicles(DataEnums.VehicleType[] vehicleTypes) {
         Array<Vehicle> spawnedVehicles = new Array<Vehicle>();
         for (int y = 0; y < vehicleTypes.length; y++) {
-            int width;
-            int velocity;
-            int spacing;
+            int width = getVehicleWidth(vehicleTypes[y]);
+            int velocity = getVehicleVelocity(vehicleTypes[y]);
+            int spacing = getVehicleSpacing(vehicleTypes[y]);
             Texture sprite;
             switch (vehicleTypes[y]) {
                 case IRON_GOLEM:
-                    width = 120;
-                    velocity = 20;
-                    spacing = 4;
                     sprite = game.getAssetManager().get("ironGolem.png", Texture.class);
                     break;
                 case CREEPER:
-                    width = 60;
-                    velocity = 130;
-                    spacing = 7;
                     sprite = game.getAssetManager().get("creeper.png", Texture.class);
                     break;
                 case SKELETON:
-                    width = 100;
-                    velocity = 80;
-                    spacing = 9;
                     sprite = game.getAssetManager().get("skeleton.png", Texture.class);
                     break;
                 default:
-                    width = 110;
-                    velocity = 60;
-                    spacing = 400;
-                    sprite = game.getAssetManager().get("creeper.png", Texture.class);
+                    sprite = game.getAssetManager().get("grass.png", Texture.class);
                     break;
 
             }
@@ -300,6 +288,45 @@ public class GameScreen implements Screen {
         return spawnedVehicles;
     }
 
+    public static int getVehicleWidth(DataEnums.VehicleType vehicleType) {
+        switch (vehicleType) {
+            case IRON_GOLEM:
+                return 140;
+            case CREEPER:
+                return 60;
+            case SKELETON:
+                return 110;
+            default:
+                return 100;
+        }
+    }
+
+
+    public static int getVehicleVelocity(DataEnums.VehicleType vehicleType){
+        switch (vehicleType) {
+            case IRON_GOLEM:
+                return 30;
+            case CREEPER:
+                return 130;
+            case SKELETON:
+                return 80;
+            default:
+                return 100;
+        }
+    }
+
+    public static int getVehicleSpacing(DataEnums.VehicleType vehicleType){
+        switch (vehicleType) {
+            case IRON_GOLEM:
+                return 7;
+            case CREEPER:
+                return 6;
+            case SKELETON:
+                return 4;
+            default:
+                return 10;
+        }
+    }
     public static DataEnums.VehicleType generateVehicleType(int x) {
         switch (x) {
             case 1:
