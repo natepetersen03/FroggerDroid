@@ -68,4 +68,15 @@ public class TestSprint3 {
         int vel = GameScreen.getVehicleSpacing(DataEnums.VehicleType.SKELETON);
         assertEquals(4, vel);
     }
+
+    //Daniel tests
+    public void testGenerateCreeperSpacing() {
+        int spacing = GameScreen.getVehicleSpacing(DataEnums.VehicleType.CREEPER);
+        assertEquals(6, spacing);
+    }
+
+    public void testGenerateIronGolemSpacing() {
+        int spacing = GameScreen.getVehicleSpacing(DataEnums.VehicleType.IRON_GOLEM);
+        assertEquals(7, spacing);
+    }
 }
