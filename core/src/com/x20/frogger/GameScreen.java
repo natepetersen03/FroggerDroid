@@ -35,18 +35,18 @@ import com.x20.frogger.GUI.GameConfigViewModel;
 import com.x20.frogger.data.DataEnums;
 import com.x20.frogger.game.GameConfig;
 import com.x20.frogger.graphics.GrassTile;
+import java.util.Iterator;
 
 public class GameScreen implements Screen {
     private final FroggerDroid game;
 
-    private Texture dropImage;
-    private Texture bucketImage;
+    private Texture grassImg;
     private Sound dropSound;
     private Music rainMusic;
     private OrthographicCamera camera;
     private Rectangle bucket;
     private Vector3 touchPos = Vector3.Zero;
-    private Array<Rectangle> raindrops;
+    private Array<Vehicle> vehicles;
     private long lastDropTime; // in nanoseconds
     private boolean paused;
     private int dropsGathered;
@@ -73,6 +73,9 @@ public class GameScreen implements Screen {
         this.viewport = new ExtendViewport(800, 400, camera);
         this.stage = new Stage(viewport);
 
+
+        this.grassImg = game.getAssetManager().get("grass.png", Texture.class);
+
         this.skin = game.getSkinGUI();
         this.score = 0;
         this.maxY = 0;
@@ -81,6 +84,8 @@ public class GameScreen implements Screen {
         constructUI();
 
         this.tileMap = constructMap();
+
+        this.vehicles = spawnVehicles();
 
         TextureAtlas atlas = game.getAssetManager().get("mc-style.atlas");
         TextureRegion region = atlas.findRegion(GameConfigViewModel.getCharacterAtlas());
@@ -110,10 +115,16 @@ public class GameScreen implements Screen {
             stage.act();
             stage.draw();
 
+
+
             update();
 
             game.getBatch().begin();
             character.draw(game.getBatch());
+            for (Iterator<Vehicle> iter = vehicles.iterator(); iter.hasNext();) {
+                Vehicle vehicle = iter.next();
+                game.getBatch().draw(grassImg, vehicle.getHitbox().x, vehicle.getHitbox().y);
+            }
             game.getBatch().end();
         }
     }
@@ -145,6 +156,11 @@ public class GameScreen implements Screen {
             updateLabel.setText("([#00FF00]" + GameConfig.getName()
                     + "[#FFFFFF])  Lives: [#ADD8E6]" + getLives(GameConfig.getDifficulty())
                     + "  [#FFFFFF]Score: [#A020F0]" + score);
+        }
+
+        for (Iterator<Vehicle> iter = vehicles.iterator(); iter.hasNext();) {
+            Vehicle vehicle = iter.next();
+            vehicle.updatePosition();
         }
     }
 
@@ -221,6 +237,15 @@ public class GameScreen implements Screen {
 
         table.add();
         addMovementListeners(upButton, leftButton, rightButton, downButton);
+    }
+
+    private Array<Vehicle> spawnVehicles() {
+        Array<Vehicle> spawnedVehicles = new Array<Vehicle>();
+        for (int x = 0; x < Gdx.graphics.getWidth(); x += 200) {
+            Vehicle vehicle = new Vehicle(x, 300, 40, 100, 100);
+            spawnedVehicles.add(vehicle);
+        }
+        return spawnedVehicles;
     }
 
     private void addMovementListeners(ImageButton up, ImageButton left, ImageButton right, ImageButton down) {
