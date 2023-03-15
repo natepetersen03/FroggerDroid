@@ -42,6 +42,7 @@ public class GameScreen implements Screen {
     private Rectangle bucket;
     private Vector3 touchPos = Vector3.Zero;
     private Array<Vehicle> vehicles;
+    private DataEnums.VehicleType[] vehicleTypes;
     private long lastDropTime; // in nanoseconds
     private boolean paused;
     private int dropsGathered;
@@ -78,7 +79,7 @@ public class GameScreen implements Screen {
 
         this.tileMap = constructMap();
 
-        DataEnums.VehicleType[] vehicleTypes = {
+        vehicleTypes = new DataEnums.VehicleType[] {
             DataEnums.VehicleType.IRON_GOLEM,
             DataEnums.VehicleType.CREEPER,
             DataEnums.VehicleType.SKELETON,
@@ -164,7 +165,8 @@ public class GameScreen implements Screen {
 
         if (maxY < character.getY()) {
             maxY = character.getY();
-            score += 1;
+            score += getPoints(maxY);
+            // score += 1;
             updateLabel.setText("([#00FF00]" + GameConfig.getName()
                     + "[#FFFFFF])  Lives: [#ADD8E6]" + getLives(GameConfig.getDifficulty())
                     + "  [#FFFFFF]Score: [#A020F0]" + score);
@@ -174,6 +176,23 @@ public class GameScreen implements Screen {
             Vehicle vehicle = iter.next();
             vehicle.updatePosition();
         }
+    }
+
+    // todo: delete this please
+    // yCoord is in screen space
+    private int getPoints(float yCoord) {
+        int points = 1;
+        for (int i = vehicleTypes.length - 1; i > -1; i--) {
+            System.out.println(i + ": checking position: " + 2 * tileSize + (i + 1));
+            if (yCoord >= 2 * tileSize + (i + 1) * tileSize) {
+                points = getVehicleVelocity(vehicleTypes[i]) / 10;
+            }
+        }
+        System.out.println("y-coord: " + yCoord + "points = " + points);
+//        if (yCoord >= 2 * tileSize + (vehicleTypes.length) * tileSize) {
+//            points = 1;
+//        }
+        return points;
     }
 
     private TiledMap constructMap() {
