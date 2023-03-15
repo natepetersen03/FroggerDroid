@@ -59,22 +59,26 @@ public class TestSprint3 {
         assertEquals(130, vel);
     }
 
+    @Test
     public void testGenerateSkeletonVelocity() {
         int vel = GameScreen.getVehicleVelocity(DataEnums.VehicleType.SKELETON);
         assertEquals(80, vel);
     }
-    
+
+    @Test
     public void testGenerateSkeletonSpacing() {
         int vel = GameScreen.getVehicleSpacing(DataEnums.VehicleType.SKELETON);
         assertEquals(4, vel);
     }
 
+    @Test
     //Daniel tests
     public void testGenerateCreeperSpacing() {
         int spacing = GameScreen.getVehicleSpacing(DataEnums.VehicleType.CREEPER);
         assertEquals(6, spacing);
     }
 
+    @Test
     public void testGenerateIronGolemSpacing() {
         int spacing = GameScreen.getVehicleSpacing(DataEnums.VehicleType.IRON_GOLEM);
         assertEquals(7, spacing);
