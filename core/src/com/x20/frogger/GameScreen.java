@@ -300,7 +300,7 @@ public class GameScreen implements Screen {
         return spawnedVehicles;
     }
 
-    public DataEnums.VehicleType generateVehicleType(int x) {
+    public static DataEnums.VehicleType generateVehicleType(int x) {
         switch (x) {
             case 1:
                 return DataEnums.VehicleType.IRON_GOLEM;
