@@ -29,8 +29,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Null;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.math.MathUtils;
 import com.x20.frogger.GUI.GameConfigViewModel;
 import com.x20.frogger.data.DataEnums;
 import com.x20.frogger.game.GameConfig;
@@ -40,13 +42,14 @@ import java.util.Iterator;
 public class GameScreen implements Screen {
     private final FroggerDroid game;
 
-    private Texture grassImg;
     private Sound dropSound;
     private Music rainMusic;
     private OrthographicCamera camera;
     private Rectangle bucket;
     private Vector3 touchPos = Vector3.Zero;
     private Array<Vehicle> vehicles;
+    private Array<Vehicle> vehiclesType2;
+    private Array<Vehicle> vehiclesType3;
     private long lastDropTime; // in nanoseconds
     private boolean paused;
     private int dropsGathered;
@@ -74,8 +77,6 @@ public class GameScreen implements Screen {
         this.stage = new Stage(viewport);
 
 
-        this.grassImg = game.getAssetManager().get("grass.png", Texture.class);
-
         this.skin = game.getSkinGUI();
         this.score = 0;
         this.maxY = 0;
@@ -85,7 +86,22 @@ public class GameScreen implements Screen {
 
         this.tileMap = constructMap();
 
-        this.vehicles = spawnVehicles();
+        DataEnums.VehicleType[] vehicleTypes = {
+                DataEnums.VehicleType.IRON_GOLEM,
+                DataEnums.VehicleType.CREEPER,
+                DataEnums.VehicleType.SKELETON,
+                DataEnums.VehicleType.IRON_GOLEM,
+                DataEnums.VehicleType.SKELETON,
+                DataEnums.VehicleType.CREEPER
+        };
+
+        for (int i = 0; i < 6; i++) {
+            int rand = MathUtils.random(1, 3);
+            vehicleTypes[i] = generateVehicleType(rand);
+        }
+
+        this.vehicles = spawnVehicles(vehicleTypes);
+
 
         TextureAtlas atlas = game.getAssetManager().get("mc-style.atlas");
         TextureRegion region = atlas.findRegion(GameConfigViewModel.getCharacterAtlas());
@@ -123,7 +139,7 @@ public class GameScreen implements Screen {
             character.draw(game.getBatch());
             for (Iterator<Vehicle> iter = vehicles.iterator(); iter.hasNext();) {
                 Vehicle vehicle = iter.next();
-                game.getBatch().draw(grassImg, vehicle.getHitbox().x, vehicle.getHitbox().y);
+                game.getBatch().draw(vehicle.getVehicleImage(), vehicle.getHitbox().x, vehicle.getHitbox().y);
             }
             game.getBatch().end();
         }
@@ -239,13 +255,60 @@ public class GameScreen implements Screen {
         addMovementListeners(upButton, leftButton, rightButton, downButton);
     }
 
-    private Array<Vehicle> spawnVehicles() {
+    private Array<Vehicle> spawnVehicles(DataEnums.VehicleType[] vehicleTypes) {
         Array<Vehicle> spawnedVehicles = new Array<Vehicle>();
-        for (int x = 0; x < Gdx.graphics.getWidth(); x += 200) {
-            Vehicle vehicle = new Vehicle(x, 300, 40, 100, 100);
-            spawnedVehicles.add(vehicle);
+        for (int y = 0; y < vehicleTypes.length; y++) {
+            int width;
+            int velocity;
+            int spacing;
+            Texture sprite;
+            switch (vehicleTypes[y]) {
+                case IRON_GOLEM:
+                    width = 120;
+                    velocity = 60;
+                    spacing = 400;
+                    sprite = game.getAssetManager().get("ironGolem.png", Texture.class);
+                    break;
+                case CREEPER:
+                    width = 60;
+                    velocity = 100;
+                    spacing = 500;
+                    sprite = game.getAssetManager().get("creeper.png", Texture.class);
+                    break;
+                case SKELETON:
+                    width = 100;
+                    velocity = 80;
+                    spacing = 300;
+                    sprite = game.getAssetManager().get("skeleton.png", Texture.class);
+                    break;
+                default:
+                    width = 110;
+                    velocity = 60;
+                    spacing = 400;
+                    sprite = game.getAssetManager().get("creeper.png", Texture.class);
+                    break;
+
+            }
+
+            for (int x = 0; x < Gdx.graphics.getWidth(); x += spacing) {
+                Vehicle vehicle = new Vehicle(x, 100 + (y + 1)*100, 100, width, velocity, sprite);
+                spawnedVehicles.add(vehicle);
+            }
         }
+
         return spawnedVehicles;
+    }
+
+    public DataEnums.VehicleType generateVehicleType(int x) {
+        switch (x) {
+            case 1:
+                return DataEnums.VehicleType.IRON_GOLEM;
+            case 2:
+                return DataEnums.VehicleType.CREEPER;
+            case 3:
+                return DataEnums.VehicleType.SKELETON;
+        }
+        return DataEnums.VehicleType.SKELETON;
     }
 
     private void addMovementListeners(ImageButton up, ImageButton left, ImageButton right, ImageButton down) {

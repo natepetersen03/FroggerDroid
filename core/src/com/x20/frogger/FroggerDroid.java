@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
+import org.w3c.dom.Text;
+
 
 public class FroggerDroid extends Game {
 
@@ -41,6 +43,9 @@ public class FroggerDroid extends Game {
 
         assetManager.load("mc-style.atlas", TextureAtlas.class);
         assetManager.load("grass.png", Texture.class);
+        assetManager.load("creeper.png", Texture.class);
+        assetManager.load("ironGolem.png", Texture.class);
+        assetManager.load("skeleton.png", Texture.class);
         // end game init
 
         skinGUI = FTFSkinLoader.loadFTFSkin("mc-style.json");
