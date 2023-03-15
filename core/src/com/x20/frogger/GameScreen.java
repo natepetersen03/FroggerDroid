@@ -273,8 +273,9 @@ public class GameScreen implements Screen {
                 break;
             }
 
-            for (int x = 0; x < Gdx.graphics.getWidth(); x += spacing*tileSize) {
-                Vehicle vehicle = new Vehicle(x, 2*tileSize + (y + 1)*tileSize, tileSize, width, velocity, sprite);
+            for (int x = 0; x < Gdx.graphics.getWidth(); x += spacing * tileSize) {
+                Vehicle vehicle = new Vehicle(
+                    x, 2 * tileSize + (y + 1) * tileSize, tileSize, width, velocity, sprite);
                 spawnedVehicles.add(vehicle);
             }
         }
@@ -284,19 +285,19 @@ public class GameScreen implements Screen {
 
     public static int getVehicleWidth(DataEnums.VehicleType vehicleType) {
         switch (vehicleType) {
-            case IRON_GOLEM:
-                return 140;
-            case CREEPER:
-                return 60;
-            case SKELETON:
-                return 110;
-            default:
-                return 100;
+        case IRON_GOLEM:
+            return 140;
+        case CREEPER:
+            return 60;
+        case SKELETON:
+            return 110;
+        default:
+            return 100;
         }
     }
 
 
-    public static int getVehicleVelocity(DataEnums.VehicleType vehicleType){
+    public static int getVehicleVelocity(DataEnums.VehicleType vehicleType) {
         switch (vehicleType) {
         case IRON_GOLEM:
             return 30;
@@ -309,7 +310,7 @@ public class GameScreen implements Screen {
         }
     }
 
-    public static int getVehicleSpacing(DataEnums.VehicleType vehicleType){
+    public static int getVehicleSpacing(DataEnums.VehicleType vehicleType) {
         switch (vehicleType) {
         case IRON_GOLEM:
             return 7;
