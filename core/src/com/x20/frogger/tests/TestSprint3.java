@@ -36,8 +36,18 @@ public class TestSprint3 {
     //testGenerateSkeleton = DataEnums.VehicleType.SKELETON
     //GenerateSkeletonWidth = 110
 
-    //GenerateIronGolemVelocity = 30
-    //GenerateCreeperVelocity = 130
+    @Test
+    public void testGenerateIronGolemVelocity() {
+        int vel = GameScreen.getVehicleVelocity(DataEnums.VehicleType.IRON_GOLEM);
+        assertEquals(30, vel);
+    }
+
+    @Test
+    public void testGenerateCreeperVelocity() {
+        int vel = GameScreen.getVehicleVelocity(DataEnums.VehicleType.CREEPER);
+        assertEquals(130, vel);
+    }
+    
     //GenerateSkeletonVelocity = 80
 
     //GenerateIronGolemSpacing = 7
