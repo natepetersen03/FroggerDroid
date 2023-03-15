@@ -22,6 +22,20 @@ public class Test_Sprint3 {
         assertEquals(60, width);
     }
 
+    //Evan's Tests
+    @Test
+    public void testGenerateIronGolem() {
+        DataEnums.VehicleType test = GameScreen.generateVehicleType(1);
+        assertEquals(DataEnums.VehicleType.IRON_GOLEM, test);
+    }
+
+    @Test
+    public void testGenerateCreeper() {
+        DataEnums.VehicleType test = GameScreen.generateVehicleType(2);
+        assertEquals(DataEnums.VehicleType.CREEPER, test);
+    }
+
+    //testGenerateSkeleton = DataEnums.VehicleType.SKELETON
     //GenerateSkeletonWidth = 110
 
     //GenerateIronGolemVelocity = 30
