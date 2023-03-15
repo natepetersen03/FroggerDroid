@@ -58,10 +58,14 @@ public class TestSprint3 {
         int vel = GameScreen.getVehicleVelocity(DataEnums.VehicleType.CREEPER);
         assertEquals(130, vel);
     }
-    
-    //GenerateSkeletonVelocity = 80
 
-    //GenerateIronGolemSpacing = 7
-    //GenerateCreeperSpacing = 6
-    //GenerateSkeletonSpacing = 4
+    public void testGenerateSkeletonVelocity() {
+        int vel = GameScreen.getVehicleVelocity(DataEnums.VehicleType.SKELETON);
+        assertEquals(80, vel);
+    }
+    
+    public void testGenerateSkeletonSpacing() {
+        int vel = GameScreen.getVehicleSpacing(DataEnums.VehicleType.SKELETON);
+        assertEquals(4, vel);
+    }
 }
