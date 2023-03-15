@@ -8,6 +8,7 @@ import com.x20.frogger.data.DataEnums;
 import org.junit.Test;
 
 public class TestSprint3 {
+    // Owen's tests
     @Test
     public void testGenerateIronGolemWidth() {
         int width = GameScreen.getVehicleWidth(DataEnums.VehicleType.IRON_GOLEM);
@@ -33,8 +34,18 @@ public class TestSprint3 {
         assertEquals(DataEnums.VehicleType.CREEPER, test);
     }
 
-    //testGenerateSkeleton = DataEnums.VehicleType.SKELETON
-    //GenerateSkeletonWidth = 110
+    // Donald's Tests
+    @Test
+    public void testGenerateSkeleton() {
+        DataEnums.VehicleType test = GameScreen.generateVehicleType(3);
+        assertEquals(test, DataEnums.VehicleType.SKELETON);
+    }
+
+    @Test
+    public void testGenerateSkeletonWidth() {
+        int width = GameScreen.getVehicleWidth(DataEnums.VehicleType.SKELETON);
+        assertEquals(110, width);
+    }
 
     @Test
     public void testGenerateIronGolemVelocity() {
