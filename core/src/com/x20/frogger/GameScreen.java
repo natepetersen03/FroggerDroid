@@ -2,8 +2,6 @@ package com.x20.frogger;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -14,8 +12,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -34,51 +30,55 @@ import com.x20.frogger.game.GameConfig;
 import java.util.Iterator;
 
 public class GameScreen implements Screen {
+    // Game state
     private final FroggerDroid game;
-
-    private Sound dropSound;
-    private Music rainMusic;
-    private OrthographicCamera camera;
-    private Rectangle bucket;
-    private Vector3 touchPos = Vector3.Zero;
-    private Array<Vehicle> vehicles;
-    private DataEnums.VehicleType[] vehicleTypes;
-    private long lastDropTime; // in nanoseconds
     private boolean paused;
-    private int dropsGathered;
 
-    private Stage stage;
+    // GUI
     private Skin skin;
+    private OrthographicCamera camera;
     private Viewport viewport;
-    private Label updateLabel;
+    private Stage stage;
 
+    // Tiles
     private int tileSize;
     private float tableHeight;
-    private int score;
     private float maxY;
-    private float unitScale;
-
-    private Sprite character;
     private TiledMap tileMap;
     private TiledMapRenderer renderer;
 
+    // Vehicles
+    private Array<Vehicle> vehicles;
+    private DataEnums.VehicleType[] vehicleTypes;
+
+    // Player
+    private Sprite character;
+
+    // Score
+    // todo: refactor label
+    private Label updateLabel;
+    private int score;
+
     public GameScreen(final FroggerDroid game) {
         this.game = game;
+
+        // init GUI
+        this.skin = game.getSkinGUI();
         this.camera = new OrthographicCamera();
         this.camera.setToOrtho(false, 800, 480);
         this.viewport = new ExtendViewport(800, 400, camera);
         this.stage = new Stage(viewport);
-
-
-        this.skin = game.getSkinGUI();
-        this.score = 0;
-        this.maxY = 0;
-        this.tileSize = 64;
-        this.unitScale = 1 / tileSize;
         constructUI();
 
+        this.score = 0;
+
+        // tilemap setup
+        this.maxY = 0;
+        this.tileSize = 64;
         this.tileMap = constructMap();
 
+        // todo: replace with proper vehicle classes
+        // vehicle types
         vehicleTypes = new DataEnums.VehicleType[] {
             DataEnums.VehicleType.IRON_GOLEM,
             DataEnums.VehicleType.CREEPER,
@@ -91,6 +91,9 @@ public class GameScreen implements Screen {
             DataEnums.VehicleType.CREEPER,
         };
 
+        // todo: replace with vehicle generator
+        // generate vehicle types in level
+        // replaces hard coded array above
         for (int i = 0; i < 9; i++) {
             int rand = MathUtils.random(1, 3);
             vehicleTypes[i] = generateVehicleType(rand);
@@ -98,7 +101,7 @@ public class GameScreen implements Screen {
 
         this.vehicles = spawnVehicles(vehicleTypes);
 
-
+        // character sprite
         TextureAtlas atlas = game.getAssetManager().get("mc-style.atlas");
         TextureRegion region = atlas.findRegion(GameConfigViewModel.getCharacterAtlas());
         this.character = new Sprite(region);
@@ -108,7 +111,8 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         game.getAssetManager().finishLoading();
-        // todo: figure out what unit scale is
+
+        // TiledMapRenderer, libGDX feature
         renderer = new OrthogonalTiledMapRenderer(tileMap, 1);
     }
 
@@ -118,20 +122,28 @@ public class GameScreen implements Screen {
             Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-
+            // ? is this needed?
+            // "Applies the viewport to the camera and sets the glViewport"
             viewport.apply(true);
+
+            // todo: should this call be moved to resize?
             renderer.setView(camera);
+            // render the tilemap
             renderer.render();
 
+            // update and render the UI
             stage.act();
             stage.draw();
 
 
-
+            // game update call
             update();
 
+            // render sprites
+            // todo: optimize render calls
             game.getBatch().begin();
             character.draw(game.getBatch());
+            // render all vehicles in one batch
             for (Iterator<Vehicle> iter = vehicles.iterator(); iter.hasNext();) {
                 Vehicle vehicle = iter.next();
                 game.getBatch().draw(
@@ -144,11 +156,13 @@ public class GameScreen implements Screen {
 
     @Override
     public void resize(int width, int height) {
+        // update UI viewport on window resize
         stage.getViewport().update(width, height, true);
     }
 
     public void update() {
         // bounds restriction
+        // todo: update all to work with world coordinates and not screen coordinates
         if (character.getX() < 0) {
             character.setX(0);
         }
@@ -163,8 +177,19 @@ public class GameScreen implements Screen {
             character.setY(Gdx.graphics.getHeight() - character.getHeight() - tableHeight);
         }
 
+        // score system
+        // todo: overhaul and put in separate method
+        // ? should this go here? in the player class?
         if (maxY < character.getY()) {
             maxY = character.getY();
+            // todo: replace with tile data based system
+            /*
+             * might try making a separate array of point values to store for this
+             * maybe just store this in tile data? would be wasteful though since
+             * each row of tiles awards the same points... except for the top row,
+             * where some spots are goal tiles and others will straight up kill you
+             * so we can't just reduce the tile data set to one tile representing the entire row
+             */
             score += getPoints(maxY);
             // score += 1;
             updateLabel.setText("([#00FF00]" + GameConfig.getName()
@@ -172,13 +197,16 @@ public class GameScreen implements Screen {
                     + "  [#FFFFFF]Score: [#A020F0]" + score);
         }
 
+        // update vehicle position
+        // todo: move into separate method
         for (Iterator<Vehicle> iter = vehicles.iterator(); iter.hasNext();) {
             Vehicle vehicle = iter.next();
             vehicle.updatePosition();
         }
     }
 
-    // todo: delete this please
+    // deprecated point system
+    // todo: delete this
     // yCoord is in screen space
     private int getPoints(float yCoord) {
         int points = 1;
@@ -195,10 +223,13 @@ public class GameScreen implements Screen {
         return points;
     }
 
+    // Generate tile map
+    // todo: replace with screen-space independent generation
     private TiledMap constructMap() {
         int mapWidth = Gdx.graphics.getWidth() / tileSize;
         int mapHeight = Gdx.graphics.getHeight() / tileSize;
 
+        // ? does this also assign sprites? or just the tile data?
         MapGenerator mapGenerator = new MapGenerator(mapWidth, mapHeight);
         mapGenerator.createMap1();
 
@@ -234,6 +265,8 @@ public class GameScreen implements Screen {
 
     }
 
+    // player controls GUI
+    // todo: refactor
     private void setButtons(Table table) {
         table.setColor(skin.getColor("white"));
         table.padLeft(0.0f);
@@ -270,6 +303,15 @@ public class GameScreen implements Screen {
         addMovementListeners(upButton, leftButton, rightButton, downButton);
     }
 
+    // vehicle spawning
+    // todo: rip and tear
+    /*
+    Seems to also assign textures to it
+    todo: pull textures from texture atlas
+    is called only once on creation of GameScreen
+    Spawns vehicles spaced out from each other
+    and reuses them instead of spawning and despawning (due to Vehicle's updatePosition method)
+     */
     private Array<Vehicle> spawnVehicles(DataEnums.VehicleType[] vehicleTypes) {
         Array<Vehicle> spawnedVehicles = new Array<Vehicle>();
         for (int y = 0; y < vehicleTypes.length; y++) {
@@ -302,6 +344,10 @@ public class GameScreen implements Screen {
         return spawnedVehicles;
     }
 
+    // used by the spawning algorithm to generate Vehicles
+    // not sure what the purpose of separate width values is for
+    // edit: for some reason this is used to build the hitbox of the vehicle.
+    //       not sure why this isn't just a constant size or stored elsewhere
     public static int getVehicleWidth(DataEnums.VehicleType vehicleType) {
         switch (vehicleType) {
         case IRON_GOLEM:
@@ -316,6 +362,7 @@ public class GameScreen implements Screen {
     }
 
 
+    // todo: store vehicle velocity as a property of a vehicle instance
     public static int getVehicleVelocity(DataEnums.VehicleType vehicleType) {
         switch (vehicleType) {
         case IRON_GOLEM:
@@ -329,6 +376,8 @@ public class GameScreen implements Screen {
         }
     }
 
+    // used by the vehicle spawner to space out vehicle spawns
+    // note: probably will be replaced by the specific vehicle's spawn-spacing property
     public static int getVehicleSpacing(DataEnums.VehicleType vehicleType) {
         switch (vehicleType) {
         case IRON_GOLEM:
@@ -341,6 +390,8 @@ public class GameScreen implements Screen {
             return 10;
         }
     }
+
+    // soon to be deprecated
     public static DataEnums.VehicleType generateVehicleType(int x) {
         switch (x) {
         case 1:
@@ -354,6 +405,8 @@ public class GameScreen implements Screen {
         }
     }
 
+    // binds player movement input to player movement
+    // todo: rip and tear
     private void addMovementListeners(
         ImageButton up,
         ImageButton left,
@@ -389,6 +442,9 @@ public class GameScreen implements Screen {
         });
     }
 
+    // determine number of starting lives from specific difficulty
+    // todo: rewrite Difficulty enum to hold value of starting lives directly
+    // todo: figure out why this is a string
     private String getLives(DataEnums.Difficulty difficulty) {
         switch (difficulty) {
         case EASY:
