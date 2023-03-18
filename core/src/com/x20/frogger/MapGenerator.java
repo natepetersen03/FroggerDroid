@@ -8,7 +8,7 @@ import com.x20.frogger.graphics.GrassTile;
 import com.x20.frogger.graphics.RoadTile;
 import com.x20.frogger.graphics.WaterTile;
 
-
+// todo: rip and tear
 public class MapGenerator {
 
     private TiledMap tileMap;
