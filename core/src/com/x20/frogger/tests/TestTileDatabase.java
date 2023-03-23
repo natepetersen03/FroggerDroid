@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import com.x20.frogger.data.TileDatabase;
 import com.x20.frogger.data.TileStruct;
+import com.x20.frogger.game.Tile;
 import com.x20.frogger.game.TileMap;
 
 import org.junit.Assert;
@@ -43,7 +44,7 @@ public class TestTileDatabase {
 
     @Test
     public void testStringToMap() {
-        TileMap map = TileMap.getInstance();
+        TileMap map = new TileMap();
         map.generateTileMapFromStringArray(new String[] {
             "rrrrr",
             "wwwww",
@@ -57,7 +58,7 @@ public class TestTileDatabase {
     @Test
 
     public void testMapToString() {
-        TileMap map = TileMap.getInstance();
+        TileMap map = new TileMap();
         String[] strMap = new String[] {
             "rrrrr",
             "wwwww",

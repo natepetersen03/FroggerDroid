@@ -4,21 +4,10 @@ import com.x20.frogger.data.TileDatabase;
 import com.x20.frogger.data.TileStruct;
 
 public class TileMap {
-    // Singleton pattern
-    // ? Does this need to be a singleton?
-    private static TileMap instance;
 
     // todo: determine if the memory overhead of storing the entire TileStruct is worth it
     // access by tilemap[x][y]
     private TileStruct[][] tilemap;
-
-    // Singleton pattern
-    public static synchronized TileMap getInstance() {
-        if (instance == null) {
-            instance = new TileMap();
-        }
-        return instance;
-    }
 
     public int[] getDimensions() {
         return new int[] {tilemap.length, tilemap[0].length};
