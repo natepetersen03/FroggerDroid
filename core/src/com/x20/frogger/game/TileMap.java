@@ -5,6 +5,7 @@ import com.x20.frogger.data.TileStruct;
 
 public class TileMap {
     // Singleton pattern
+    // ? Does this need to be a singleton?
     private static TileMap instance;
 
     // todo: determine if the memory overhead of storing the entire TileStruct is worth it

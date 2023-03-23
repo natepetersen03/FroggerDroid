@@ -6,12 +6,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
@@ -22,12 +18,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.x20.frogger.GUI.GameConfigViewModel;
 import com.x20.frogger.data.DataEnums;
 import com.x20.frogger.game.GameConfig;
-
-import java.util.Iterator;
+import com.x20.frogger.game.TileMap;
 
 public class GameScreen implements Screen {
     // Game state
@@ -36,16 +31,23 @@ public class GameScreen implements Screen {
 
     // GUI
     private Skin skin;
-    private OrthographicCamera camera;
-    private Viewport viewport;
+    private OrthographicCamera guiCamera;
+    private Viewport guiViewport;
     private Stage stage;
 
-    // Tiles
+    // Game
+    private Viewport gameViewport;
+    private OrthographicCamera gameCamera;
+
+    // Tile data
+    private TileMap tileMap;
+
+    // (Old) Tiles
     private int tileSize;
     private float tableHeight;
     private float maxY;
-    private TiledMap tileMap;
-    private TiledMapRenderer renderer;
+    private TiledMap tiledMap;
+    private TiledMapRenderer tiledMapRenderer;
 
     // Vehicles
     private Array<Vehicle> vehicles;
@@ -64,13 +66,25 @@ public class GameScreen implements Screen {
 
         // init GUI
         this.skin = game.getSkinGUI();
-        this.camera = new OrthographicCamera();
-        this.camera.setToOrtho(false, 800, 480);
-        this.viewport = new ExtendViewport(800, 400, camera);
-        this.stage = new Stage(viewport);
+        this.guiCamera = new OrthographicCamera();
+        this.guiCamera.setToOrtho(false, 800, 480);
+        this.guiViewport = new ExtendViewport(800, 400, guiCamera);
+        this.stage = new Stage(guiViewport);
         constructUI();
 
         this.score = 0;
+
+        /// Generate tiles
+        // todo: random level generation/selection from pre-made levels based on difficulty?
+        // possibly add vertical scrolling if the level is very tall
+
+
+
+        /// New Game Viewport
+        // Init
+        this.gameViewport = new FitViewport(10, 10, this.gameCamera);
+
+
 
         // tilemap setup
         // status: rewrite
@@ -134,7 +148,7 @@ public class GameScreen implements Screen {
 
             // "Applies the viewport to the camera and sets the glViewport"
             // ? is this needed?
-            viewport.apply(true);
+            guiViewport.apply(true);
 
             // ? should this call be moved to resize?
             // status: disabled (null pointer exception)
