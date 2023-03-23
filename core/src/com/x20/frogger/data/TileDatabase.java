@@ -13,6 +13,8 @@ public class TileDatabase {
     private static Map<Character, String> charToKey;
     private static Map<String, Character> keyToChar;
 
+    private static 
+
     public static void initDatabase() {
         if (init) {
             return;

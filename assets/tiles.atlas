@@ -1,0 +1,55 @@
+
+tiles.png
+size: 64, 64
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+tile_road
+  rotate: false
+  xy: 1, 1
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+button_enderman
+  rotate: false
+  xy: 1, 70
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+button_steve
+  rotate: false
+  xy: 67, 136
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+down_64x64
+  rotate: false
+  xy: 67, 70
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+left_64x64
+  rotate: false
+  xy: 133, 136
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+right_64x64
+  rotate: false
+  xy: 67, 4
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+up_1_64x64
+  rotate: false
+  xy: 1, 4
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1

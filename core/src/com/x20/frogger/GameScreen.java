@@ -77,7 +77,14 @@ public class GameScreen implements Screen {
         /// Generate tiles
         // todo: random level generation/selection from pre-made levels based on difficulty?
         // possibly add vertical scrolling if the level is very tall
-
+        tileMap = new TileMap();
+        tileMap.generateTileMapFromStringArray(new String[] {
+                "",
+                "",
+                "",
+                "",
+                ""
+        });
 
 
         /// New Game Viewport
