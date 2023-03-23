@@ -73,39 +73,48 @@ public class GameScreen implements Screen {
         this.score = 0;
 
         // tilemap setup
-        this.maxY = 0;
-        this.tileSize = 64;
-        this.tileMap = constructMap();
+        // status: rewrite
 
-        // todo: replace with proper vehicle classes
+        //this.maxY = 0;
+        //this.tileSize = 64;
+        //this.tileMap = constructMap();
+
         // vehicle types
-        vehicleTypes = new DataEnums.VehicleType[] {
-            DataEnums.VehicleType.IRON_GOLEM,
-            DataEnums.VehicleType.CREEPER,
-            DataEnums.VehicleType.SKELETON,
-            DataEnums.VehicleType.IRON_GOLEM,
-            DataEnums.VehicleType.SKELETON,
-            DataEnums.VehicleType.CREEPER,
-            DataEnums.VehicleType.CREEPER,
-            DataEnums.VehicleType.CREEPER,
-            DataEnums.VehicleType.CREEPER,
-        };
+        // todo: replace with proper vehicle classes
+        // status: disabled
+        //vehicleTypes = new DataEnums.VehicleType[] {
+        //    DataEnums.VehicleType.IRON_GOLEM,
+        //    DataEnums.VehicleType.CREEPER,
+        //    DataEnums.VehicleType.SKELETON,
+        //    DataEnums.VehicleType.IRON_GOLEM,
+        //    DataEnums.VehicleType.SKELETON,
+        //    DataEnums.VehicleType.CREEPER,
+        //    DataEnums.VehicleType.CREEPER,
+        //    DataEnums.VehicleType.CREEPER,
+        //    DataEnums.VehicleType.CREEPER,
+        //};
 
-        // todo: replace with vehicle generator
         // generate vehicle types in level
         // replaces hard coded array above
-        for (int i = 0; i < 9; i++) {
-            int rand = MathUtils.random(1, 3);
-            vehicleTypes[i] = generateVehicleType(rand);
-        }
+        // todo: replace with vehicle generator
+        // status: disabled
 
-        this.vehicles = spawnVehicles(vehicleTypes);
+        //for (int i = 0; i < 9; i++) {
+        //    int rand = MathUtils.random(1, 3);
+        //    vehicleTypes[i] = generateVehicleType(rand);
+        //}
+        //
+        //this.vehicles = spawnVehicles(vehicleTypes);
+
 
         // character sprite
-        TextureAtlas atlas = game.getAssetManager().get("mc-style.atlas");
-        TextureRegion region = atlas.findRegion(GameConfigViewModel.getCharacterAtlas());
-        this.character = new Sprite(region);
-        character.setPosition(Gdx.graphics.getWidth() / 2 - character.getWidth() / 2, 0);
+        // todo: undergoing reconstruction
+        // status: disabled
+
+        //TextureAtlas atlas = game.getAssetManager().get("mc-style.atlas");
+        //TextureRegion region = atlas.findRegion(GameConfigViewModel.getCharacterAtlas());
+        //this.character = new Sprite(region);
+        //character.setPosition(Gdx.graphics.getWidth() / 2 - character.getWidth() / 2, 0);
     }
 
     @Override
@@ -113,7 +122,8 @@ public class GameScreen implements Screen {
         game.getAssetManager().finishLoading();
 
         // TiledMapRenderer, libGDX feature
-        renderer = new OrthogonalTiledMapRenderer(tileMap, 1);
+        // status: rewrite
+        // renderer = new OrthogonalTiledMapRenderer(tileMap, 1);
     }
 
     @Override
@@ -122,14 +132,17 @@ public class GameScreen implements Screen {
             Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-            // ? is this needed?
             // "Applies the viewport to the camera and sets the glViewport"
+            // ? is this needed?
             viewport.apply(true);
 
-            // todo: should this call be moved to resize?
-            renderer.setView(camera);
+            // ? should this call be moved to resize?
+            // status: disabled (null pointer exception)
+            //renderer.setView(camera);
+
             // render the tilemap
-            renderer.render();
+            // status: disabled (null pointer exception)
+            //renderer.render();
 
             // update and render the UI
             stage.act();
@@ -140,16 +153,19 @@ public class GameScreen implements Screen {
             update();
 
             // render sprites
-            // todo: optimize render calls
+            // todo: under reconstruction
+            // status: disabled
             game.getBatch().begin();
-            character.draw(game.getBatch());
-            // render all vehicles in one batch
-            for (Iterator<Vehicle> iter = vehicles.iterator(); iter.hasNext();) {
-                Vehicle vehicle = iter.next();
-                game.getBatch().draw(
-                    vehicle.getVehicleImage(), vehicle.getHitbox().x, vehicle.getHitbox().y
-                );
-            }
+
+            //character.draw(game.getBatch());
+            //// render all vehicles in one batch
+            //for (Iterator<Vehicle> iter = vehicles.iterator(); iter.hasNext();) {
+            //    Vehicle vehicle = iter.next();
+            //    game.getBatch().draw(
+            //        vehicle.getVehicleImage(), vehicle.getHitbox().x, vehicle.getHitbox().y
+            //    );
+            //}
+
             game.getBatch().end();
         }
     }
@@ -163,51 +179,57 @@ public class GameScreen implements Screen {
     public void update() {
         // bounds restriction
         // todo: update all to work with world coordinates and not screen coordinates
-        if (character.getX() < 0) {
-            character.setX(0);
-        }
-        if (character.getX() > Gdx.graphics.getWidth() - character.getWidth()) {
-            character.setX(Gdx.graphics.getWidth() - character.getWidth());
-        }
-
-        if (character.getY() < 0) {
-            character.setY(0);
-        }
-        if (character.getY() > Gdx.graphics.getHeight() - character.getHeight() - tableHeight) {
-            character.setY(Gdx.graphics.getHeight() - character.getHeight() - tableHeight);
-        }
+        // status: disabled
+        //if (character.getX() < 0) {
+        //    character.setX(0);
+        //}
+        //if (character.getX() > Gdx.graphics.getWidth() - character.getWidth()) {
+        //    character.setX(Gdx.graphics.getWidth() - character.getWidth());
+        //}
+        //
+        //if (character.getY() < 0) {
+        //    character.setY(0);
+        //}
+        //if (character.getY() > Gdx.graphics.getHeight() - character.getHeight() - tableHeight) {
+        //    character.setY(Gdx.graphics.getHeight() - character.getHeight() - tableHeight);
+        //}
 
         // score system
         // todo: overhaul and put in separate method
         // ? should this go here? in the player class?
-        if (maxY < character.getY()) {
-            maxY = character.getY();
-            // todo: replace with tile data based system
-            /*
-             * might try making a separate array of point values to store for this
-             * maybe just store this in tile data? would be wasteful though since
-             * each row of tiles awards the same points... except for the top row,
-             * where some spots are goal tiles and others will straight up kill you
-             * so we can't just reduce the tile data set to one tile representing the entire row
-             */
-            score += getPoints(maxY);
-            // score += 1;
-            updateLabel.setText("([#00FF00]" + GameConfig.getName()
-                    + "[#FFFFFF])  Lives: [#ADD8E6]" + getLives(GameConfig.getDifficulty())
-                    + "  [#FFFFFF]Score: [#A020F0]" + score);
-        }
+        // status: disabled
+
+        //if (maxY < character.getY()) {
+        //    maxY = character.getY();
+        //    // todo: replace with tile data based system
+        //    /*
+        //     * might try making a separate array of point values to store for this
+        //     * maybe just store this in tile data? would be wasteful though since
+        //     * each row of tiles awards the same points... except for the top row,
+        //     * where some spots are goal tiles and others will straight up kill you
+        //     * so we can't just reduce the tile data set to one tile representing the entire row
+        //     */
+        //    score += getPoints(maxY);
+        //    // score += 1;
+        //    updateLabel.setText("([#00FF00]" + GameConfig.getName()
+        //            + "[#FFFFFF])  Lives: [#ADD8E6]" + getLives(GameConfig.getDifficulty())
+        //            + "  [#FFFFFF]Score: [#A020F0]" + score);
+        //}
 
         // update vehicle position
         // todo: move into separate method
-        for (Iterator<Vehicle> iter = vehicles.iterator(); iter.hasNext();) {
-            Vehicle vehicle = iter.next();
-            vehicle.updatePosition();
-        }
+        // status: disabled
+
+        //for (Iterator<Vehicle> iter = vehicles.iterator(); iter.hasNext();) {
+        //    Vehicle vehicle = iter.next();
+        //    vehicle.updatePosition();
+        //}
     }
 
     // deprecated point system
     // todo: delete this
     // yCoord is in screen space
+    // status: unused
     private int getPoints(float yCoord) {
         int points = 1;
         for (int i = vehicleTypes.length - 1; i > -1; i--) {
@@ -225,6 +247,7 @@ public class GameScreen implements Screen {
 
     // Generate tile map
     // todo: replace with screen-space independent generation
+    // status: unused
     private TiledMap constructMap() {
         int mapWidth = Gdx.graphics.getWidth() / tileSize;
         int mapHeight = Gdx.graphics.getHeight() / tileSize;
@@ -312,6 +335,7 @@ public class GameScreen implements Screen {
     Spawns vehicles spaced out from each other
     and reuses them instead of spawning and despawning (due to Vehicle's updatePosition method)
      */
+    // status: unused
     private Array<Vehicle> spawnVehicles(DataEnums.VehicleType[] vehicleTypes) {
         Array<Vehicle> spawnedVehicles = new Array<Vehicle>();
         for (int y = 0; y < vehicleTypes.length; y++) {
@@ -348,6 +372,7 @@ public class GameScreen implements Screen {
     // not sure what the purpose of separate width values is for
     // edit: for some reason this is used to build the hitbox of the vehicle.
     //       not sure why this isn't just a constant size or stored elsewhere
+    // todo: remove
     public static int getVehicleWidth(DataEnums.VehicleType vehicleType) {
         switch (vehicleType) {
         case IRON_GOLEM:
@@ -407,6 +432,7 @@ public class GameScreen implements Screen {
 
     // binds player movement input to player movement
     // todo: rip and tear
+    // status: callbacks disabled
     private void addMovementListeners(
         ImageButton up,
         ImageButton left,
@@ -416,28 +442,28 @@ public class GameScreen implements Screen {
         up.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                character.setY(character.getY() + tileSize);
+                //character.setY(character.getY() + tileSize);
             }
         });
 
         right.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                character.setX(character.getX() + tileSize);
+                //character.setX(character.getX() + tileSize);
             }
         });
 
         left.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                character.setX(character.getX() - tileSize);
+                //character.setX(character.getX() - tileSize);
             }
         });
 
         down.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                character.setY(character.getY() - tileSize);
+                //character.setY(character.getY() - tileSize);
             }
         });
     }
