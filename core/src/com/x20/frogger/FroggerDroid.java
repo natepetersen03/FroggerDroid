@@ -42,6 +42,7 @@ public class FroggerDroid extends Game {
         assetManager.load("creeper.png", Texture.class);
         assetManager.load("ironGolem.png", Texture.class);
         assetManager.load("skeleton.png", Texture.class);
+        assetManager.load("tiles.png", Texture.class);
         // end game init
 
         skinGUI = FTFSkinLoader.loadFTFSkin("mc-style.json");

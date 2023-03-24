@@ -1,11 +1,8 @@
-package com.x20.frogger.data;
+package com.x20.frogger.game.tiles;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.x20.frogger.game.Tile;
-import com.x20.frogger.graphics.TileRenderData;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -13,10 +10,11 @@ import java.util.Map;
 public class TileDatabase {
 
     private static boolean init = false;
-    private static Map<String, TileStruct> database;
+    private static Map<String, Tile> database;
     private static Map<Character, String> charToKey;
     private static Map<String, Character> keyToChar;
 
+    // todo: move texture file data outside the database
     private static Texture packedTileTextures;
 
     private static TextureAtlas tileTextureAtlas;
@@ -25,13 +23,11 @@ public class TileDatabase {
         if (init) {
             return;
         }
-        database = new HashMap<String, TileStruct>();
+        database = new HashMap<String, Tile>();
         charToKey = new HashMap<Character, String>();
         keyToChar = new HashMap<String, Character>();
         packedTileTextures = new Texture(new FileHandle("tiles.png"));
         packedTileTextures.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
-        TextureRegion r = new TextureRegion();
-        tileTextureAtlas = new TextureAtlas();
 
         generateEntry(
             new TileID("road", 'r'),
@@ -61,7 +57,7 @@ public class TileDatabase {
         System.out.println("Tile database initialized");
     }
 
-    public static Map<String, TileStruct> getDatabase() {
+    public static Map<String, Tile> getDatabase() {
         if (!init) {
             initDatabase();
         }
@@ -87,8 +83,8 @@ public class TileDatabase {
         TileSpriteData spriteData
     ) {
         database.put(id.name,
-            new TileStruct(
-                new Tile(id.name, properties.isSolid, properties.isDamaging, properties.xVelocity),
+            new Tile(
+                new TileData(id.name, properties.isSolid, properties.isDamaging, properties.xVelocity),
                 new TileRenderData(
                     packedTileTextures,
                     spriteData.textureX, spriteData.textureY,

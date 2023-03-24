@@ -1,7 +1,7 @@
-package com.x20.frogger.graphics;
+package com.x20.frogger.game.tiles;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.x20.frogger.game.TileMap;
+import com.x20.frogger.game.tiles.TileMap;
 
 public class TileRenderer {
     private SpriteBatch spriteBatch;

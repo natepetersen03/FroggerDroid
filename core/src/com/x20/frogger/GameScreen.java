@@ -22,7 +22,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.x20.frogger.data.DataEnums;
 import com.x20.frogger.game.GameConfig;
-import com.x20.frogger.game.TileMap;
+import com.x20.frogger.game.tiles.TileMap;
+import com.x20.frogger.game.tiles.TileRenderer;
 
 public class GameScreen implements Screen {
     // Game state
@@ -38,6 +39,7 @@ public class GameScreen implements Screen {
     // Game
     private Viewport gameViewport;
     private OrthographicCamera gameCamera;
+    private TileRenderer tileRenderer;
 
     // Tile data
     private TileMap tileMap;
@@ -100,7 +102,7 @@ public class GameScreen implements Screen {
         this.gameViewport = new FitViewport(
                 worldString[0].length(), worldString.length, this.gameCamera
         );
-
+        this.tileRenderer = new TileRenderer(this.game.getBatch(), tileMap);
 
 
         // tilemap setup
@@ -163,9 +165,6 @@ public class GameScreen implements Screen {
             Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-            // "Applies the viewport to the camera and sets the glViewport"
-            // ? is this needed?
-            guiViewport.apply(true);
 
             // ? should this call be moved to resize?
             // status: disabled (null pointer exception)
@@ -174,7 +173,12 @@ public class GameScreen implements Screen {
             // render the tilemap
             // status: disabled (null pointer exception)
             //renderer.render();
+            gameViewport.apply(true);
+            tileRenderer.render();
 
+            // "Applies the viewport to the camera and sets the glViewport"
+            // ? is this needed?
+            guiViewport.apply(true);
             // update and render the UI
             stage.act();
             stage.draw();
@@ -204,7 +208,9 @@ public class GameScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         // update UI viewport on window resize
-        stage.getViewport().update(width, height, true);
+        gameViewport.update(width, height, true);
+        guiViewport.update(width, height, true);
+        //stage.getViewport().update(width, height, true);
     }
 
     public void update() {

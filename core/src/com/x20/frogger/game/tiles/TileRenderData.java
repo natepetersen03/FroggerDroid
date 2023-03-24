@@ -1,4 +1,4 @@
-package com.x20.frogger.graphics;
+package com.x20.frogger.game.tiles;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
