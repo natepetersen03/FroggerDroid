@@ -54,6 +54,7 @@ public class TestTileDatabaseData {
 
     @Test
     public void testStringToMap() {
+        TileDatabase.initDatabase();
         TileMap map = new TileMap();
         map.generateTileMapFromStringArray(new String[] {
             "rrrrr",
@@ -66,8 +67,8 @@ public class TestTileDatabaseData {
     }
 
     @Test
-
     public void testMapToString() {
+        TileDatabase.initDatabase();
         TileMap map = new TileMap();
         String[] strMap = new String[] {
             "rrrrr",

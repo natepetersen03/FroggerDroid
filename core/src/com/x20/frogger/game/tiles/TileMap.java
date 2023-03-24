@@ -19,7 +19,7 @@ public class TileMap {
     }
 
     public Tile getTileStruct(int x, int y) {
-        if (x < 0 || x >= tilemap.length || y < 0 || y >= tilemap.length) {
+        if (x < 0 || x >= getWidth() || y < 0 || y >= getHeight()) {
             throw new IllegalArgumentException("Coordinates out of bounds");
         }
         return tilemap[x][y];
