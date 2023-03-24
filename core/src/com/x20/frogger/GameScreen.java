@@ -77,19 +77,29 @@ public class GameScreen implements Screen {
         /// Generate tiles
         // todo: random level generation/selection from pre-made levels based on difficulty?
         // possibly add vertical scrolling if the level is very tall
+        String[] worldString = new String[] {
+                "sgsgsgsgsgs",
+                "wwwwwwwwwww",
+                "wwwwwwwwwww",
+                "wwwwwwwwwww",
+                "sssssssssss",
+                "rrrrrrrrrrr",
+                "rrrrrrrrrrr",
+                "rrrrrrrrrrr",
+                "sssssssssss",
+                "rrrrrrrrrrr",
+                "rrrrrrrrrrr",
+                "sssssssssss"
+        };
         tileMap = new TileMap();
-        tileMap.generateTileMapFromStringArray(new String[] {
-                "",
-                "",
-                "",
-                "",
-                ""
-        });
+        tileMap.generateTileMapFromStringArray(worldString);
 
 
         /// New Game Viewport
         // Init
-        this.gameViewport = new FitViewport(10, 10, this.gameCamera);
+        this.gameViewport = new FitViewport(
+                worldString[0].length(), worldString.length, this.gameCamera
+        );
 
 
 
