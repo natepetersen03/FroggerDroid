@@ -34,13 +34,12 @@ public class GameScreen implements Screen {
 
     // GUI
     private Skin skin;
-    private OrthographicCamera guiCamera;
     private Viewport guiViewport;
     private Stage stage;
 
     // Game
-    private Viewport gameViewport;
     private OrthographicCamera gameCamera;
+    private Viewport gameViewport;
     private TileRenderer tileRenderer;
 
     // Tile data
@@ -73,10 +72,8 @@ public class GameScreen implements Screen {
 
         // init GUI
         this.skin = game.getSkinGUI();
-        this.guiCamera = new OrthographicCamera();
-        this.guiCamera.setToOrtho(false, 800, 480);
-        this.guiViewport = new ExtendViewport(800, 400, guiCamera);
-        this.stage = new Stage(guiViewport);
+        // todo: get these width and height values from a variable somewhere
+        this.guiViewport = new ExtendViewport(500, 480);
         constructUI();
 
         this.score = 0;
@@ -104,10 +101,11 @@ public class GameScreen implements Screen {
 
         /// New Game Viewport
         // Init
-        this.gameCamera = new OrthographicCamera();
-        this.gameViewport = new FitViewport(
-                worldString[0].length(), worldString.length, this.gameCamera
-        );
+        this.gameCamera = new OrthographicCamera(worldString[0].length(), worldString.length);
+        //this.gameViewport = new FitViewport(
+        //        worldString[0].length() * 160, worldString.length * 160, gameCamera
+        //);
+        this.gameViewport = new ExtendViewport(worldString[0].length(), worldString.length, gameCamera);
         this.tileRenderer = new TileRenderer(this.game.getBatch(), tileMap);
 
 
@@ -169,9 +167,12 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         if (!paused) {
+            // game update call
+            update();
+
+            // clear screen
             Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-
 
             // ? should this call be moved to resize?
             // status: disabled (null pointer exception)
@@ -180,25 +181,16 @@ public class GameScreen implements Screen {
             // render the tilemap
             // status: disabled (null pointer exception)
             //renderer.render();
+
+            // Render game viewport first
             gameViewport.apply(true);
+            game.getBatch().setProjectionMatrix(gameViewport.getCamera().combined);
             tileRenderer.render();
-
-            // "Applies the viewport to the camera and sets the glViewport"
-            // ? is this needed?
-            guiViewport.apply(true);
-            // update and render the UI
-            stage.act();
-            stage.draw();
-
-
-            // game update call
-            update();
 
             // render sprites
             // todo: under reconstruction
             // status: disabled
-            game.getBatch().begin();
-
+            //game.getBatch().begin();
             //character.draw(game.getBatch());
             //// render all vehicles in one batch
             //for (Iterator<Vehicle> iter = vehicles.iterator(); iter.hasNext();) {
@@ -207,17 +199,33 @@ public class GameScreen implements Screen {
             //        vehicle.getVehicleImage(), vehicle.getHitbox().x, vehicle.getHitbox().y
             //    );
             //}
+            //game.getBatch().end();
 
-            game.getBatch().end();
+            // Then render GUI viewport
+            guiViewport.apply(true);
+            game.getBatch().setProjectionMatrix(guiViewport.getCamera().combined);
+            stage.act();
+            stage.draw();
         }
     }
 
     @Override
     public void resize(int width, int height) {
         // update UI viewport on window resize
-        gameViewport.update(width, height, true);
+        gameViewport.update(width, height, false);
         guiViewport.update(width, height, true);
         //stage.getViewport().update(width, height, true);
+        System.out.println(
+            "Screen dimensions: " +
+            gameViewport.getScreenWidth() +
+            " x " +
+            gameViewport.getScreenHeight() +
+            "; World dimensions: " +
+            gameViewport.getWorldWidth() +
+            " x " +
+            gameViewport.getWorldHeight()
+        );
+
     }
 
     public void update() {
@@ -304,8 +312,7 @@ public class GameScreen implements Screen {
     }
 
     private void constructUI() {
-
-        stage = new Stage(new ExtendViewport(500, 480));
+        stage = new Stage(guiViewport);
         Gdx.input.setInputProcessor(stage);
 
         Table table = new Table();
