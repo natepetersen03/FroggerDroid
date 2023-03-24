@@ -29,6 +29,12 @@ public class TileMap {
     }
 
     // MUST HAVE A PERFECTLY RECTANGULAR STRING OR BAD THINGS MIGHT HAPPEN
+
+    /**
+     * Populate the tilemap using an array of strings which indicate the tile type
+     * Precondition: Each string in the array are of equal length
+     * @param str Array of tile strings
+     */
     public void generateTileMapFromStringArray(String[] str) {
         tilemap = new TileStruct[str[0].length()][str.length];
         for (int x = 0; x < str[0].length(); x++) {
@@ -43,6 +49,10 @@ public class TileMap {
         return TileDatabase.getDatabase().get(TileDatabase.getCharToKey().get(charAt));
     }
 
+    /**
+     * Get the corresponding array of tile strings for an existing tilemap
+     * @return the string array representation of the tilemap
+     */
     public String[] generateStringArrayFromTileMap() {
         String[] str = new String[tilemap[0].length];
         char[] row = new char[tilemap.length];

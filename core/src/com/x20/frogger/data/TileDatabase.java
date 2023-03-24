@@ -36,19 +36,19 @@ public class TileDatabase {
         generateEntry(
             new TileID("road", 'r'),
             new TileProperties(false, false, 0),
-            new TileSpriteData(0, 0, 16, 16, 1, 0)
+            new TileSpriteData(0, 16, 16, 16, 1, 0)
         );
 
         generateEntry(
             new TileID("water", 'w'),
             new TileProperties(false, true, 0.1f),
-            new TileSpriteData(0, 0, 16, 16, 1, 0)
+            new TileSpriteData(2*16, 0, 16, 16, 2, 1)
         );
 
         generateEntry(
             new TileID("safe", 's'),
             new TileProperties(false, false, 0f),
-            new TileSpriteData(0, 0, 16, 16, 1, 0)
+            new TileSpriteData(16, 0, 16, 16, 1, 0)
         );
 
         generateEntry(
@@ -90,6 +90,7 @@ public class TileDatabase {
             new TileStruct(
                 new Tile(id.name, properties.isSolid, properties.isDamaging, properties.xVelocity),
                 new TileRenderData(
+                    packedTileTextures,
                     spriteData.textureX, spriteData.textureY,
                     spriteData.width, spriteData.height,
                     spriteData.frames, spriteData.fps)
