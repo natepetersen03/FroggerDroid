@@ -26,20 +26,21 @@ public class AssetManagerSingleton {
     }
 
     public AssetManager getAssetManager() {
-        return instance.assetManager;
+        return assetManager;
     }
 
-    public void init() {
+    public void loadAssets() {
         TextureParameter textureParameter = new TextureParameter();
         textureParameter.minFilter = Texture.TextureFilter.Linear;
         textureParameter.magFilter = Texture.TextureFilter.Nearest;
         textureParameter.genMipMaps = false;
 
-        instance.assetManager.load("mc-style.atlas", TextureAtlas.class);
-        instance.assetManager.load("grass.png", Texture.class, textureParameter);
-        instance.assetManager.load("creeper.png", Texture.class, textureParameter);
-        instance.assetManager.load("ironGolem.png", Texture.class, textureParameter);
-        instance.assetManager.load("skeleton.png", Texture.class, textureParameter);
-        instance.assetManager.load("tiles.png", Texture.class, textureParameter);
+        assetManager.load("mc-style.atlas", TextureAtlas.class);
+        assetManager.load("creeper.png", Texture.class, textureParameter);
+        assetManager.load("ironGolem.png", Texture.class, textureParameter);
+        assetManager.load("skeleton.png", Texture.class, textureParameter);
+        assetManager.load("tiles.png", Texture.class, textureParameter);
+
+        System.out.println("Assets enqueued...");
     }
 }

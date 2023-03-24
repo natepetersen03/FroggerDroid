@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.x20.frogger.data.DataEnums;
 import com.x20.frogger.game.GameConfig;
+import com.x20.frogger.game.tiles.TileDatabase;
 import com.x20.frogger.game.tiles.TileMap;
 import com.x20.frogger.game.tiles.TileRenderer;
 import com.x20.frogger.graphics.AssetManagerSingleton;
@@ -67,6 +68,9 @@ public class GameScreen implements Screen {
     public GameScreen(final FroggerDroid game) {
         this.game = game;
 
+        // init TileDatabase
+        TileDatabase.initDatabase();
+
         // init GUI
         this.skin = game.getSkinGUI();
         this.guiCamera = new OrthographicCamera();
@@ -100,6 +104,7 @@ public class GameScreen implements Screen {
 
         /// New Game Viewport
         // Init
+        this.gameCamera = new OrthographicCamera();
         this.gameViewport = new FitViewport(
                 worldString[0].length(), worldString.length, this.gameCamera
         );
@@ -154,7 +159,7 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         // game.getAssetManager().finishLoading();
-        AssetManagerSingleton.getInstance().getAssetManager().finishLoading();
+        //AssetManagerSingleton.getInstance().getAssetManager().finishLoading();
 
         // TiledMapRenderer, libGDX feature
         // status: rewrite
@@ -384,16 +389,16 @@ public class GameScreen implements Screen {
             Texture sprite;
             switch (vehicleTypes[y]) {
             case IRON_GOLEM:
-                sprite = game.getAssetManager().get("ironGolem.png", Texture.class);
+                sprite = AssetManagerSingleton.getInstance().getAssetManager().get("ironGolem.png", Texture.class);
                 break;
             case CREEPER:
-                sprite = game.getAssetManager().get("creeper.png", Texture.class);
+                sprite = AssetManagerSingleton.getInstance().getAssetManager().get("creeper.png", Texture.class);
                 break;
             case SKELETON:
-                sprite = game.getAssetManager().get("skeleton.png", Texture.class);
+                sprite = AssetManagerSingleton.getInstance().getAssetManager().get("skeleton.png", Texture.class);
                 break;
             default:
-                sprite = game.getAssetManager().get("grass.png", Texture.class);
+                sprite = AssetManagerSingleton.getInstance().getAssetManager().get("grass.png", Texture.class);
                 break;
             }
 

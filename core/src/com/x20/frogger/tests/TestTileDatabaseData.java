@@ -14,8 +14,16 @@ import org.junit.Test;
 public class TestTileDatabaseData {
     @BeforeClass
     public static void initAssets() {
-        AssetManagerSingleton.getInstance().init();
-        AssetManagerSingleton.getInstance().getAssetManager().finishLoading();
+        /// So it turns out that I can't use any libgdx-specific code (or at least, nothing
+        /// related with asset loading, which likely has more to do with opengl) without
+        /// somehow loading part/all of libgdx that deals with this stuff
+        /// so I can't test this here.
+        /// There is a way to test using the headless backend.
+        /// It can be implemented using code provided freely from:
+        /// https://github.com/TomGrill/gdx-testing
+        /// todo: implement the above
+        //AssetManagerSingleton.getInstance().loadAssets();
+        //AssetManagerSingleton.getInstance().getAssetManager().finishLoading();
     }
 
     @Test

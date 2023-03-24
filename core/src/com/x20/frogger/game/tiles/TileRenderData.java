@@ -33,10 +33,10 @@ public class TileRenderData {
      * @param fps how fast an animated tile is. set to 0 for a static image
      */
     public TileRenderData(int textureX, int textureY, int width, int height, int frames, int fps) {
-        this.tileTextureRegion = new TextureRegion(
-                AssetManagerSingleton.getInstance().getAssetManager().get("tiles.png", Texture.class),
-                textureX, textureY, width, height
-        );
+        //this.tileTextureRegion = new TextureRegion(
+        //        AssetManagerSingleton.getInstance().getAssetManager().get("tiles.png", Texture.class),
+        //        textureX, textureY, width, height
+        //);
         this.textureX = Math.max(textureX, 0);
         this.textureY = Math.max(textureY, 0);
         this.width = Math.max(width, 0);

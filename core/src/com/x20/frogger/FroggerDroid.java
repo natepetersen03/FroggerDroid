@@ -13,12 +13,7 @@ import com.x20.frogger.utils.FTFSkinLoader;
 public class FroggerDroid extends Game {
 
     private SpriteBatch batch;
-    private AssetManager assetManager = new AssetManager();
     private Skin skinGUI;
-
-    public AssetManager getAssetManager() {
-        return assetManager;
-    }
 
     public SpriteBatch getBatch() {
         return batch;
@@ -32,18 +27,8 @@ public class FroggerDroid extends Game {
         batch = new SpriteBatch();
 
         // game asset init
-        TextureLoader.TextureParameter parameter = new TextureLoader.TextureParameter();
-        parameter.minFilter = Texture.TextureFilter.Linear;
-        parameter.magFilter = Texture.TextureFilter.Nearest;
-        parameter.genMipMaps = false;
-
-        //assetManager.load("mc-style.atlas", TextureAtlas.class);
-        //assetManager.load("grass.png", Texture.class);
-        //assetManager.load("creeper.png", Texture.class);
-        //assetManager.load("ironGolem.png", Texture.class);
-        //assetManager.load("skeleton.png", Texture.class);
-        //assetManager.load("tiles.png", Texture.class);
-        AssetManagerSingleton.getInstance().init();
+        AssetManagerSingleton.getInstance().loadAssets();
+        AssetManagerSingleton.getInstance().getAssetManager().finishLoading();
         // end game init
 
         skinGUI = FTFSkinLoader.loadFTFSkin("mc-style.json");
@@ -57,7 +42,6 @@ public class FroggerDroid extends Game {
 
     public void dispose() {
         batch.dispose();
-        assetManager.dispose();
         AssetManagerSingleton.getInstance().getAssetManager().dispose();
         skinGUI.dispose();
     }

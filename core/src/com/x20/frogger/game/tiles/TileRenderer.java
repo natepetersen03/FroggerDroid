@@ -33,13 +33,14 @@ public class TileRenderer {
             for (int x = 0; x < tileMap.getWidth(); x++) {
                 // draw left-to-right, bottom-to-top.
                 // bottom left is (0,0)
-                spriteBatch.draw(
-                    tileMap.getTileStruct(x, y).getRenderData().getTextureRegion(),
-                    x,
-                    y,
-                    1,
-                    1
-                );
+
+                //spriteBatch.draw(
+                //    tileMap.getTileStruct(x, y).getRenderData().getTextureRegion(),
+                //    x,
+                //    y,
+                //    1,
+                //    1
+                //);
             }
         }
 

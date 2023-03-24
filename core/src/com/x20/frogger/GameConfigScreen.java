@@ -53,7 +53,7 @@ public class GameConfigScreen extends ScreenAdapter {
     @Override
     public void show() {
         // load all assets before displaying ready
-        game.getAssetManager().finishLoading();
+        // now called in FroggerDroid immediately after assets have been loaded
     }
 
     @Override
