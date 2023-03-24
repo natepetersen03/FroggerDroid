@@ -102,19 +102,10 @@ public class GameScreen implements Screen {
         /// New Game Viewport
         // Init
         this.gameCamera = new OrthographicCamera(worldString[0].length(), worldString.length);
-        //this.gameViewport = new FitViewport(
-        //        worldString[0].length() * 160, worldString.length * 160, gameCamera
-        //);
-        this.gameViewport = new ExtendViewport(worldString[0].length(), worldString.length, gameCamera);
+        this.gameViewport = new FitViewport(worldString[0].length(), worldString.length, gameCamera);
+        //this.gameViewport = new ExtendViewport(worldString[0].length(), worldString.length, gameCamera);
         this.tileRenderer = new TileRenderer(this.game.getBatch(), tileMap);
 
-
-        // tilemap setup
-        // status: rewrite
-
-        //this.maxY = 0;
-        //this.tileSize = 64;
-        //this.tileMap = constructMap();
 
         // vehicle types
         // todo: replace with proper vehicle classes
@@ -156,12 +147,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-        // game.getAssetManager().finishLoading();
-        //AssetManagerSingleton.getInstance().getAssetManager().finishLoading();
 
-        // TiledMapRenderer, libGDX feature
-        // status: rewrite
-        // renderer = new OrthogonalTiledMapRenderer(tileMap, 1);
     }
 
     @Override
@@ -173,14 +159,6 @@ public class GameScreen implements Screen {
             // clear screen
             Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-
-            // ? should this call be moved to resize?
-            // status: disabled (null pointer exception)
-            //renderer.setView(camera);
-
-            // render the tilemap
-            // status: disabled (null pointer exception)
-            //renderer.render();
 
             // Render game viewport first
             gameViewport.apply(true);
@@ -212,9 +190,8 @@ public class GameScreen implements Screen {
     @Override
     public void resize(int width, int height) {
         // update UI viewport on window resize
-        gameViewport.update(width, height, false);
+        gameViewport.update(width, height, true);
         guiViewport.update(width, height, true);
-        //stage.getViewport().update(width, height, true);
         System.out.println(
             "Screen dimensions: " +
             gameViewport.getScreenWidth() +
@@ -295,20 +272,6 @@ public class GameScreen implements Screen {
 //            points = 1;
 //        }
         return points;
-    }
-
-    // Generate tile map
-    // todo: replace with screen-space independent generation
-    // status: unused
-    private TiledMap constructMap() {
-        int mapWidth = Gdx.graphics.getWidth() / tileSize;
-        int mapHeight = Gdx.graphics.getHeight() / tileSize;
-
-        // ? does this also assign sprites? or just the tile data?
-        MapGenerator mapGenerator = new MapGenerator(mapWidth, mapHeight);
-        mapGenerator.createMap1();
-
-        return mapGenerator.returnMap();
     }
 
     private void constructUI() {
