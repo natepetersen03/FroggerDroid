@@ -1,5 +1,9 @@
 package com.x20.frogger.data;
 
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.x20.frogger.game.Tile;
 import com.x20.frogger.graphics.TileRenderData;
 
@@ -13,7 +17,9 @@ public class TileDatabase {
     private static Map<Character, String> charToKey;
     private static Map<String, Character> keyToChar;
 
-    private static 
+    private static Texture packedTileTextures;
+
+    private static TextureAtlas tileTextureAtlas;
 
     public static void initDatabase() {
         if (init) {
@@ -22,6 +28,10 @@ public class TileDatabase {
         database = new HashMap<String, TileStruct>();
         charToKey = new HashMap<Character, String>();
         keyToChar = new HashMap<String, Character>();
+        packedTileTextures = new Texture(new FileHandle("tiles.png"));
+        packedTileTextures.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
+        TextureRegion r = new TextureRegion();
+        tileTextureAtlas = new TextureAtlas();
 
         generateEntry(
             new TileID("road", 'r'),
