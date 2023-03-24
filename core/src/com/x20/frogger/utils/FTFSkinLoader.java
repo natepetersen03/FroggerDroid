@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.ObjectSet;
 
+// todo: write to extend SkinLoader so we can load directly into an AssetManager
 public class FTFSkinLoader {
     public static Skin loadFTFSkin(String skinName) {
         return loadFTFSkin(skinName, Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
