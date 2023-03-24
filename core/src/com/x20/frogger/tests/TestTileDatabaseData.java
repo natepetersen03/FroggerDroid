@@ -2,19 +2,22 @@ package com.x20.frogger.tests;
 
 import static org.junit.Assert.assertEquals;
 
-import com.x20.frogger.game.tiles.TileDatabase;
 import com.x20.frogger.game.tiles.Tile;
+import com.x20.frogger.game.tiles.TileDatabase;
 import com.x20.frogger.game.tiles.TileMap;
+import com.x20.frogger.graphics.AssetManagerSingleton;
 
 import org.junit.Assert;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-/**
- * Example local unit test, which will execute on the development machine (host).
- *
- * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
- */
 public class TestTileDatabaseData {
+    @BeforeClass
+    public static void initAssets() {
+        AssetManagerSingleton.getInstance().init();
+        AssetManagerSingleton.getInstance().getAssetManager().finishLoading();
+    }
+
     @Test
     public void checkInitialization() {
         TileDatabase.initDatabase();

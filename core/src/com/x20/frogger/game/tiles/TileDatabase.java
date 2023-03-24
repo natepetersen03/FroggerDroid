@@ -14,11 +14,6 @@ public class TileDatabase {
     private static Map<Character, String> charToKey;
     private static Map<String, Character> keyToChar;
 
-    // todo: move texture file data outside the database
-    private static Texture packedTileTextures;
-
-    private static TextureAtlas tileTextureAtlas;
-
     public static void initDatabase() {
         if (init) {
             return;
@@ -26,8 +21,6 @@ public class TileDatabase {
         database = new HashMap<String, Tile>();
         charToKey = new HashMap<Character, String>();
         keyToChar = new HashMap<String, Character>();
-        packedTileTextures = new Texture(new FileHandle("tiles.png"));
-        packedTileTextures.setFilter(Texture.TextureFilter.Nearest, Texture.TextureFilter.Nearest);
 
         generateEntry(
             new TileID("road", 'r'),
@@ -59,20 +52,20 @@ public class TileDatabase {
 
     public static Map<String, Tile> getDatabase() {
         if (!init) {
-            initDatabase();
+            throw new TileDatabaseInitializationException();
         }
         return database;
     }
     public static Map<Character, String> getCharToKey() {
         if (!init) {
-            initDatabase();
+            throw new TileDatabaseInitializationException();
         }
         return charToKey;
     }
 
     public static Map<String, Character> getKeyToChar() {
         if (!init) {
-            initDatabase();
+            throw new TileDatabaseInitializationException();
         }
         return keyToChar;
     }
@@ -86,7 +79,6 @@ public class TileDatabase {
             new Tile(
                 new TileData(id.name, properties.isSolid, properties.isDamaging, properties.xVelocity),
                 new TileRenderData(
-                    packedTileTextures,
                     spriteData.textureX, spriteData.textureY,
                     spriteData.width, spriteData.height,
                     spriteData.frames, spriteData.fps)
@@ -135,4 +127,6 @@ public class TileDatabase {
             this.fps = fps;
         }
     }
+
+
 }

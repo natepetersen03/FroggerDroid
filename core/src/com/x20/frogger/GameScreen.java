@@ -24,6 +24,7 @@ import com.x20.frogger.data.DataEnums;
 import com.x20.frogger.game.GameConfig;
 import com.x20.frogger.game.tiles.TileMap;
 import com.x20.frogger.game.tiles.TileRenderer;
+import com.x20.frogger.graphics.AssetManagerSingleton;
 
 public class GameScreen implements Screen {
     // Game state
@@ -152,7 +153,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-        game.getAssetManager().finishLoading();
+        // game.getAssetManager().finishLoading();
+        AssetManagerSingleton.getInstance().getAssetManager().finishLoading();
 
         // TiledMapRenderer, libGDX feature
         // status: rewrite

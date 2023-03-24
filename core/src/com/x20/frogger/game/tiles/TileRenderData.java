@@ -2,6 +2,7 @@ package com.x20.frogger.game.tiles;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.x20.frogger.graphics.AssetManagerSingleton;
 
 public class TileRenderData {
     private int textureX = 0;
@@ -13,12 +14,12 @@ public class TileRenderData {
 
     private TextureRegion tileTextureRegion;
 
-    public TileRenderData(Texture packedTileTexture, int textureX, int textureY) {
-        this(packedTileTexture, textureX, textureY, 16, 16, 1, 0);
+    public TileRenderData(int textureX, int textureY) {
+        this(textureX, textureY, 16, 16, 1, 0);
     }
 
-    public TileRenderData(Texture packedTileTexture, int textureX, int textureY, int frames, int fps) {
-        this(packedTileTexture, textureX, textureY, 16, 16, frames, fps);
+    public TileRenderData(int textureX, int textureY, int frames, int fps) {
+        this(textureX, textureY, 16, 16, frames, fps);
     }
 
     /**
@@ -31,8 +32,11 @@ public class TileRenderData {
      * @param frames how many frames in a row this sprite has. set to 1 for a static image
      * @param fps how fast an animated tile is. set to 0 for a static image
      */
-    public TileRenderData(Texture packedTileTexture, int textureX, int textureY, int width, int height, int frames, int fps) {
-        this.tileTextureRegion = new TextureRegion(packedTileTexture, textureX, textureY, width, height);
+    public TileRenderData(int textureX, int textureY, int width, int height, int frames, int fps) {
+        this.tileTextureRegion = new TextureRegion(
+                AssetManagerSingleton.getInstance().getAssetManager().get("tiles.png", Texture.class),
+                textureX, textureY, width, height
+        );
         this.textureX = Math.max(textureX, 0);
         this.textureY = Math.max(textureY, 0);
         this.width = Math.max(width, 0);
