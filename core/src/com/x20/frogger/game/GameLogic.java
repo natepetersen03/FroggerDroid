@@ -66,6 +66,6 @@ public class GameLogic {
         // 2. update player
         // 3. update world (entities)
 
-
+        player.update();
     }
 }

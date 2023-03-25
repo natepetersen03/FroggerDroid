@@ -1,26 +1,21 @@
 package com.x20.frogger.game;
 
+import com.badlogic.gdx.math.Vector2;
 import com.x20.frogger.data.Updatable;
 
 public abstract class Entity implements Updatable {
 
-    protected float x = 0;
-    protected float y = 0;
-
-    public float getX() {
-        return x;
-    }
-    public float getY() {
-        return y;
+    protected Vector2 position = Vector2.Zero;
+    public void setPosition(float x, float y) {
+        position.set(x, y);
     }
 
-    public void setPos(float x, float y) {
-        this.x = x;
-        this.y = y;
+    public void setPosition(Vector2 newPosition) {
+        position = newPosition.cpy();
     }
 
-    public float[] getPos() {
-        return new float[] {x, y};
+    public Vector2 getPosition() {
+        return position.cpy();
     }
 
     @Override
