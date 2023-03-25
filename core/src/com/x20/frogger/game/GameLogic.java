@@ -1,24 +1,56 @@
 package com.x20.frogger.game;
 
+import com.x20.frogger.game.tiles.TileDatabase;
+import com.x20.frogger.game.tiles.TileMap;
+
 public class GameLogic {
     private static GameLogic instance;
 
-    // todo: get tile board information here (for bounds)
-    // the following are TEMPORARY variables for the purposes of testing
-    private int xMin = 0;
-    private int xMax = 20;
-    private int yMin = 0;
-    private int yMax = 20;
-
-    // other info the Game needs to know about
     private Player player = new Player();
+    private int score = 0;
+    private TileMap tileMap;
+    private String[] worldString;
 
     public Player getPlayer() {
         return player;
     }
 
+    public int getScore() {
+        return score;
+    }
+
+    public TileMap getTileMap() {
+        return tileMap;
+    }
+
     private GameLogic() {
         System.out.println("GameLogic singleton initialized");
+
+        // init TileDatabase
+        TileDatabase.initDatabase();
+
+        /// Generate tiles
+        // todo: random level generation/selection from pre-made levels based on difficulty?
+        // possibly add vertical scrolling if the level is very tall
+        worldString = new String[] {
+            "sgsgsgsgsgs",
+            "wwwwwwwwwww",
+            "wwwwwwwwwww",
+            "wwwwwwwwwww",
+            "sssssssssss",
+            "rrrrrrrrrrr",
+            "rrrrrrrrrrr",
+            "rrrrrrrrrrr",
+            "sssssssssss",
+            "rrrrrrrrrrr",
+            "rrrrrrrrrrr",
+            "sssssssssss"
+        };
+        tileMap = new TileMap();
+        tileMap.generateTileMapFromStringArray(worldString);
+
+        /// Player init
+        this.player = new Player();
     }
 
     public static synchronized GameLogic getInstance() {
@@ -28,18 +60,12 @@ public class GameLogic {
         return instance;
     }
 
+    public void update() {
+        // steps:
+        // 1. update input (handled by GUI in GameScreen.java)
+        // 2. update player
+        // 3. update world (entities)
 
-    // todo: move to Player.java
-    public void processMovement() {
-        if (!InputController.QUEUE_MOVEMENTS.isEmpty()) {
-            // replace with EnumHandler
-            switch (InputController.QUEUE_MOVEMENTS.poll()) {
-            default:
-                break;
-            }
-            System.out.println("Inputs processed");
-            System.out.println("Player position: " + player.getX() + ", " + player.getY());
-            InputController.QUEUE_MOVEMENTS.clear();
-        }
+
     }
 }

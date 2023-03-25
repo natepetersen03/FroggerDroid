@@ -53,6 +53,18 @@ public class Player extends Entity implements Renderable {
         super.update();
     }
 
+    // todo: move to Player.java
+    public void processMovement() {
+        if (!InputController.QUEUE_MOVEMENTS.isEmpty()) {
+            // replace with EnumHandler
+            switch (InputController.QUEUE_MOVEMENTS.poll()) {
+                default:
+                    break;
+            }
+            InputController.QUEUE_MOVEMENTS.clear();
+        }
+    }
+
     @Override
     public void render(Batch batch) {
         batch.draw(playerSprite, x, y, 1, 1);

@@ -5,11 +5,9 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -20,56 +18,41 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.x20.frogger.data.Controls;
 import com.x20.frogger.data.DataEnums;
 import com.x20.frogger.game.GameConfig;
-import com.x20.frogger.game.Player;
-import com.x20.frogger.game.tiles.TileDatabase;
-import com.x20.frogger.game.tiles.TileMap;
+import com.x20.frogger.game.GameLogic;
+import com.x20.frogger.game.InputController;
 import com.x20.frogger.game.tiles.TileRenderer;
 import com.x20.frogger.graphics.AssetManagerSingleton;
 
 public class GameScreen implements Screen {
     // Game state
     private final FroggerDroid game;
+    private GameLogic gameLogic;
     private boolean paused;
 
     // GUI
     private Skin skin;
     private Viewport guiViewport;
     private Stage stage;
+    private Label scoreLabel;
 
-    // Game
+
+    // Game rendering
     private OrthographicCamera gameCamera;
     private Viewport gameViewport;
     private TileRenderer tileRenderer;
-
-    // Tile data
-    private TileMap tileMap;
-
-    // (Old) Tiles
-    private int tileSize;
-    private float tableHeight;
-    private float maxY;
-    private TiledMap tiledMap;
-    private TiledMapRenderer tiledMapRenderer;
 
     // Vehicles
     private Array<Vehicle> vehicles;
     private DataEnums.VehicleType[] vehicleTypes;
 
-    // Player
-    private Player player;
-
-    // Score
-    // todo: refactor label
-    private Label updateLabel;
-    private int score;
-
     public GameScreen(final FroggerDroid game) {
         this.game = game;
 
-        // init TileDatabase
-        TileDatabase.initDatabase();
+        /// Initialize game logic
+        gameLogic = GameLogic.getInstance();
 
         // init GUI
         this.skin = game.getSkinGUI();
@@ -77,38 +60,12 @@ public class GameScreen implements Screen {
         this.guiViewport = new ExtendViewport(500, 480);
         constructUI();
 
-        this.score = 0;
-
-        /// Generate tiles
-        // todo: random level generation/selection from pre-made levels based on difficulty?
-        // possibly add vertical scrolling if the level is very tall
-        String[] worldString = new String[] {
-                "sgsgsgsgsgs",
-                "wwwwwwwwwww",
-                "wwwwwwwwwww",
-                "wwwwwwwwwww",
-                "sssssssssss",
-                "rrrrrrrrrrr",
-                "rrrrrrrrrrr",
-                "rrrrrrrrrrr",
-                "sssssssssss",
-                "rrrrrrrrrrr",
-                "rrrrrrrrrrr",
-                "sssssssssss"
-        };
-        tileMap = new TileMap();
-        tileMap.generateTileMapFromStringArray(worldString);
-
-
         /// New Game Viewport
         // Init
-        this.gameCamera = new OrthographicCamera(worldString[0].length(), worldString.length);
-        this.gameViewport = new FitViewport(worldString[0].length(), worldString.length, gameCamera);
+        this.gameCamera = new OrthographicCamera(gameLogic.getTileMap().getWidth(), gameLogic.getTileMap().getHeight());
+        this.gameViewport = new FitViewport(gameLogic.getTileMap().getWidth(), gameLogic.getTileMap().getHeight(), gameCamera);
         //this.gameViewport = new ExtendViewport(worldString[0].length(), worldString.length, gameCamera);
-        this.tileRenderer = new TileRenderer(this.game.getBatch(), tileMap);
-
-        /// Player init
-        this.player = new Player();
+        this.tileRenderer = new TileRenderer(this.game.getBatch(), gameLogic.getTileMap());
 
 
         // vehicle types
@@ -160,16 +117,13 @@ public class GameScreen implements Screen {
 
             game.getBatch().begin();
 
+            // Render tilemap
             tileRenderer.render();
-            player.render(game.getBatch());
 
-            game.getBatch().end();
-
-            // render sprites
+            // render vehicles
             // todo: under reconstruction
             // status: disabled
             //game.getBatch().begin();
-            //character.draw(game.getBatch());
             //// render all vehicles in one batch
             //for (Iterator<Vehicle> iter = vehicles.iterator(); iter.hasNext();) {
             //    Vehicle vehicle = iter.next();
@@ -177,7 +131,11 @@ public class GameScreen implements Screen {
             //        vehicle.getVehicleImage(), vehicle.getHitbox().x, vehicle.getHitbox().y
             //    );
             //}
-            //game.getBatch().end();
+
+            // Render player
+            gameLogic.getPlayer().render(game.getBatch());
+
+            game.getBatch().end();
 
             // Then render GUI viewport
             guiViewport.apply(true);
@@ -206,12 +164,7 @@ public class GameScreen implements Screen {
     }
 
     public void update() {
-        // steps:
-        // 1. update input
-        // 2. update player
-        // 3. update world (entities)
-
-        player.update();
+        gameLogic.update();
 
         // bounds restriction
         // todo: update all to work with world coordinates and not screen coordinates
@@ -265,21 +218,21 @@ public class GameScreen implements Screen {
     // deprecated point system
     // todo: delete this
     // yCoord is in screen space
-    // status: unused
-    private int getPoints(float yCoord) {
-        int points = 1;
-        for (int i = vehicleTypes.length - 1; i > -1; i--) {
-            System.out.println(i + ": checking position: " + 2 * tileSize + (i + 1));
-            if (yCoord >= 2 * tileSize + (i + 1) * tileSize) {
-                points = getVehicleVelocity(vehicleTypes[i]) / 10;
-            }
-        }
-        System.out.println("y-coord: " + yCoord + "points = " + points);
-//        if (yCoord >= 2 * tileSize + (vehicleTypes.length) * tileSize) {
-//            points = 1;
+    // status: disabled
+//    private int getPoints(float yCoord) {
+//        int points = 1;
+//        for (int i = vehicleTypes.length - 1; i > -1; i--) {
+//            System.out.println(i + ": checking position: " + 2 * tileSize + (i + 1));
+//            if (yCoord >= 2 * tileSize + (i + 1) * tileSize) {
+//                points = getVehicleVelocity(vehicleTypes[i]) / 10;
+//            }
 //        }
-        return points;
-    }
+//        System.out.println("y-coord: " + yCoord + "points = " + points);
+////        if (yCoord >= 2 * tileSize + (vehicleTypes.length) * tileSize) {
+////            points = 1;
+////        }
+//        return points;
+//    }
 
     private void constructUI() {
         stage = new Stage(guiViewport);
@@ -295,12 +248,11 @@ public class GameScreen implements Screen {
 
         table.row();
         skin.getFont("Pixelify").getData().markupEnabled = true;
-        updateLabel = new Label("([#00FF00]" + GameConfig.getName()
+        scoreLabel = new Label("([#00FF00]" + GameConfig.getName()
                 + "[#FFFFFF])  Lives: [#ADD8E6]" + getLives(GameConfig.getDifficulty())
-                + "  [#FFFFFF]Score: [#A020F0]" + score, skin, "dark-bg");
-        updateLabel.setAlignment(Align.top);
-        this.tableHeight = 200;
-        table.add(updateLabel).growX();
+                + "  [#FFFFFF]Score: [#A020F0]" + GameLogic.getInstance().getScore(), skin, "dark-bg");
+        scoreLabel.setAlignment(Align.top);
+        table.add(scoreLabel).growX();
         stage.addActor(table);
 
         Table moveTable = new Table();
@@ -356,38 +308,38 @@ public class GameScreen implements Screen {
     Spawns vehicles spaced out from each other
     and reuses them instead of spawning and despawning (due to Vehicle's updatePosition method)
      */
-    // status: unused
-    private Array<Vehicle> spawnVehicles(DataEnums.VehicleType[] vehicleTypes) {
-        Array<Vehicle> spawnedVehicles = new Array<Vehicle>();
-        for (int y = 0; y < vehicleTypes.length; y++) {
-            int width = getVehicleWidth(vehicleTypes[y]);
-            int velocity = getVehicleVelocity(vehicleTypes[y]);
-            int spacing = getVehicleSpacing(vehicleTypes[y]);
-            Texture sprite;
-            switch (vehicleTypes[y]) {
-            case IRON_GOLEM:
-                sprite = AssetManagerSingleton.getInstance().getAssetManager().get("ironGolem.png", Texture.class);
-                break;
-            case CREEPER:
-                sprite = AssetManagerSingleton.getInstance().getAssetManager().get("creeper.png", Texture.class);
-                break;
-            case SKELETON:
-                sprite = AssetManagerSingleton.getInstance().getAssetManager().get("skeleton.png", Texture.class);
-                break;
-            default:
-                sprite = AssetManagerSingleton.getInstance().getAssetManager().get("grass.png", Texture.class);
-                break;
-            }
-
-            for (int x = 0; x < Gdx.graphics.getWidth(); x += spacing * tileSize) {
-                Vehicle vehicle = new Vehicle(
-                    x, 2 * tileSize + (y + 1) * tileSize, tileSize, width, velocity, sprite);
-                spawnedVehicles.add(vehicle);
-            }
-        }
-
-        return spawnedVehicles;
-    }
+    // status: disabled
+    //private Array<Vehicle> spawnVehicles(DataEnums.VehicleType[] vehicleTypes) {
+    //    Array<Vehicle> spawnedVehicles = new Array<Vehicle>();
+    //    for (int y = 0; y < vehicleTypes.length; y++) {
+    //        int width = getVehicleWidth(vehicleTypes[y]);
+    //        int velocity = getVehicleVelocity(vehicleTypes[y]);
+    //        int spacing = getVehicleSpacing(vehicleTypes[y]);
+    //        Texture sprite;
+    //        switch (vehicleTypes[y]) {
+    //        case IRON_GOLEM:
+    //            sprite = AssetManagerSingleton.getInstance().getAssetManager().get("ironGolem.png", Texture.class);
+    //            break;
+    //        case CREEPER:
+    //            sprite = AssetManagerSingleton.getInstance().getAssetManager().get("creeper.png", Texture.class);
+    //            break;
+    //        case SKELETON:
+    //            sprite = AssetManagerSingleton.getInstance().getAssetManager().get("skeleton.png", Texture.class);
+    //            break;
+    //        default:
+    //            sprite = AssetManagerSingleton.getInstance().getAssetManager().get("grass.png", Texture.class);
+    //            break;
+    //        }
+    //
+    //        for (int x = 0; x < Gdx.graphics.getWidth(); x += spacing * tileSize) {
+    //            Vehicle vehicle = new Vehicle(
+    //                x, 2 * tileSize + (y + 1) * tileSize, tileSize, width, velocity, sprite);
+    //            spawnedVehicles.add(vehicle);
+    //        }
+    //    }
+    //
+    //    return spawnedVehicles;
+    //}
 
     // used by the spawning algorithm to generate Vehicles
     // not sure what the purpose of separate width values is for
@@ -453,38 +405,38 @@ public class GameScreen implements Screen {
 
     // binds player movement input to player movement
     // todo: rip and tear
-    // status: callbacks disabled
+    // status: callbacks updated
     private void addMovementListeners(
-        ImageButton up,
-        ImageButton left,
-        ImageButton right,
-        ImageButton down
+        Button up,
+        Button left,
+        Button right,
+        Button down
     ) {
         up.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //character.setY(character.getY() + tileSize);
+                InputController.queueMoveInput(Controls.MOVE.UP);
             }
         });
 
         right.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //character.setX(character.getX() + tileSize);
+                InputController.queueMoveInput(Controls.MOVE.RIGHT);
             }
         });
 
         left.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //character.setX(character.getX() - tileSize);
+                InputController.queueMoveInput(Controls.MOVE.LEFT);
             }
         });
 
         down.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                //character.setY(character.getY() - tileSize);
+                InputController.queueMoveInput(Controls.MOVE.DOWN);
             }
         });
     }
