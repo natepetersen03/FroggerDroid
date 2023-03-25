@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.x20.frogger.data.DataEnums;
 import com.x20.frogger.game.GameConfig;
+import com.x20.frogger.game.Player;
 import com.x20.frogger.game.tiles.TileDatabase;
 import com.x20.frogger.game.tiles.TileMap;
 import com.x20.frogger.game.tiles.TileRenderer;
@@ -57,7 +58,7 @@ public class GameScreen implements Screen {
     private DataEnums.VehicleType[] vehicleTypes;
 
     // Player
-    private Sprite character;
+    private Player player;
 
     // Score
     // todo: refactor label
@@ -106,6 +107,9 @@ public class GameScreen implements Screen {
         //this.gameViewport = new ExtendViewport(worldString[0].length(), worldString.length, gameCamera);
         this.tileRenderer = new TileRenderer(this.game.getBatch(), tileMap);
 
+        /// Player init
+        this.player = new Player();
+
 
         // vehicle types
         // todo: replace with proper vehicle classes
@@ -133,16 +137,6 @@ public class GameScreen implements Screen {
         //}
         //
         //this.vehicles = spawnVehicles(vehicleTypes);
-
-
-        // character sprite
-        // todo: undergoing reconstruction
-        // status: disabled
-
-        //TextureAtlas atlas = game.getAssetManager().get("mc-style.atlas");
-        //TextureRegion region = atlas.findRegion(GameConfigViewModel.getCharacterAtlas());
-        //this.character = new Sprite(region);
-        //character.setPosition(Gdx.graphics.getWidth() / 2 - character.getWidth() / 2, 0);
     }
 
     @Override
@@ -163,7 +157,13 @@ public class GameScreen implements Screen {
             // Render game viewport first
             gameViewport.apply(true);
             game.getBatch().setProjectionMatrix(gameViewport.getCamera().combined);
+
+            game.getBatch().begin();
+
             tileRenderer.render();
+            player.render(game.getBatch());
+
+            game.getBatch().end();
 
             // render sprites
             // todo: under reconstruction
@@ -206,6 +206,13 @@ public class GameScreen implements Screen {
     }
 
     public void update() {
+        // steps:
+        // 1. update input
+        // 2. update player
+        // 3. update world (entities)
+
+        player.update();
+
         // bounds restriction
         // todo: update all to work with world coordinates and not screen coordinates
         // status: disabled

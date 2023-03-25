@@ -38,10 +38,8 @@ public class AssetManagerSingleton {
         textureParameter.genMipMaps = false;
 
         assetManager.load("mc-style.atlas", TextureAtlas.class);
-        assetManager.load("creeper.png", Texture.class, textureParameter);
-        assetManager.load("ironGolem.png", Texture.class, textureParameter);
-        assetManager.load("skeleton.png", Texture.class, textureParameter);
         assetManager.load("tiles.png", Texture.class, textureParameter);
+        assetManager.load("players.png", Texture.class, textureParameter);
 
         System.out.println("Assets enqueued...");
     }
