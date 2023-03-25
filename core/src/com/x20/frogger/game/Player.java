@@ -70,6 +70,22 @@ public class Player extends Entity implements Renderable {
         }
     }
 
+    @Override
+    public void setPosition(float x, float y) {
+        setPosition(new Vector2(x, y));
+    }
+
+    /**
+     * Teleport player to a position. Resets targetPos, lastPos, and lerpTimer
+     * @param newPosition
+     */
+    @Override
+    public void setPosition(Vector2 newPosition) {
+        position.set(newPosition.x, newPosition.y);
+        lastPos = position.cpy();
+        targetPos = position.cpy();
+        lerpTimer = lerpDuration;
+    }
 
     /**
      * Sets the target position for the player to interpolate to

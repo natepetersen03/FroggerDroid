@@ -51,6 +51,8 @@ public class GameLogic {
 
         /// Player init
         this.player = new Player();
+        // move player to center of tilemap
+        this.player.setPosition(tileMap.getWidth() / 2,0);
     }
 
     public static synchronized GameLogic getInstance() {
