@@ -32,6 +32,8 @@ public class GameLogic {
         /// Generate tiles
         // todo: random level generation/selection from pre-made levels based on difficulty?
         // possibly add vertical scrolling if the level is very tall
+        // consider building a World class that holds spawn information for both player and vehicles
+        // as well as score information
         worldString = new String[] {
             "sgsgsgsgsgs",
             "wwwwwwwwwww",
@@ -52,6 +54,7 @@ public class GameLogic {
         /// Player init
         this.player = new Player();
         // move player to center of tilemap
+        // todo: specify a spawn tile position in the TileMap
         this.player.setPosition(tileMap.getWidth() / 2,0);
     }
 
