@@ -1,26 +1,23 @@
-package com.x20.frogger;
+package com.x20.frogger.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.x20.frogger.data.Renderable;
 
-public class Vehicle {
-    private int velocity;
+public class Vehicle extends Entity implements Renderable {
 
-    private Texture vehicleImage;
-
-    public  Texture getVehicleImage() {
-        return vehicleImage;
-    }
+    private TextureRegion vehicleSprite;
+    private float velocity;
     private Rectangle hitbox;
 
     public Rectangle getHitbox() {
         return hitbox;
     }
-    public Vehicle(int xPos, int yPos, int height, int width, int velocity, Texture vehicleImage) {
+    public Vehicle(int xPos, int yPos, int height, int width, int velocity) {
         this.velocity = velocity;
-        this.vehicleImage = vehicleImage;
-
         this.hitbox = buildHitbox(height, width, xPos, yPos);
 
     }
@@ -40,5 +37,10 @@ public class Vehicle {
         if (hitbox.x + hitbox.width < 0) {
             hitbox.x = Gdx.graphics.getWidth();
         }
+    }
+
+    @Override
+    public void render(Batch b) {
+
     }
 }

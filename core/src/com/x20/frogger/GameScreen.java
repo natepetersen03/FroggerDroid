@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -23,8 +22,8 @@ import com.x20.frogger.data.DataEnums;
 import com.x20.frogger.game.GameConfig;
 import com.x20.frogger.game.GameLogic;
 import com.x20.frogger.game.InputController;
+import com.x20.frogger.game.Vehicle;
 import com.x20.frogger.game.tiles.TileRenderer;
-import com.x20.frogger.graphics.AssetManagerSingleton;
 
 public class GameScreen implements Screen {
     // Game state

@@ -1,8 +1,16 @@
 package com.x20.frogger.game.tiles;
 
 public class TileMap {
+    // todo: add vehicle spawns, player spawn
+    // todo: data structure for storing vehicles for efficient collision tests
+    // ? should the above information be contained in a separate World class?
+    // ? if so, World would be responsible for:
+    // ? TileMap init, Player init, Vehicle init
+    // ? But would it also handle GameLogic? Should GameLogic do what World would?
+    // ?    Probably not. GameLogic will have to pull Player and Vehicle data from the World
+    // ?    World contains all data. GameLogic manipulates/interacts with this data
 
-    // todo: determine if the memory overhead of storing the entire TileStruct is worth it
+
     // access by tilemap[x][y]
     private Tile[][] tilemap;
 
@@ -18,7 +26,7 @@ public class TileMap {
         return tilemap[0].length;
     }
 
-    public Tile getTileStruct(int x, int y) {
+    public Tile getTile(int x, int y) {
         if (x < 0 || x >= getWidth() || y < 0 || y >= getHeight()) {
             throw new IllegalArgumentException("Coordinates out of bounds");
         }

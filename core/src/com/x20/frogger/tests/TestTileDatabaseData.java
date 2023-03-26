@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import com.x20.frogger.game.tiles.Tile;
 import com.x20.frogger.game.tiles.TileDatabase;
 import com.x20.frogger.game.tiles.TileMap;
-import com.x20.frogger.graphics.AssetManagerSingleton;
 
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -62,8 +61,8 @@ public class TestTileDatabaseData {
             "sssss",
             "ggggg"
         });
-        assertEquals(map.getTileStruct(0, 0).getTile().getName(), "goal");
-        assertEquals(map.getTileStruct(3, 2).getTile().getName(), "water");
+        assertEquals(map.getTile(0, 0).getTile().getName(), "goal");
+        assertEquals(map.getTile(3, 2).getTile().getName(), "water");
     }
 
     @Test
@@ -78,7 +77,7 @@ public class TestTileDatabaseData {
         };
         map.generateTileMapFromStringArray(strMap);
         String[] generated = map.generateStringArrayFromTileMap();
-        assertEquals(map.getTileStruct(1, 0).getTile().getName(), "goal");
+        assertEquals(map.getTile(1, 0).getTile().getName(), "goal");
         System.out.println(map.toString());
         Assert.assertArrayEquals(strMap, generated);
     }

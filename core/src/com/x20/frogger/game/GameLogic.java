@@ -6,7 +6,7 @@ import com.x20.frogger.game.tiles.TileMap;
 public class GameLogic {
     private static GameLogic instance;
 
-    private Player player = new Player();
+    private Player player;
     private int score = 0;
     private TileMap tileMap;
     private String[] worldString;
@@ -52,10 +52,8 @@ public class GameLogic {
         tileMap.generateTileMapFromStringArray(worldString);
 
         /// Player init
-        this.player = new Player();
-        // move player to center of tilemap
+        this.player = new Player(tileMap.getWidth() / 2,0);
         // todo: specify a spawn tile position in the TileMap
-        this.player.setPosition(tileMap.getWidth() / 2,0);
     }
 
     public static synchronized GameLogic getInstance() {

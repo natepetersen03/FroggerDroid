@@ -13,23 +13,34 @@ public class Player extends Entity implements Renderable {
 
     // todo: animated player sprites
     private TextureRegion playerSprite;
-    private Vector2 lastPos = position.cpy();
-    private Vector2 targetPos = position.cpy();
+    private Vector2 lastPos;
+    private Vector2 targetPos;
     private float lerpDuration = 0.25f; // in seconds
     private float lerpTimer = lerpDuration;
 
     private Controls.MOVE lastMoveDirection = Controls.MOVE.RIGHT;
 
 
-    public Player() {
+    public Player(Vector2 spawnPosition) {
+        position = spawnPosition.cpy();
+        lastPos = position.cpy();
+        targetPos = position.cpy();
+
         // todo: make a more robust system for determining the player skin
         playerSprite = new TextureRegion(
-            AssetManagerSingleton.getInstance()
-                .getAssetManager().get("players.png", Texture.class),
-            0, 0, 16, 16
+                AssetManagerSingleton.getInstance()
+                        .getAssetManager().get("players.png", Texture.class),
+                0, 0, 16, 16
         );
         updatePlayerSprite();
+    }
 
+    public Player(float x, float y) {
+        this(new Vector2(x, y));
+    }
+
+    public Player() {
+        this(Vector2.Zero);
     }
 
     // todo: do this without a switch statement

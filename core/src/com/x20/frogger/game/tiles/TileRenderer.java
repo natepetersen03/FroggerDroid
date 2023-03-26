@@ -1,7 +1,6 @@
 package com.x20.frogger.game.tiles;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.x20.frogger.game.tiles.TileMap;
 import com.x20.frogger.graphics.BatchException;
 
 // todo: make use of the Renderable interface to call .render(spriteBatch) directly from TileMap
@@ -27,7 +26,7 @@ public class TileRenderer {
                     // bottom left is (0,0)
 
                     spriteBatch.draw(
-                        tileMap.getTileStruct(x, y).getRenderData().getTextureRegion(),
+                        tileMap.getTile(x, y).getRenderData().getTextureRegion(),
                         x,
                         y,
                         1,
