@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.x20.frogger.data.Renderable;
 
 public class Vehicle extends Entity implements Renderable {
@@ -12,6 +13,11 @@ public class Vehicle extends Entity implements Renderable {
     private TextureRegion vehicleSprite;
     private float velocity;
     private Rectangle hitbox;
+
+    public Vehicle(Vector2 spawnPosition) {
+        position = spawnPosition.cpy();
+        
+    }
 
     public Rectangle getHitbox() {
         return hitbox;
@@ -32,15 +38,19 @@ public class Vehicle extends Entity implements Renderable {
         return newHitbox;
     }
 
-    public void updatePosition() {
-        hitbox.x -= velocity * Gdx.graphics.getDeltaTime();
-        if (hitbox.x + hitbox.width < 0) {
-            hitbox.x = Gdx.graphics.getWidth();
-        }
+    @Override
+    public void update() {
+        position.x += velocity * Gdx.graphics.getDeltaTime();
+
+        // not sure what this does
+        //hitbox.x -= velocity * Gdx.graphics.getDeltaTime();
+        //if (hitbox.x + hitbox.width < 0) {
+        //    hitbox.x = Gdx.graphics.getWidth();
+        //}
     }
 
     @Override
     public void render(Batch b) {
-
+        b.draw(vehicleSprite, position.x, position.y, 1, 1);
     }
 }

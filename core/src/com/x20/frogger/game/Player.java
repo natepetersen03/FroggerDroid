@@ -124,7 +124,6 @@ public class Player extends Entity implements Renderable {
 
     @Override
     public void update() {
-        super.update();
         processInput();
         moveToTarget();
     }
