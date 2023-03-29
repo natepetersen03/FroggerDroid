@@ -9,6 +9,16 @@ public class TileMap {
     // ? But would it also handle GameLogic? Should GameLogic do what World would?
     // ?    Probably not. GameLogic will have to pull Player and Vehicle data from the World
     // ?    World contains all data. GameLogic manipulates/interacts with this data
+    // ? further note: point assignments could be handled in many ways. some ideas:
+    // ?    1. in the World class, hold an array whose length matches the height of the TileMap.
+    // ?       Each value stored is the number of points received for crossing this tile.
+    // ?    2. Let there be a VehicleSpawner class which determines the vehicle type, the spawning
+    // ?       frequency (could be a range), and the spawn direction. It will also have position.
+    // ?       This class can also contain the number of points gained by passing this spawner.
+    // ?       This would assume that safe tiles don't award points (or you'd need empty spawners)
+    // ? Also likely will be making that VehicleSpawner class from idea 2 anyway.
+    // ? Should double check the points behavior expectations
+
 
 
     // access by tilemap[x][y]

@@ -16,7 +16,7 @@ public class Vehicle extends Entity implements Renderable {
 
     public Vehicle(Vector2 spawnPosition) {
         position = spawnPosition.cpy();
-        
+
     }
 
     public Rectangle getHitbox() {
