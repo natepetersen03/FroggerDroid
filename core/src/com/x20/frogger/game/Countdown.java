@@ -10,7 +10,13 @@ public class Countdown implements Updatable {
 
     public Countdown(float duration)
     {
+        this(duration, duration);
+    }
+
+    public Countdown(float duration, float startTime)
+    {
         this.duration = duration;
+        this.timeLeft = startTime;
     }
 
     /**
@@ -27,6 +33,10 @@ public class Countdown implements Updatable {
      */
     public float getTimeLeft() {
         return timeLeft;
+    }
+
+    public boolean isRunning() {
+        return running;
     }
 
     /**
@@ -46,25 +56,17 @@ public class Countdown implements Updatable {
     }
 
     /**
-     * Reset timeLeft and resumes countdown
+     * Start/resume countdown. Does not reset time left on countdown
      */
     public void start() {
-        timeLeft = duration;
         running = true;
     }
 
     /**
-     * Stops countdown from running
+     * Stop/pause countdown. Does not reset time left on countdown.
      */
     public void pause() {
         running = false;
-    }
-
-    /**
-     * Lets countdown continue to run
-      */
-    public void resume() {
-        running = true;
     }
 
     /**
@@ -72,14 +74,6 @@ public class Countdown implements Updatable {
      */
     public void reset() {
         timeLeft = duration;
-    }
-
-    /**
-     * Reset time left and pause the countdown
-     */
-    public void stop() {
-        timeLeft = duration;
-        running = false;
     }
 
     @Override
