@@ -13,6 +13,7 @@ public class Player extends Entity implements Renderable {
 
     // todo: animated player sprites
     private TextureRegion playerSprite;
+    // todo: player hitbox
     private Vector2 lastPos;
     private Vector2 targetPos;
     private float lerpDuration = 0.25f; // in seconds
@@ -96,7 +97,10 @@ public class Player extends Entity implements Renderable {
         position = clampToBounds(
                 newPosition,
                 Vector2.Zero,
-                GameLogic.getInstance().getTileMap().getDimensions()
+                new Vector2(
+                        GameLogic.getInstance().getTileMap().getWidth() - 1,
+                        GameLogic.getInstance().getTileMap().getHeight() - 1
+                )
         );
         lastPos = position.cpy();
         targetPos = position.cpy();
@@ -107,12 +111,16 @@ public class Player extends Entity implements Renderable {
      * Sets the target position for the player to interpolate to
      * @param newPosition the position to move to
      */
+    // todo: replace magic numbers with hitbox width, height
     public void setTargetPos(Vector2 newPosition) {
         lastPos = position.cpy();
         targetPos = clampToBounds(
                 newPosition,
                 Vector2.Zero,
-                GameLogic.getInstance().getTileMap().getDimensions()
+                new Vector2(
+                        GameLogic.getInstance().getTileMap().getWidth() - 1,
+                        GameLogic.getInstance().getTileMap().getHeight() - 1
+                )
         );
         lerpTimer = 0f;
     }
@@ -127,6 +135,7 @@ public class Player extends Entity implements Renderable {
 
     /**
      * Limits coordinates within a rectangular boundary defined by mins, maxes.
+     * DOES NOT ACCOUNT FOR WIDTH/HEIGHT OF AN ENTITY, if using an entity's position
      * Does not modify the original vector.
      * @param location
      * @param mins
