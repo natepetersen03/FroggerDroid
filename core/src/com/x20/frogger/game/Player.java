@@ -16,6 +16,7 @@ public class Player extends Entity implements Renderable {
     // todo: player hitbox
     private Vector2 lastPos;
     private Vector2 targetPos;
+    private Vector2 velocity;
     private float lerpDuration = 0.25f; // in seconds
     private float lerpTimer = lerpDuration;
 
@@ -26,6 +27,7 @@ public class Player extends Entity implements Renderable {
         position = spawnPosition.cpy();
         lastPos = position.cpy();
         targetPos = position.cpy();
+        velocity = Vector2.Zero;
 
         // todo: make a more robust system for determining the player skin
         playerSprite = new TextureRegion(
@@ -108,10 +110,26 @@ public class Player extends Entity implements Renderable {
     }
 
     /**
+     * Move the player by velocity without affecting player-intended movement behavior
+     */
+    private void moveByVelocity() {
+        Vector2 delta = velocity.cpy().scl(Gdx.graphics.getDeltaTime());
+        position = clampToBounds(
+                position.cpy().add(delta),
+                Vector2.Zero,
+                new Vector2(
+                        GameLogic.getInstance().getTileMap().getWidth() - 1,
+                        GameLogic.getInstance().getTileMap().getHeight() - 1
+                )
+        );
+        lastPos = position.cpy();
+        targetPos.add(delta);
+    }
+
+    /**
      * Sets the target position for the player to interpolate to
      * @param newPosition the position to move to
      */
-    // todo: replace magic numbers with hitbox width, height
     public void setTargetPos(Vector2 newPosition) {
         lastPos = position.cpy();
         targetPos = clampToBounds(
@@ -125,6 +143,7 @@ public class Player extends Entity implements Renderable {
         lerpTimer = 0f;
     }
 
+    // todo: use with logs/turtles to see if player would go offscreen when moving
     public boolean checkBounds(Vector2 location, float xMin, float xMax, float yMin, float yMax) {
         // todo: update these with the proper calls from the tile board
         if (location.x < xMin || location.x > xMax || location.y < yMin || location.y > yMax) {
@@ -154,6 +173,7 @@ public class Player extends Entity implements Renderable {
     @Override
     public void update() {
         processInput();
+        moveByVelocity();
         moveToTarget();
     }
 
