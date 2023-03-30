@@ -48,13 +48,10 @@ public class Player extends Entity implements Renderable {
         setPosition(new Vector2(x, y));
     }
 
-    private void movePlayer(Vector2 moveVelocity) {
+    private void updateMoveTimer() {
         // if already moving, don't try to move again
         if (moveTimer > 0) {
             moveTimer = Math.max(moveTimer - Gdx.graphics.getDeltaTime(), 0);
-            velocity = moveVelocity.cpy();
-        } else {
-            velocity = Vector2.Zero;
         }
     }
 
