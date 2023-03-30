@@ -14,20 +14,17 @@ public class Player extends Entity implements Renderable {
     // todo: animated player sprites
     private TextureRegion playerSprite;
     // todo: player hitbox
-    private Vector2 lastPos;
-    private Vector2 targetPos;
-    private Vector2 velocity;
-    private float lerpDuration = 0.25f; // in seconds
-    private float lerpTimer = lerpDuration;
+    private Vector2 moveDir;
+    private float moveDuration = 0.25f; // in seconds
+    private float moveTimer = moveDuration;
 
     private Controls.MOVE lastMoveDirection = Controls.MOVE.RIGHT;
 
 
     public Player(Vector2 spawnPosition) {
+        super();
         position = spawnPosition.cpy();
-        lastPos = position.cpy();
-        targetPos = position.cpy();
-        velocity = Vector2.Zero;
+        moveDir = Vector2.Zero;
 
         // todo: make a more robust system for determining the player skin
         playerSprite = new TextureRegion(
@@ -46,101 +43,19 @@ public class Player extends Entity implements Renderable {
         this(Vector2.Zero);
     }
 
-    // todo: do this without a switch statement
-    public void updatePlayerSprite() {
-        switch(GameConfig.getCharacter()) {
-        case STEVE:
-            playerSprite.setRegion(playerSprite.getRegionX(), 0 * 16, 16, 16);
-            break;
-        case ALEX:
-            playerSprite.setRegion(playerSprite.getRegionX(), 1 * 16, 16, 16);
-            break;
-        case ENDERMAN:
-            playerSprite.setRegion(playerSprite.getRegionX(), 2 * 16, 16, 16);
-            break;
-        default:
-            throw new IllegalStateException(
-                "Invalid player character (" + GameConfig.getCharacter().toString() + ") selected"
-            );
-        }
-    }
-
-    // todo: figure out the right way of doing this
-    public void animate() {
-        // flip x direction based on last horizontal move
-        switch (lastMoveDirection) {
-        case RIGHT:
-            if (playerSprite.isFlipX()) {
-                playerSprite.flip(true, false);
-            }
-            break;
-        case LEFT:
-            if (!playerSprite.isFlipX()) {
-                playerSprite.flip(true, false);
-            }
-            break;
-        default:
-            break;
-        }
-    }
-
     @Override
     public void setPosition(float x, float y) {
         setPosition(new Vector2(x, y));
     }
 
-    /**
-     * Teleport player to a position. Resets targetPos, lastPos, and lerpTimer.
-     * Will be clamped to the world
-     * @param newPosition
-     */
-    @Override
-    public void setPosition(Vector2 newPosition) {
-        position = clampToBounds(
-                newPosition,
-                Vector2.Zero,
-                new Vector2(
-                        GameLogic.getInstance().getTileMap().getWidth() - 1,
-                        GameLogic.getInstance().getTileMap().getHeight() - 1
-                )
-        );
-        lastPos = position.cpy();
-        targetPos = position.cpy();
-        lerpTimer = lerpDuration;
-    }
-
-    /**
-     * Move the player by velocity without affecting player-intended movement behavior
-     */
-    private void moveByVelocity() {
-        Vector2 delta = velocity.cpy().scl(Gdx.graphics.getDeltaTime());
-        position = clampToBounds(
-                position.cpy().add(delta),
-                Vector2.Zero,
-                new Vector2(
-                        GameLogic.getInstance().getTileMap().getWidth() - 1,
-                        GameLogic.getInstance().getTileMap().getHeight() - 1
-                )
-        );
-        lastPos = position.cpy();
-        targetPos.add(delta);
-    }
-
-    /**
-     * Sets the target position for the player to interpolate to
-     * @param newPosition the position to move to
-     */
-    public void setTargetPos(Vector2 newPosition) {
-        lastPos = position.cpy();
-        targetPos = clampToBounds(
-                newPosition,
-                Vector2.Zero,
-                new Vector2(
-                        GameLogic.getInstance().getTileMap().getWidth() - 1,
-                        GameLogic.getInstance().getTileMap().getHeight() - 1
-                )
-        );
-        lerpTimer = 0f;
+    private void movePlayer(Vector2 moveVelocity) {
+        // if already moving, don't try to move again
+        if (moveTimer > 0) {
+            moveTimer = Math.max(moveTimer - Gdx.graphics.getDeltaTime(), 0);
+            velocity = moveVelocity.cpy();
+        } else {
+            velocity = Vector2.Zero;
+        }
     }
 
     // todo: use with logs/turtles to see if player would go offscreen when moving
@@ -170,49 +85,58 @@ public class Player extends Entity implements Renderable {
         return clamped;
     }
 
-    @Override
-    public void update() {
-        processInput();
-        moveByVelocity();
-        moveToTarget();
-    }
-
-    // possibly replace with an EnumHandler holding the appropriate direction vectors
-    public void processInput() {
+    private void processInput() {
         if (!InputController.QUEUE_MOVEMENTS.isEmpty()) {
-            // only set a new target if we're done moving to the current target
-            if (lerpTimer >= lerpDuration) {
+            // only process if we're not currently moving from a previous input
+            if (moveTimer > 0) {
                 lastMoveDirection = InputController.QUEUE_MOVEMENTS.peek();
-                switch (lastMoveDirection) {
-                case UP:
-                    setTargetPos(getPosition().cpy().add(Vector2.Y));
-                    break;
-                case DOWN:
-                    setTargetPos(getPosition().cpy().sub(Vector2.Y));
-                    break;
-                case RIGHT:
-                    setTargetPos(getPosition().cpy().add(Vector2.X));
-                    break;
-                case LEFT:
-                    setTargetPos(getPosition().cpy().sub(Vector2.X));
-                    break;
-                default:
-                    break;
-                }
+                moveDir = lastMoveDirection.getDirection();
             }
             InputController.QUEUE_MOVEMENTS.clear();
         }
     }
 
-    private void moveToTarget() {
-        if (lerpTimer < lerpDuration) {
-            lerpTimer = Math.min(lerpTimer + Gdx.graphics.getDeltaTime(), lerpDuration);
-            // snap to target position if lerp timer has reached its duration
-            if (lerpTimer == lerpDuration) {
-                position = targetPos.cpy();
-            } else {
-                position = lastPos.cpy().lerp(targetPos, lerpTimer / lerpDuration);
-            }
+    @Override
+    public void update() {
+        processInput();
+        updatePos();
+    }
+
+    // todo: do this without a switch statement
+    public void updatePlayerSprite() {
+        switch(GameConfig.getCharacter()) {
+            case STEVE:
+                playerSprite.setRegion(playerSprite.getRegionX(), 0 * 16, 16, 16);
+                break;
+            case ALEX:
+                playerSprite.setRegion(playerSprite.getRegionX(), 1 * 16, 16, 16);
+                break;
+            case ENDERMAN:
+                playerSprite.setRegion(playerSprite.getRegionX(), 2 * 16, 16, 16);
+                break;
+            default:
+                throw new IllegalStateException(
+                        "Invalid player character (" + GameConfig.getCharacter().toString() + ") selected"
+                );
+        }
+    }
+
+    // todo: figure out the right way of doing this
+    public void animate() {
+        // flip x direction based on last horizontal move
+        switch (lastMoveDirection) {
+            case RIGHT:
+                if (playerSprite.isFlipX()) {
+                    playerSprite.flip(true, false);
+                }
+                break;
+            case LEFT:
+                if (!playerSprite.isFlipX()) {
+                    playerSprite.flip(true, false);
+                }
+                break;
+            default:
+                break;
         }
     }
 
