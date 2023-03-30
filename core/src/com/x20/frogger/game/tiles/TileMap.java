@@ -1,5 +1,7 @@
 package com.x20.frogger.game.tiles;
 
+import com.badlogic.gdx.math.Vector2;
+
 public class TileMap {
     // todo: add vehicle spawns, player spawn
     // todo: data structure for storing vehicles for efficient collision tests
@@ -23,9 +25,14 @@ public class TileMap {
 
     // access by tilemap[x][y]
     private Tile[][] tilemap;
+    private Vector2 dimensions = Vector2.Zero;
 
-    public int[] getDimensions() {
-        return new int[] {tilemap.length, tilemap[0].length};
+    public Vector2 getDimensions() {
+        return dimensions;
+    }
+
+    private void updateDimensions() {
+        dimensions = new Vector2(getWidth(), getHeight());
     }
 
     public int getWidth() {
@@ -58,6 +65,7 @@ public class TileMap {
                 tilemap[x][str.length - y - 1] = generateTileFromChar(str[y].charAt(x));
             }
         }
+        updateDimensions();
     }
 
     private Tile generateTileFromChar(char charAt) {

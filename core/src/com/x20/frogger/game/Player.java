@@ -87,12 +87,17 @@ public class Player extends Entity implements Renderable {
     }
 
     /**
-     * Teleport player to a position. Resets targetPos, lastPos, and lerpTimer
+     * Teleport player to a position. Resets targetPos, lastPos, and lerpTimer.
+     * Will be clamped to the world
      * @param newPosition
      */
     @Override
     public void setPosition(Vector2 newPosition) {
-        position.set(newPosition.x, newPosition.y);
+        position = clampToBounds(
+                newPosition,
+                Vector2.Zero,
+                GameLogic.getInstance().getTileMap().getDimensions()
+        );
         lastPos = position.cpy();
         targetPos = position.cpy();
         lerpTimer = lerpDuration;
@@ -103,15 +108,13 @@ public class Player extends Entity implements Renderable {
      * @param newPosition the position to move to
      */
     public void setTargetPos(Vector2 newPosition) {
-        // make sure not out of bounds
-        if (checkBounds(newPosition,
-            0, GameLogic.getInstance().getTileMap().getWidth() - 1,
-            0, GameLogic.getInstance().getTileMap().getHeight() - 1
-        )) {
-            lastPos = position.cpy();
-            targetPos = newPosition.cpy();
-            lerpTimer = 0f;
-        }
+        lastPos = position.cpy();
+        targetPos = clampToBounds(
+                newPosition,
+                Vector2.Zero,
+                GameLogic.getInstance().getTileMap().getDimensions()
+        );
+        lerpTimer = 0f;
     }
 
     public boolean checkBounds(Vector2 location, float xMin, float xMax, float yMin, float yMax) {
@@ -120,6 +123,23 @@ public class Player extends Entity implements Renderable {
             return false;
         }
         return true;
+    }
+
+    /**
+     * Limits coordinates within a rectangular boundary defined by mins, maxes.
+     * Does not modify the original vector.
+     * @param location
+     * @param mins
+     * @param maxes
+     * @return A new vector within the bounds
+     */
+    public Vector2 clampToBounds(Vector2 location, Vector2 mins, Vector2 maxes) {
+        Vector2 clamped = location.cpy();
+        // clamp x
+        clamped.x = Math.max(Math.min(clamped.x, maxes.x), mins.x);
+        // clamp y
+        clamped.y = Math.max(Math.min(clamped.y, maxes.y), mins.y);
+        return clamped;
     }
 
     @Override
