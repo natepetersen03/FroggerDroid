@@ -47,11 +47,14 @@ public class GameScreen implements Screen {
     private Array<Vehicle> vehicles;
     private DataEnums.VehicleType[] vehicleTypes;
 
+    private String name;
+
     public GameScreen(final FroggerDroid game) {
         this.game = game;
 
         /// Initialize game logic
         gameLogic = GameLogic.getInstance();
+        gameLogic.setLives(getLives(GameConfig.getDifficulty()));
 
         // init GUI
         this.skin = game.getSkinGUI();
@@ -66,7 +69,8 @@ public class GameScreen implements Screen {
         //this.gameViewport = new ExtendViewport(worldString[0].length(), worldString.length, gameCamera);
         this.tileRenderer = new TileRenderer(this.game.getBatch(), gameLogic.getTileMap());
 
-
+        // set label fields
+        this.name = GameConfig.getName();
         // vehicle types
         // todo: replace with proper vehicle classes
         // status: disabled
@@ -162,8 +166,24 @@ public class GameScreen implements Screen {
 
     }
 
+    public void updateScoreLives() {
+        // TODO: bad performance, need to store name/
+        String text = "([#00FF00]" + name
+                + "[#FFFFFF])  Lives: [#ADD8E6]" + gameLogic.getLives()
+                + "  [#FFFFFF]Score: [#A020F0]" + gameLogic.getScore();
+        scoreLabel.setText(text);
+    }
+
     public void update() {
         gameLogic.update();
+        updateScoreLives();
+
+        if (gameLogic.checkLives()) {
+            switchToGameOverScreen();
+        }
+//        if (gameLogic.checkGoal()) {
+//            switchToGameOverScreen();
+//        }
 
         // bounds restriction
         // todo: update all to work with world coordinates and not screen coordinates
@@ -233,6 +253,11 @@ public class GameScreen implements Screen {
 //        return points;
 //    }
 
+    private void switchToGameOverScreen() {
+        game.setScreen(new GameOverScreen(game));
+        this.dispose();
+    }
+
     private void constructUI() {
         stage = new Stage(guiViewport);
         Gdx.input.setInputProcessor(stage);
@@ -247,7 +272,7 @@ public class GameScreen implements Screen {
 
         table.row();
         skin.getFont("Pixelify").getData().markupEnabled = true;
-        scoreLabel = new Label("([#00FF00]" + GameConfig.getName()
+        scoreLabel = new Label("([#00FF00]" + name
                 + "[#FFFFFF])  Lives: [#ADD8E6]" + getLives(GameConfig.getDifficulty())
                 + "  [#FFFFFF]Score: [#A020F0]" + GameLogic.getInstance().getScore(), skin, "dark-bg");
         scoreLabel.setAlignment(Align.top);

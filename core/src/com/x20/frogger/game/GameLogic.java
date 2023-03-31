@@ -1,5 +1,7 @@
 package com.x20.frogger.game;
 
+import com.badlogic.gdx.math.Vector2;
+import com.x20.frogger.GameScreen;
 import com.x20.frogger.game.tiles.TileDatabase;
 import com.x20.frogger.game.tiles.TileMap;
 
@@ -8,6 +10,8 @@ public class GameLogic {
 
     private Player player;
     private int score = 0;
+
+    private int lives;
     private TileMap tileMap;
     private String[] worldString;
 
@@ -19,11 +23,14 @@ public class GameLogic {
         return score;
     }
 
+    public int getLives() { return lives; }
+
     public TileMap getTileMap() {
         return tileMap;
     }
 
     private GameLogic() {
+
         System.out.println("GameLogic singleton initialized");
 
         // init TileDatabase
@@ -70,5 +77,40 @@ public class GameLogic {
         // 3. update world (entities)
 
         player.update();
+        checkWaterCollision();
+    }
+    public boolean checkGoal() {
+        int checkX = (int) player.position.x;
+        int checkY = (int) player.position.y - tileMap.getHeight() + 1;
+        int goalRow = 0;
+        System.out.println(checkX + " " + checkY);
+        if (goalRow == checkY && worldString[goalRow].charAt(checkX) == 'g') {
+            return true;
+        }
+        return false;
+    }
+
+    public void checkWaterCollision() {
+        int checkX = (int) player.position.x;
+        int checkY = (int) (tileMap.getHeight() - 1 - player.position.y);
+
+        System.out.println(checkX + " " + checkY);
+        if (worldString[checkY].charAt(checkX) == 'w') {
+            this.lives -= 1;
+            this.score = 0;
+            player.setPosition(new Vector2(tileMap.getWidth() / 2,0));
+        }
+    }
+
+    public boolean checkLives(){
+        if (this.lives == 0) {
+            return true;
+        }
+        return false;
+    }
+
+    public void setLives(String lives) {
+        int temp = Integer.parseInt(lives);
+        this.lives = temp;
     }
 }
