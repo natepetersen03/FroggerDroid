@@ -1,12 +1,13 @@
 package com.x20.frogger.game;
 
+import com.x20.frogger.FroggerDroid;
 import com.x20.frogger.data.DataEnums;
 import com.x20.frogger.data.Serializable;
 
 public class GameConfig implements Serializable {
-    private static DataEnums.Difficulty difficulty;
-    private static DataEnums.Character character;
-    private static String name;
+    private static DataEnums.Difficulty difficulty = FroggerDroid.isFlagDebug() ? DataEnums.Difficulty.EASY : null;
+    private static DataEnums.Character character = FroggerDroid.isFlagDebug() ? DataEnums.Character.STEVE : null;
+    private static String name = FroggerDroid.isFlagDebug() ? "Debugger" : null;
 
     public static DataEnums.Difficulty getDifficulty() {
         return difficulty;

@@ -40,8 +40,8 @@ public class GameConfigScreen extends ScreenAdapter {
         this.camera.setToOrtho(false, 800, 480);
         this.viewport = new ExtendViewport(800, 400, camera);
         this.stage = new Stage(viewport);
-
         this.skin = game.getSkinGUI();
+
         constructGUI();
     }
 
@@ -52,9 +52,12 @@ public class GameConfigScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        // load all assets before displaying ready
-        // now called in FroggerDroid immediately after assets have been loaded
+        if (FroggerDroid.isFlagSkipToGame()) {
+            switchToGameScreen();
+        }
     }
+
+
 
     @Override
     public void render(float delta) {

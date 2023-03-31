@@ -48,18 +48,31 @@ public class GameScreen implements Screen {
     private DataEnums.VehicleType[] vehicleTypes;
 
     public GameScreen(final FroggerDroid game) {
+        if (FroggerDroid.isFlagDebug()) {
+            System.out.println("Loading GameScreen...");
+        }
         this.game = game;
 
         /// Initialize game logic
+        if (FroggerDroid.isFlagDebug()) {
+            System.out.println("Loading GameLogic...");
+        }
         gameLogic = GameLogic.getInstance();
 
+
         // init GUI
+        if (FroggerDroid.isFlagDebug()) {
+            System.out.println("Loading GUI...");
+        }
         this.skin = game.getSkinGUI();
         // todo: get these width and height values from a variable somewhere
         this.guiViewport = new ExtendViewport(500, 480);
         constructUI();
 
         /// New Game Viewport
+        if (FroggerDroid.isFlagDebug()) {
+            System.out.println("Loading World Renderer...");
+        }
         // Init
         this.gameCamera = new OrthographicCamera(gameLogic.getTileMap().getWidth(), gameLogic.getTileMap().getHeight());
         this.gameViewport = new FitViewport(gameLogic.getTileMap().getWidth(), gameLogic.getTileMap().getHeight(), gameCamera);
@@ -97,7 +110,9 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-
+        if (FroggerDroid.isFlagDebug()) {
+            System.out.println("Done loading GameScreen");
+        }
     }
 
     @Override
@@ -149,17 +164,18 @@ public class GameScreen implements Screen {
         // update UI viewport on window resize
         gameViewport.update(width, height, true);
         guiViewport.update(width, height, true);
-        System.out.println(
-            "Screen dimensions: " +
-            gameViewport.getScreenWidth() +
-            " x " +
-            gameViewport.getScreenHeight() +
-            "; World dimensions: " +
-            gameViewport.getWorldWidth() +
-            " x " +
-            gameViewport.getWorldHeight()
-        );
-
+        if (FroggerDroid.isFlagDebug()) {
+            System.out.println(
+                "Screen resized to dimensions: " +
+                    gameViewport.getScreenWidth() +
+                    " x " +
+                    gameViewport.getScreenHeight() +
+                    "; World dimensions: " +
+                    gameViewport.getWorldWidth() +
+                    " x " +
+                    gameViewport.getWorldHeight()
+            );
+        }
     }
 
     public void update() {
@@ -258,6 +274,9 @@ public class GameScreen implements Screen {
         setButtons(moveTable);
         stage.addActor(moveTable);
 
+        if (FroggerDroid.isFlagDebug()) {
+            System.out.println("Done loading GUI");
+        }
     }
 
     // player controls GUI
