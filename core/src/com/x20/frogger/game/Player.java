@@ -101,19 +101,19 @@ public class Player extends Entity implements Renderable {
     // todo: do this without a switch statement
     public void updatePlayerSprite() {
         switch(GameConfig.getCharacter()) {
-            case STEVE:
-                playerSprite.setRegion(playerSprite.getRegionX(), 0 * 16, 16, 16);
-                break;
-            case ALEX:
-                playerSprite.setRegion(playerSprite.getRegionX(), 1 * 16, 16, 16);
-                break;
-            case ENDERMAN:
-                playerSprite.setRegion(playerSprite.getRegionX(), 2 * 16, 16, 16);
-                break;
-            default:
-                throw new IllegalStateException(
-                        "Invalid player character (" + GameConfig.getCharacter().toString() + ") selected"
-                );
+        case STEVE:
+            playerSprite.setRegion(playerSprite.getRegionX(), 0 * 16, 16, 16);
+            break;
+        case ALEX:
+            playerSprite.setRegion(playerSprite.getRegionX(), 1 * 16, 16, 16);
+            break;
+        case ENDERMAN:
+            playerSprite.setRegion(playerSprite.getRegionX(), 2 * 16, 16, 16);
+            break;
+        default:
+            throw new IllegalStateException(
+                "Invalid player character (" + GameConfig.getCharacter().toString() + ") selected"
+            );
         }
     }
 
@@ -121,18 +121,18 @@ public class Player extends Entity implements Renderable {
     public void animate() {
         // flip x direction based on last horizontal move
         switch (lastMoveDirection) {
-            case RIGHT:
-                if (playerSprite.isFlipX()) {
-                    playerSprite.flip(true, false);
-                }
-                break;
-            case LEFT:
-                if (!playerSprite.isFlipX()) {
-                    playerSprite.flip(true, false);
-                }
-                break;
-            default:
-                break;
+        case RIGHT:
+            if (playerSprite.isFlipX()) {
+                playerSprite.flip(true, false);
+            }
+            break;
+        case LEFT:
+            if (!playerSprite.isFlipX()) {
+                playerSprite.flip(true, false);
+            }
+            break;
+        default:
+            break;
         }
     }
 

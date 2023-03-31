@@ -182,6 +182,7 @@ public class GameScreen implements Screen {
         gameLogic.update();
 
         // bounds restriction
+        //bounds x-coordinates: 0 -> 10, y-coordinates: 0 -> 12
         // todo: update all to work with world coordinates and not screen coordinates
         // status: disabled
         //if (character.getX() < 0) {
