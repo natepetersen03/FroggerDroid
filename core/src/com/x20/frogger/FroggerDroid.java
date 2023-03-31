@@ -39,7 +39,7 @@ public class FroggerDroid extends Game {
                 case "-skip":
                     flagSkipToGame = true;
                     break;
-                case -"god":
+                case "-god":
                     flagInvulnerable = true;
                     break;
                 default:

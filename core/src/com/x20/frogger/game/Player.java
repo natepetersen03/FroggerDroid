@@ -79,34 +79,6 @@ public class Player extends Entity implements Renderable {
         );
     }
 
-
-    // todo: use with logs/turtles to see if player would go offscreen when moving
-    public boolean checkBounds(Vector2 location, float xMin, float xMax, float yMin, float yMax) {
-        // todo: update these with the proper calls from the tile board
-        if (location.x < xMin || location.x > xMax || location.y < yMin || location.y > yMax) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Limits coordinates within a rectangular boundary defined by mins, maxes.
-     * DOES NOT ACCOUNT FOR WIDTH/HEIGHT OF AN ENTITY, if using an entity's position
-     * Does not modify the original vector.
-     * @param location
-     * @param mins
-     * @param maxes
-     * @return A new vector within the bounds
-     */
-    public Vector2 clampToBounds(Vector2 location, Vector2 mins, Vector2 maxes) {
-        Vector2 clamped = location.cpy();
-        // clamp x
-        clamped.x = Math.max(Math.min(clamped.x, maxes.x), mins.x);
-        // clamp y
-        clamped.y = Math.max(Math.min(clamped.y, maxes.y), mins.y);
-        return clamped;
-    }
-
     private void processInput() {
         if (!InputController.QUEUE_MOVEMENTS.isEmpty()) {
             // only process if we're not currently moving from a previous input
