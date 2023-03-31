@@ -9,7 +9,7 @@ public class Tile {
         this.renderData = renderData;
     }
 
-    public TileData getTile() {
+    public TileData getTileData() {
         return tileData;
     }
 

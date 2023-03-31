@@ -1,7 +1,6 @@
 package com.x20.frogger.game;
 
-import com.badlogic.gdx.math.Vector2;
-import com.x20.frogger.GameScreen;
+import com.x20.frogger.FroggerDroid;
 import com.x20.frogger.game.tiles.TileDatabase;
 import com.x20.frogger.game.tiles.TileMap;
 
@@ -30,8 +29,9 @@ public class GameLogic {
     }
 
     private GameLogic() {
-
-        System.out.println("GameLogic singleton initialized");
+        if (FroggerDroid.isFlagDebug()) {
+            System.out.println("GameLogic singleton initialized");
+        }
 
         // init TileDatabase
         TileDatabase.initDatabase();
@@ -77,28 +77,38 @@ public class GameLogic {
         // 3. update world (entities)
 
         player.update();
-        checkWaterCollision();
+        // todo: test extensively. possibility that floating point errors might cause this to fail
+        checkForDamagingTile((int) player.position.x, (int) player.position.y);
     }
-    public boolean checkGoal() {
-        int checkX = (int) player.position.x;
-        int checkY = (int) player.position.y - tileMap.getHeight() + 1;
-        int goalRow = 0;
-        System.out.println(checkX + " " + checkY);
-        if (goalRow == checkY && worldString[goalRow].charAt(checkX) == 'g') {
+
+    // todo: this would probably be something the Player does in its own update method
+    // we can use custom events that the GUI elements are subscribed to
+    // then when we fire the events, we can notify the subscribers to update
+    // see: https://programming.guide/java/create-a-custom-event.html
+
+    public boolean checkGoal(int x, int y) {
+        // todo: test extensively. possibility that floating point errors might cause this to fail
+        if (tileMap.getTile(x, y).getTileData().getName().equals("goal")) {
             return true;
         }
         return false;
     }
 
-    public void checkWaterCollision() {
-        int checkX = (int) player.position.x;
-        int checkY = (int) (tileMap.getHeight() - 1 - player.position.y);
-
-        System.out.println(checkX + " " + checkY);
-        if (worldString[checkY].charAt(checkX) == 'w') {
+    public void checkForDamagingTile(int x, int y) {
+        // todo: test extensively. possibility that floating point errors might cause this to fail
+        if (tileMap.getTile(x, y).getTileData().isDamaging()) {
             this.lives -= 1;
-            this.score = 0;
-            player.setPosition(new Vector2(tileMap.getWidth() / 2,0));
+            switch (GameConfig.getDifficulty()) {
+            case HARD:
+                this.score = 0;
+                break;
+            default:
+                this.score /= 2;
+                break;
+            }
+
+            // todo: use a kill/respawn method to avoid hard-coding respawn position
+            player.setPosition(tileMap.getWidth() / 2, 0);
         }
     }
 

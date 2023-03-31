@@ -45,9 +45,9 @@ public class MainMenuScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        // load all assets before displaying ready
-        //game.getAssetManager().finishLoading();
-        AssetManagerSingleton.getInstance().getAssetManager().finishLoading();
+        if (FroggerDroid.isFlagSkipToGame()) {
+            switchToGameConfigScreen();
+        }
     }
 
     @Override
