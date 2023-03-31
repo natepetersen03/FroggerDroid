@@ -26,7 +26,7 @@ public class Player extends Entity implements Renderable {
         position = spawnPosition.cpy();
         moveDir = Vector2.Zero;
         mover = new Mover(1);
-        velocity = new Vector2(1, 0);
+        velocity = new Vector2(0, 0);
 
         // todo: make a more robust system for determining the player skin
         playerSprite = new TextureRegion(
@@ -60,7 +60,6 @@ public class Player extends Entity implements Renderable {
 
     @Override
     protected void updatePos() {
-        // todo: currently breaks bounds clamping, need to fix
         position.add(velocity.cpy().scl(Gdx.graphics.getDeltaTime()));
 
         if (mover.isMoving()) {
