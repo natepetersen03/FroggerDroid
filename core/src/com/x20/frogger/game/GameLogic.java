@@ -1,5 +1,6 @@
 package com.x20.frogger.game;
 
+import com.x20.frogger.FroggerDroid;
 import com.x20.frogger.game.tiles.TileDatabase;
 import com.x20.frogger.game.tiles.TileMap;
 
@@ -24,7 +25,9 @@ public class GameLogic {
     }
 
     private GameLogic() {
-        System.out.println("GameLogic singleton initialized");
+        if (FroggerDroid.isFlagDebug()) {
+            System.out.println("GameLogic singleton initialized");
+        }
 
         // init TileDatabase
         TileDatabase.initDatabase();

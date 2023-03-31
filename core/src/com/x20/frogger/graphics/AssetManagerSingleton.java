@@ -4,6 +4,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.x20.frogger.FroggerDroid;
 import com.x20.frogger.utils.FTFSkin;
 import com.x20.frogger.utils.FTFSkinLoader;
 
@@ -41,6 +42,8 @@ public class AssetManagerSingleton {
         assetManager.load("tiles.png", Texture.class, textureParameter);
         assetManager.load("players.png", Texture.class, textureParameter);
 
-        System.out.println("Assets enqueued...");
+        if (FroggerDroid.isFlagDebug()) {
+            System.out.println("Assets enqueued...");
+        }
     }
 }

@@ -25,6 +25,7 @@ import com.x20.frogger.GUI.DifficultyRadio;
 import com.x20.frogger.GUI.EnumHandler;
 import com.x20.frogger.GUI.GameConfigViewModel;
 import com.x20.frogger.data.DataEnums;
+import com.x20.frogger.game.GameConfig;
 
 public class GameConfigScreen extends ScreenAdapter {
 
@@ -40,8 +41,8 @@ public class GameConfigScreen extends ScreenAdapter {
         this.camera.setToOrtho(false, 800, 480);
         this.viewport = new ExtendViewport(800, 400, camera);
         this.stage = new Stage(viewport);
-
         this.skin = game.getSkinGUI();
+
         constructGUI();
     }
 
@@ -52,9 +53,15 @@ public class GameConfigScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        // load all assets before displaying ready
-        // now called in FroggerDroid immediately after assets have been loaded
+        if (FroggerDroid.isFlagSkipToGame()) {
+            GameConfig.setCharacter(DataEnums.Character.STEVE);
+            GameConfig.setName("Debugger");
+            GameConfig.setDifficulty(DataEnums.Difficulty.EASY);
+            switchToGameScreen();
+        }
     }
+
+
 
     @Override
     public void render(float delta) {

@@ -13,18 +13,20 @@ public class Player extends Entity implements Renderable {
 
     // todo: animated player sprites
     private TextureRegion playerSprite;
-    private Vector2 lastPos;
-    private Vector2 targetPos;
-    private float lerpDuration = 0.25f; // in seconds
-    private float lerpTimer = lerpDuration;
+    // todo: player hitbox
+    private Vector2 moveDir;
+    private Mover mover;
+    private float speed = 4f;
 
     private Controls.MOVE lastMoveDirection = Controls.MOVE.RIGHT;
 
 
     public Player(Vector2 spawnPosition) {
+        super();
         position = spawnPosition.cpy();
-        lastPos = position.cpy();
-        targetPos = position.cpy();
+        moveDir = Vector2.Zero;
+        mover = new Mover(1);
+        velocity = new Vector2(0, 0);
 
         // todo: make a more robust system for determining the player skin
         playerSprite = new TextureRegion(
@@ -41,6 +43,59 @@ public class Player extends Entity implements Renderable {
 
     public Player() {
         this(Vector2.Zero);
+    }
+
+    @Override
+    public void setPosition(float x, float y) {
+        setPosition(new Vector2(x, y));
+        position = clampToBounds(
+                position,
+                Vector2.Zero,
+                new Vector2(
+                        GameLogic.getInstance().getTileMap().getWidth() - 1,
+                        GameLogic.getInstance().getTileMap().getHeight() - 1
+                )
+        );
+    }
+
+    @Override
+    protected void updatePos() {
+        position.add(velocity.cpy().scl(Gdx.graphics.getDeltaTime()));
+
+        if (mover.isMoving()) {
+            float delta = speed * Gdx.graphics.getDeltaTime();
+            delta = mover.accumulate(delta);
+            Vector2 deltaVec = moveDir.cpy().scl(delta);
+            position.add(deltaVec);
+        }
+
+        position = clampToBounds(
+            position,
+            Vector2.Zero,
+            new Vector2(
+                    GameLogic.getInstance().getTileMap().getWidth() - 1,
+                    GameLogic.getInstance().getTileMap().getHeight() - 1
+            )
+        );
+    }
+
+    private void processInput() {
+        if (!InputController.QUEUE_MOVEMENTS.isEmpty()) {
+            // only process if we're not currently moving from a previous input
+            if (!mover.isMoving()) {
+                mover.resetAccumulator();
+                lastMoveDirection = InputController.QUEUE_MOVEMENTS.peek();
+                moveDir = lastMoveDirection.getDirection();
+                mover.setMoving(true);
+            }
+            InputController.QUEUE_MOVEMENTS.clear();
+        }
+    }
+
+    @Override
+    public void update() {
+        processInput();
+        updatePos();
     }
 
     // todo: do this without a switch statement
@@ -82,119 +137,48 @@ public class Player extends Entity implements Renderable {
     }
 
     @Override
-    public void setPosition(float x, float y) {
-        setPosition(new Vector2(x, y));
-    }
-
-    /**
-     * Teleport player to a position. Resets targetPos, lastPos, and lerpTimer.
-     * Will be clamped to the world
-     * @param newPosition
-     */
-    @Override
-    public void setPosition(Vector2 newPosition) {
-        position = clampToBounds(
-                newPosition,
-                Vector2.Zero,
-                GameLogic.getInstance().getTileMap().getDimensions()
-        );
-        lastPos = position.cpy();
-        targetPos = position.cpy();
-        lerpTimer = lerpDuration;
-    }
-
-    /**
-     * Sets the target position for the player to interpolate to
-     * @param newPosition the position to move to
-     */
-    public void setTargetPos(Vector2 newPosition) {
-        lastPos = position.cpy();
-        targetPos = clampToBounds(
-                newPosition,
-                Vector2.Zero,
-                GameLogic.getInstance().getTileMap().getDimensions()
-        );
-        lerpTimer = 0f;
-    }
-
-    public boolean checkBounds(Vector2 location, float xMin, float xMax, float yMin, float yMax) {
-        // todo: update these with the proper calls from the tile board
-        if (location.x < xMin || location.x > xMax || location.y < yMin || location.y > yMax) {
-            return false;
-        }
-        return true;
-    }
-
-    /**
-     * Limits coordinates within a rectangular boundary defined by mins, maxes.
-     * Does not modify the original vector.
-     * @param location
-     * @param mins
-     * @param maxes
-     * @return A new vector within the bounds
-     */
-    public Vector2 clampToBounds(Vector2 location, Vector2 mins, Vector2 maxes) {
-        Vector2 clamped = location.cpy();
-        // clamp x
-        clamped.x = Math.max(Math.min(clamped.x, maxes.x), mins.x);
-        // clamp y
-        clamped.y = Math.max(Math.min(clamped.y, maxes.y), mins.y);
-        return clamped;
-    }
-
-    @Override
-    public void update() {
-        processInput();
-        moveToTarget();
-    }
-
-    // possibly replace with an EnumHandler holding the appropriate direction vectors
-    public void processInput() {
-        if (!InputController.QUEUE_MOVEMENTS.isEmpty()) {
-            // only set a new target if we're done moving to the current target
-            if (lerpTimer >= lerpDuration) {
-                lastMoveDirection = InputController.QUEUE_MOVEMENTS.peek();
-                switch (lastMoveDirection) {
-                case UP:
-                    setTargetPos(getPosition().cpy().add(Vector2.Y));
-                    break;
-                case DOWN:
-                    setTargetPos(getPosition().cpy().sub(Vector2.Y));
-                    break;
-                case RIGHT:
-                    if (getPosition().x <= 9) {
-                        setTargetPos(getPosition().cpy().add(Vector2.X));
-                    }
-                    break;
-                case LEFT:
-                    if (getPosition().x >= 0) {
-                        setTargetPos(getPosition().cpy().add(Vector2.X));
-                    }
-                    setTargetPos(getPosition().cpy().sub(Vector2.X));
-                    break;
-                default:
-                    break;
-                }
-            }
-            InputController.QUEUE_MOVEMENTS.clear();
-        }
-    }
-
-    private void moveToTarget() {
-        if (lerpTimer < lerpDuration) {
-            lerpTimer = Math.min(lerpTimer + Gdx.graphics.getDeltaTime(), lerpDuration);
-            // snap to target position if lerp timer has reached its duration
-            if (lerpTimer == lerpDuration) {
-                position = targetPos.cpy();
-            } else {
-                position = lastPos.cpy().lerp(targetPos, lerpTimer / lerpDuration);
-            }
-        }
-    }
-
-    @Override
     public void render(Batch batch) {
         animate();
         batch.draw(playerSprite, position.x, position.y, 1, 1);
+    }
+
+    private class Mover  {
+        private boolean moving = false;
+        private float distance = 0;
+        private float targetDistance = 1;
+
+        public Mover(float targetDistance) {
+            this.targetDistance = targetDistance;
+        }
+
+        public void setTargetDisplacement(float target) {
+            targetDistance = target;
+        }
+
+        public void resetAccumulator() {
+            distance = 0;
+            moving = false;
+        }
+
+        public void setMoving(boolean moving) {
+            this.moving = moving;
+        }
+
+        public boolean isMoving() {
+            return this.moving;
+        }
+
+        public float accumulate(float delta) {
+            moving = true;
+            distance += delta;
+            if (distance >= targetDistance) {
+                moving = false;
+            }
+            if (distance <= targetDistance) {
+                return delta;
+            } else {
+                return delta - (distance - targetDistance);
+            }
+        }
     }
 }
