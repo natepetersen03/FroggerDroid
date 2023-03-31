@@ -23,6 +23,7 @@ public class FroggerDroid extends Game {
     // debug flags
     private static boolean flagDebug = false;
     private static boolean flagSkipToGame = false;
+    private boolean flagInvulnerable;
 
     public FroggerDroid() {
 
@@ -37,6 +38,9 @@ public class FroggerDroid extends Game {
                     break;
                 case "-skip":
                     flagSkipToGame = true;
+                    break;
+                case -"god":
+                    flagInvulnerable = true;
                     break;
                 default:
                     break;
@@ -56,6 +60,10 @@ public class FroggerDroid extends Game {
 
     public static boolean isFlagSkipToGame() {
         return flagSkipToGame;
+    }
+
+    public static boolean isFlagInvulnerable() {
+        return isFlagInvulnerable();
     }
 
     public void create() {

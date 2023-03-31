@@ -25,6 +25,7 @@ import com.x20.frogger.GUI.DifficultyRadio;
 import com.x20.frogger.GUI.EnumHandler;
 import com.x20.frogger.GUI.GameConfigViewModel;
 import com.x20.frogger.data.DataEnums;
+import com.x20.frogger.game.GameConfig;
 
 public class GameConfigScreen extends ScreenAdapter {
 
@@ -53,6 +54,9 @@ public class GameConfigScreen extends ScreenAdapter {
     @Override
     public void show() {
         if (FroggerDroid.isFlagSkipToGame()) {
+            GameConfig.setCharacter(DataEnums.Character.STEVE);
+            GameConfig.setName("Debugger");
+            GameConfig.setDifficulty(DataEnums.Difficulty.EASY);
             switchToGameScreen();
         }
     }
