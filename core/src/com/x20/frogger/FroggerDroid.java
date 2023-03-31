@@ -64,6 +64,9 @@ public class FroggerDroid extends Game {
         // game asset init
         AssetManagerSingleton.getInstance().loadAssets();
         AssetManagerSingleton.getInstance().getAssetManager().finishLoading();
+        if (FroggerDroid.isFlagDebug()) {
+            System.out.println("Assets finished loading");
+        }
         // end game init
 
         skinGUI = FTFSkinLoader.loadFTFSkin("mc-style.json");
