@@ -5,11 +5,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.x20.frogger.FroggerDroid;
 import com.x20.frogger.data.Controls;
+import com.x20.frogger.data.Debuggable;
 import com.x20.frogger.data.Renderable;
 import com.x20.frogger.graphics.AssetManagerSingleton;
+import com.x20.frogger.utils.DebugLog;
 
-public class Player extends Entity implements Renderable {
+public class Player extends Entity implements Renderable, Debuggable {
 
     // todo: animated player sprites
     private TextureRegion playerSprite;
@@ -20,6 +23,8 @@ public class Player extends Entity implements Renderable {
 
     private Controls.MOVE lastMoveDirection = Controls.MOVE.RIGHT;
 
+    // debug vars
+    Countdown debugTimer = new Countdown(1f);
 
     public Player(Vector2 spawnPosition) {
         super();
@@ -35,6 +40,10 @@ public class Player extends Entity implements Renderable {
                 0, 0, 16, 16
         );
         updatePlayerSprite();
+
+        if (FroggerDroid.isFlagDebug()) {
+            debugTimer.start();
+        }
     }
 
     public Player(float x, float y) {
@@ -76,6 +85,13 @@ public class Player extends Entity implements Renderable {
             position.add(deltaVec);
         }
 
+        // todo: DOESN'T WORK. Need to find root of floating point errors
+        // If it's close to being on the next tile, round it up
+        // (within 0.1 pixels (0.00625 units))
+        // We need to deal with floating point error accumulation anyway
+        // position.x = snapToInt(position.x, 0.00625f);
+        // position.y = snapToInt(position.y, 0.00625f);
+
         position = clampToBounds(
             position,
             Vector2.Zero,
@@ -84,6 +100,12 @@ public class Player extends Entity implements Renderable {
                 GameLogic.getInstance().getTileMap().getHeight() - 1
             )
         );
+    }
+
+    private float snapToInt(float a, float threshold) {
+        return Math.abs(Math.ceil(a) - a) <= threshold
+            ? (float) Math.ceil(a)
+            : (float) Math.floor(a);
     }
 
     private void processInput() {
@@ -101,6 +123,7 @@ public class Player extends Entity implements Renderable {
 
     @Override
     public void update() {
+        debug();
         processInput();
         updatePos();
     }
@@ -185,6 +208,22 @@ public class Player extends Entity implements Renderable {
                 return delta;
             } else {
                 return delta - (distance - targetDistance);
+            }
+        }
+    }
+
+    @Override
+    public void debug() {
+        if (FroggerDroid.isFlagDebug()) {
+            if (!debugTimer.isRunning()) {
+                debugTimer.restart();
+                System.out.println("Player pos: " +
+                        DebugLog.getMaxPrecisionFormat().format(position.x) + ", " +
+                        DebugLog.getMaxPrecisionFormat().format(position.y)
+                );
+            } else
+            {
+                debugTimer.update();
             }
         }
     }

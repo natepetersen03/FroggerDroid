@@ -86,6 +86,8 @@ public class GameLogic {
     // then when we fire the events, we can notify the subscribers to update
     // see: https://programming.guide/java/create-a-custom-event.html
 
+
+
     public boolean checkGoal(int x, int y) {
         // todo: test extensively. possibility that floating point errors might cause this to fail
         if (tileMap.getTile(x, y).getTileData().getName().equals("goal")) {

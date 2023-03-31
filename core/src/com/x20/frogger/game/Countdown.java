@@ -76,6 +76,14 @@ public class Countdown implements Updatable {
         timeLeft = duration;
     }
 
+    /**
+     * Reset and start countdown
+     */
+    public void restart() {
+        reset();
+        start();
+    }
+
     @Override
     public void update() {
         if (running) {
