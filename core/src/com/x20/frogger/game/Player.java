@@ -162,9 +162,14 @@ public class Player extends Entity implements Renderable {
                     setTargetPos(getPosition().cpy().sub(Vector2.Y));
                     break;
                 case RIGHT:
-                    setTargetPos(getPosition().cpy().add(Vector2.X));
+                    if (getPosition().x <= 9) {
+                        setTargetPos(getPosition().cpy().add(Vector2.X));
+                    }
                     break;
                 case LEFT:
+                    if (getPosition().x >= 0) {
+                        setTargetPos(getPosition().cpy().add(Vector2.X));
+                    }
                     setTargetPos(getPosition().cpy().sub(Vector2.X));
                     break;
                 default:
