@@ -12,6 +12,10 @@ public abstract class Entity implements Updatable {
         position.set(x, y);
     }
 
+    /**
+     * Return a copy of this entity's position
+     * @return a copy of position
+     */
     public Vector2 getPosition() {
         return position.cpy();
     }

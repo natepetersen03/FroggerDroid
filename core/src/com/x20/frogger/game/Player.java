@@ -24,7 +24,7 @@ public class Player extends Entity implements Renderable, Debuggable {
     private Controls.MOVE lastMoveDirection = Controls.MOVE.RIGHT;
 
     // debug vars
-    Countdown debugTimer = new Countdown(1f);
+    Countdown debugTimer = new Countdown(.5f);
 
     public Player(Vector2 spawnPosition) {
         super();
@@ -34,12 +34,16 @@ public class Player extends Entity implements Renderable, Debuggable {
         velocity = new Vector2(0, 0);
 
         // todo: make a more robust system for determining the player skin
-        playerSprite = new TextureRegion(
-                AssetManagerSingleton.getInstance()
-                        .getAssetManager().get("players.png", Texture.class),
-                0, 0, 16, 16
-        );
-        updatePlayerSprite();
+        try {
+            playerSprite = new TextureRegion(
+                    AssetManagerSingleton.getInstance()
+                            .getAssetManager().get("players.png", Texture.class),
+                    0, 0, 16, 16
+            );
+            updatePlayerSprite();
+        } catch (com.badlogic.gdx.utils.GdxRuntimeException exception) {
+            System.err.println("Sprite failed to load; Assuming headless launch.");
+        }
 
         if (FroggerDroid.isFlagDebug()) {
             debugTimer.start();
@@ -52,6 +56,10 @@ public class Player extends Entity implements Renderable, Debuggable {
 
     public Player() {
         this(Vector2.Zero);
+    }
+
+    public Mover getMover() {
+        return mover;
     }
 
     @Override
@@ -72,6 +80,14 @@ public class Player extends Entity implements Renderable, Debuggable {
                 GameLogic.getInstance().getTileMap().getHeight() - 1
             )
         );
+    }
+
+    /**
+     * Teleport to a given position without any additional processing or affecting the mover
+     * @param newPosition
+     */
+    public void setPositionRaw(Vector2 newPosition) {
+        position = newPosition.cpy();
     }
 
     @Override
@@ -172,7 +188,7 @@ public class Player extends Entity implements Renderable, Debuggable {
         batch.draw(playerSprite, position.x, position.y, 1, 1);
     }
 
-    private class Mover  {
+    public class Mover  {
         private boolean moving = false;
         private float distance = 0;
         private float targetDistance = 1;
@@ -200,14 +216,17 @@ public class Player extends Entity implements Renderable, Debuggable {
 
         public float accumulate(float delta) {
             moving = true;
-            distance += delta;
-            if (distance >= targetDistance) {
-                moving = false;
+            if (distance > .95 * targetDistance) {
+                char t = 0;
             }
-            if (distance <= targetDistance) {
-                return delta;
+            if (distance + delta >= targetDistance) {
+                moving = false;
+                float clampedDelta = delta - (distance + delta - targetDistance);
+                distance += clampedDelta;
+                return clampedDelta;
             } else {
-                return delta - (distance - targetDistance);
+                distance += delta;
+                return delta;
             }
         }
     }
@@ -220,6 +239,10 @@ public class Player extends Entity implements Renderable, Debuggable {
                 System.out.println("Player pos: " +
                         DebugLog.getMaxPrecisionFormat().format(position.x) + ", " +
                         DebugLog.getMaxPrecisionFormat().format(position.y)
+                );
+                System.out.println("Mover state: " +
+                        DebugLog.getMaxPrecisionFormat().format(mover.distance) + "/" +
+                        DebugLog.getMaxPrecisionFormat().format(mover.targetDistance)
                 );
             } else
             {
