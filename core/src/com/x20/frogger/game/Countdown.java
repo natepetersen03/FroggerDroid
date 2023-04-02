@@ -39,6 +39,10 @@ public class Countdown implements Updatable {
         return running;
     }
 
+    public void setRunning(boolean running) {
+        this.running = running;
+    }
+
     /**
      * Manually set the time left
      * @param time seconds

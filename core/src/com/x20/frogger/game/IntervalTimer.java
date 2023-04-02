@@ -1,7 +1,7 @@
 package com.x20.frogger.game;
 
 import com.badlogic.gdx.Gdx;
-import com.x20.frogger.data.IntervaledUpdatable;
+import com.x20.frogger.data.IntervalUpdatable;
 import com.x20.frogger.data.Updatable;
 
 import java.util.LinkedList;
@@ -10,7 +10,7 @@ public class IntervalTimer implements Updatable {
     private float interval;
     private float timeCounter;
     private boolean running = false;
-    LinkedList<IntervaledUpdatable> listeners;
+    LinkedList<IntervalUpdatable> listeners;
 
 
     /**
@@ -27,11 +27,15 @@ public class IntervalTimer implements Updatable {
         return running;
     }
 
+    public void setRunning(boolean running) {
+        this.running = running;
+    }
+
     public void setInterval(float interval) {
         this.interval = interval;
     }
 
-    public void addListener(IntervaledUpdatable listener) {
+    public void addListener(IntervalUpdatable listener) {
         listeners.add(listener);
     }
 
@@ -82,8 +86,8 @@ public class IntervalTimer implements Updatable {
             timeCounter += delta;
             while (timeCounter >= interval) {
                 timeCounter -= interval;
-                for (IntervaledUpdatable listener : listeners) {
-                    listener.intervaledUpdate();
+                for (IntervalUpdatable listener : listeners) {
+                    listener.intervalUpdate();
                 }
             }
         }

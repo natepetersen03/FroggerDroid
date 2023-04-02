@@ -2,9 +2,10 @@ package com.x20.frogger.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
+import com.x20.frogger.data.Debuggable;
 import com.x20.frogger.data.Updatable;
 
-public abstract class Entity implements Updatable {
+public abstract class Entity implements Updatable, Debuggable {
 
     protected Vector2 position = Vector2.Zero;
     protected Vector2 velocity = Vector2.Zero;
@@ -73,6 +74,11 @@ public abstract class Entity implements Updatable {
 
     @Override
     public void update() {
+
+    }
+
+    @Override
+    public void debug() {
 
     }
 }

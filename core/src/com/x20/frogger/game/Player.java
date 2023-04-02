@@ -7,11 +7,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.x20.frogger.FroggerDroid;
 import com.x20.frogger.data.Controls;
-import com.x20.frogger.data.Debuggable;
+import com.x20.frogger.data.IntervalUpdatable;
 import com.x20.frogger.data.Renderable;
 import com.x20.frogger.graphics.AssetManagerSingleton;
+import com.x20.frogger.utils.DebugLog;
 
-public class Player extends Entity implements Renderable, Debuggable {
+public class Player extends Entity implements Renderable {
 
     // todo: animated player sprites
     private TextureRegion playerSprite;
@@ -24,7 +25,7 @@ public class Player extends Entity implements Renderable, Debuggable {
     private Controls.MOVE moveDirEnum = Controls.MOVE.RIGHT;
 
     // debug vars
-    private Countdown debugTimer = new Countdown(.5f);
+    private IntervalTimer debugTimer = new IntervalTimer(0.5f);
 
     public Player(Vector2 spawnPosition) {
         super();
@@ -44,8 +45,13 @@ public class Player extends Entity implements Renderable, Debuggable {
         } catch (com.badlogic.gdx.utils.GdxRuntimeException exception) {
             System.err.println("Sprite failed to load; Assuming headless launch.");
         }
-
         if (FroggerDroid.isFlagDebug()) {
+            debugTimer.addListener(new IntervalUpdatable() {
+                @Override
+                public void intervalUpdate() {
+                    debug();
+                }
+            });
             debugTimer.start();
         }
     }
@@ -159,7 +165,9 @@ public class Player extends Entity implements Renderable, Debuggable {
 
     @Override
     public void update() {
-        debug();
+        if (debugTimer.isRunning()) {
+            debugTimer.update();
+        }
         processInput();
         updatePos();
     }
@@ -210,13 +218,6 @@ public class Player extends Entity implements Renderable, Debuggable {
 
     @Override
     public void debug() {
-        if (FroggerDroid.isFlagDebug()) {
-            if (!debugTimer.isRunning()) {
-                debugTimer.restart();
-
-            } else {
-                debugTimer.update();
-            }
-        }
+        System.out.println("Position: " + DebugLog.maxPrecisionVector2(position));
     }
 }
