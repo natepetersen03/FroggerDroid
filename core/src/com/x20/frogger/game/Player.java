@@ -95,7 +95,7 @@ public class Player extends Entity implements Renderable, Debuggable {
         mover.addDelta(deltaPosFromVel);
 
         if (mover.isMoving()) {
-            mover.moveToTarget(Gdx.graphics.getDeltaTime());
+            position = mover.moveToTarget(Gdx.graphics.getDeltaTime());
         }
 
         // todo: DOESN'T WORK. Need to find root of floating point errors
@@ -127,6 +127,7 @@ public class Player extends Entity implements Renderable, Debuggable {
             if (!mover.isMoving()) {
                 moveDir = InputController.QUEUE_MOVEMENTS.peek().getDirection();
                 mover.deriveTargetPos(moveDir);
+                mover.startMoving();
             }
             InputController.QUEUE_MOVEMENTS.clear();
         }
