@@ -1,16 +1,29 @@
 package com.x20.frogger.game;
 
 import com.badlogic.gdx.math.Vector2;
+import com.x20.frogger.events.MoveListener;
+
+import org.apache.tools.ant.taskdefs.Move;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public class Mover  {
     private Vector2 targetPos;
     private Vector2 originPos;
     private Countdown timing;
 
+    private List<MoveListener> moveListeners;
+
     public Mover(Vector2 initialPos, float speed) {
+        moveListeners = new LinkedList<>();
         originPos = initialPos.cpy();
         targetPos = initialPos.cpy();
         timing = new Countdown(1f / speed);
+    }
+
+    public void addMoveListener(MoveListener listener) {
+        moveListeners.add(listener);
     }
 
     public void setMoveDurationFromSpeed(float speed) {
@@ -85,6 +98,12 @@ public class Mover  {
             fracPos = targetPos.cpy();
             originPos = targetPos.cpy();
             timing.reset();
+
+            // send move event
+            MoveListener.MoveEvent moveEvent = new MoveListener.MoveEvent(targetPos);
+            for (MoveListener listener : moveListeners) {
+                listener.onMove(moveEvent);
+            }
         } else {
             float frac = 1f - (timing.getTimeLeft() / timing.getDuration());
             fracPos = originPos.cpy().lerp(targetPos, frac);

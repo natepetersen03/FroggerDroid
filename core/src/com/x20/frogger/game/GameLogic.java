@@ -9,6 +9,7 @@ public class GameLogic {
 
     private Player player;
     private int score = 0;
+    private int yMax = 0;
 
     private int lives;
     private TileMap tileMap;
@@ -84,6 +85,15 @@ public class GameLogic {
     // we can use custom events that the GUI elements are subscribed to
     // then when we fire the events, we can notify the subscribers to update
     // see: https://programming.guide/java/create-a-custom-event.html
+
+    public void updatePoints() {
+        int y = (int) (Math.floor(player.getPosition().y));
+        if (y > yMax) {
+            yMax = y;
+            // Entity rowEntity = tileMap.getEntities(yMax).peek();
+
+        }
+    }
 
 
     public boolean checkGoal(int x, int y) {
