@@ -118,7 +118,6 @@ public class GameLogic {
         }
     }
 
-
     public boolean checkGoal(int x, int y) {
         // todo: test extensively. possibility that floating point errors might cause this to fail
         if (tileMap.getTile(x, y).getTileData().getName().equals("goal")) {
@@ -139,20 +138,15 @@ public class GameLogic {
                 this.score /= 2;
                 break;
             }
-
-            // todo: use a kill/respawn method to avoid hard-coding respawn position
-            player.setPosition(tileMap.getWidth() / 2, 0);
+            respawnPlayer();
         }
     }
 
-    public boolean isDead() {
-        if (this.lives == 0) {
-            return true;
-        }
-        return false;
-    }
+    public boolean isDead() { return (this.lives == 0); }
 
-    public void setLives(int lives) {
-        this.lives = lives;
+    public void setLives(int lives) { this.lives = lives; }
+
+    public void respawnPlayer() {
+        player.setPosition(tileMap.getWidth() / 2, 0);
     }
 }

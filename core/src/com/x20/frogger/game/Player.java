@@ -47,8 +47,9 @@ public class Player extends Entity implements Renderable {
                 exception
             );
         }
+
+        debugTimer = new IntervalTimer(1f);
         if (FroggerDroid.isFlagDebug()) {
-            debugTimer = new IntervalTimer(1f);
             debugTimer.addListener(new IntervalUpdatable() {
                 @Override
                 public void intervalUpdate() {
