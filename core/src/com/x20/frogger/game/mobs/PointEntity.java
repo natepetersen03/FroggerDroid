@@ -1,5 +1,5 @@
 package com.x20.frogger.game.mobs;
 
-public interface pointEntity {
+public interface PointEntity {
     int getPoints();
 }

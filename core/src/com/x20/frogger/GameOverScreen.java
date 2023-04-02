@@ -17,16 +17,16 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.x20.frogger.GUI.GameConfigViewModel;
+import com.x20.frogger.graphics.AssetManagerSingleton;
 
-public class MainMenuScreen extends ScreenAdapter {
-
+public class GameOverScreen extends ScreenAdapter {
     private final FroggerDroid game;
     private OrthographicCamera camera;
     private Viewport viewport;
     private Stage stage;
     private Skin skin;
 
-    public MainMenuScreen(final FroggerDroid game) {
+    public GameOverScreen(final FroggerDroid game) {
         this.game = game;
         this.camera = new OrthographicCamera();
         this.camera.setToOrtho(false, 800, 480);
@@ -44,7 +44,9 @@ public class MainMenuScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-
+        // load all assets before displaying ready
+        //game.getAssetManager().finishLoading();
+        AssetManagerSingleton.getInstance().getAssetManager().finishLoading();
     }
 
     @Override
@@ -75,48 +77,36 @@ public class MainMenuScreen extends ScreenAdapter {
 
     private void constructGUI() {
         stage = new Stage(new ExtendViewport(500, 480));
-
         Gdx.input.setInputProcessor(stage);
-        GameConfigViewModel gameConfigViewModel = new GameConfigViewModel();
 
         Table table = new Table();
-        table.setTouchable(enabled);
         table.setFillParent(true);
 
-        Label label = new Label("WORK IN PROGRESS", skin, "dark-bg");
-        setTitleLabel(table, label);
+        Label label = new Label("Game Over", skin, "dark-bg");
+        table.add(label).colspan(2);
 
         table.row();
-        TextButton textButton = new TextButton("Play", skin);
-        setPlayButton(table, textButton);
+        table.add().colspan(2);
 
-        gameConfigViewModel.setGoButton(textButton);
+        table.row();
+        label = new Label(null, skin);
+        table.add(label);
 
+        label = new Label(null, skin);
+        table.add(label);
+
+        table.row();
+        label = new Label("Your Score: ", skin);
+        table.add(label).padTop(5.0f).padBottom(5.0f).colspan(2);
+
+        table.row();
+        TextButton textButton = new TextButton("Restart", skin, "centeredLabel");
+        table.add(textButton).pad(5.0f);
+
+        textButton = new TextButton("Exit", skin, "centeredLabel");
+        table.add(textButton).pad(5.0f);
         stage.addActor(table);
+
     }
 
-    private void setTitleLabel(Table table, Label label) {
-        label.setAlignment(Align.center);
-        table.add(label)
-                .spaceBottom(8.0f)
-                .fillX()
-                .minWidth(300.0f)
-                .minHeight(42.0f)
-                .colspan(3);
-    }
-
-    public void setPlayButton(Table table, TextButton textButton) {
-        table.add(textButton)
-                .spaceTop(32.0f)
-                .spaceBottom(4.0f)
-                .fillX()
-                .minHeight(44.0f)
-                .colspan(3);
-        textButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                switchToGameConfigScreen();
-            }
-        });
-    }
 }

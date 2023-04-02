@@ -1,4 +1,6 @@
-package com.x20.frogger.GUI;
+package com.x20.frogger.events;
+
+import com.x20.frogger.events.EnumAction;
 
 public class EnumHandler<E extends Enum> {
     private EnumAction<E> action;
