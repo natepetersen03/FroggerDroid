@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.x20.frogger.FroggerDroid;
 import com.x20.frogger.data.Controls;
@@ -13,10 +14,6 @@ import com.x20.frogger.graphics.AssetManagerSingleton;
 import com.x20.frogger.utils.MiscUtils;
 
 public class Player extends Entity implements Renderable {
-
-    // todo: animated player sprites
-    private TextureRegion playerSprite;
-    // todo: player hitbox
     private Vector2 moveDir;
     private Mover mover;
     private float speed = 5f;
@@ -33,15 +30,16 @@ public class Player extends Entity implements Renderable {
         moveDir = Vector2.Zero;
         mover = new Mover(position, speed);
         velocity = new Vector2(0, 0);
+        hitbox = new Rectangle(0, 0, 1, 1);
 
         // todo: make a more robust system for determining the player skin
         try {
-            playerSprite = new TextureRegion(
+            sprite = new TextureRegion(
                     AssetManagerSingleton.getInstance()
                             .getAssetManager().get("players.png", Texture.class),
                     0, 0, 16, 16
             );
-            updatePlayerSprite();
+            assignCharacterSprite();
         } catch (com.badlogic.gdx.utils.GdxRuntimeException exception) {
             Gdx.app.error(
                 "Player",
@@ -103,6 +101,7 @@ public class Player extends Entity implements Renderable {
                 GameLogic.getInstance().getTileMap().getHeight() - 1
             )
         );
+        super.updateHitboxPosition();
     }
 
     /**
@@ -111,6 +110,7 @@ public class Player extends Entity implements Renderable {
      */
     public void setPositionRaw(Vector2 newPosition) {
         position = newPosition.cpy();
+        super.updateHitboxPosition();
     }
 
 
@@ -152,6 +152,8 @@ public class Player extends Entity implements Renderable {
                 GameLogic.getInstance().getTileMap().getHeight() - 1
             )
         );
+
+        super.updateHitboxPosition();
     }
 
     private void processInput() {
@@ -178,16 +180,16 @@ public class Player extends Entity implements Renderable {
     }
 
     // todo: do this without a switch statement
-    public void updatePlayerSprite() {
+    public void assignCharacterSprite() {
         switch (GameConfig.getCharacter()) {
         case STEVE:
-            playerSprite.setRegion(playerSprite.getRegionX(), 0 * 16, 16, 16);
+            sprite.setRegion(sprite.getRegionX(), 0 * 16, 16, 16);
             break;
         case ALEX:
-            playerSprite.setRegion(playerSprite.getRegionX(), 1 * 16, 16, 16);
+            sprite.setRegion(sprite.getRegionX(), 1 * 16, 16, 16);
             break;
         case ENDERMAN:
-            playerSprite.setRegion(playerSprite.getRegionX(), 2 * 16, 16, 16);
+            sprite.setRegion(sprite.getRegionX(), 2 * 16, 16, 16);
             break;
         default:
             throw new IllegalStateException(
@@ -197,17 +199,18 @@ public class Player extends Entity implements Renderable {
     }
 
     // todo: figure out the right way of doing this
+    @Override
     public void animate() {
         // flip x direction based on last horizontal move
         switch (moveDirEnum) {
         case RIGHT:
-            if (playerSprite.isFlipX()) {
-                playerSprite.flip(true, false);
+            if (sprite.isFlipX()) {
+                sprite.flip(true, false);
             }
             break;
         case LEFT:
-            if (!playerSprite.isFlipX()) {
-                playerSprite.flip(true, false);
+            if (!sprite.isFlipX()) {
+                sprite.flip(true, false);
             }
             break;
         default:
@@ -218,7 +221,7 @@ public class Player extends Entity implements Renderable {
     @Override
     public void render(Batch batch) {
         animate();
-        batch.draw(playerSprite, position.x, position.y, 1, 1);
+        batch.draw(sprite, position.x, position.y, 1, 1);
     }
 
     @Override

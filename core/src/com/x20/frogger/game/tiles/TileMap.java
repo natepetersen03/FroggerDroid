@@ -24,6 +24,8 @@ public class TileMap {
     // access by tilemap[x][y]
     private Tile[][] tilemap;
 
+    private int[] rowPoints;
+
     public int getWidth() {
         return tilemap.length;
     }
