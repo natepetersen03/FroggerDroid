@@ -98,13 +98,6 @@ public class Player extends Entity implements Renderable, Debuggable {
             position = mover.moveToTarget(Gdx.graphics.getDeltaTime());
         }
 
-        // todo: DOESN'T WORK. Need to find root of floating point errors
-        // If it's close to being on the next tile, round it up
-        // (within 0.1 pixels (0.00625 units))
-        // We need to deal with floating point error accumulation anyway
-        // position.x = snapToInt(position.x, 0.00625f);
-        // position.y = snapToInt(position.y, 0.00625f);
-
         position = clampToBounds(
             position,
             Vector2.Zero,
@@ -113,12 +106,6 @@ public class Player extends Entity implements Renderable, Debuggable {
                 GameLogic.getInstance().getTileMap().getHeight() - 1
             )
         );
-    }
-
-    private float snapToInt(float a, float threshold) {
-        return Math.abs(Math.ceil(a) - a) <= threshold
-            ? (float) Math.ceil(a)
-            : (float) Math.floor(a);
     }
 
     private void processInput() {
