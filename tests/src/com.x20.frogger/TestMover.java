@@ -1,18 +1,29 @@
-package com.x20.frogger.tests;
+package com.x20.frogger;
 
-import static org.testng.AssertJUnit.assertEquals;
+import static org.junit.Assert.assertEquals;
 
+import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.math.Vector2;
 import com.x20.frogger.game.Mover;
 import com.x20.frogger.game.Player;
 import com.x20.frogger.utils.MiscUtils;
 
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-public class TestMover {
+// Headless backend implementation from
+// https://stackoverflow.com/questions/42252209/is-there-any-way-to-create-integration-test-for-libgdx-application
 
+
+public class TestMover {
     Player player;
+    private static HeadlessApplication application;
+
+    @BeforeClass
+    public static void initHeadless() {
+        application = new HeadlessApplication(new FroggerDroid());
+    }
 
     @Before
     public void init() {
@@ -33,6 +44,6 @@ public class TestMover {
             i = (i + 1) % 4;
         }
         System.out.println(MiscUtils.getMaxPrecisionFormat().format(player.getPosition().x));
-        assertEquals(player.getPosition().x, 1.0f);
+        assertEquals(player.getPosition().x, 1.0f, 0f);
     }
 }

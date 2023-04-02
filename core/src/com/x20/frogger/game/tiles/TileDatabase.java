@@ -49,7 +49,7 @@ public class TileDatabase {
         );
 
         init = true;
-        Gdx.app.log("TileDatabase", "Initialized.");
+        Gdx.app.log("TileDatabase", "Initialized");
 
     }
 

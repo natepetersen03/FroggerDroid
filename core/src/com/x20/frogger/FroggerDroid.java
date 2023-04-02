@@ -70,7 +70,7 @@ public class FroggerDroid extends Game {
         // game asset init
         AssetManagerSingleton.getInstance().loadAssets();
         AssetManagerSingleton.getInstance().getAssetManager().finishLoading();
-        Gdx.app.log("AssetManagerSingleton", "Assets Loaded");
+        Gdx.app.log("AssetManagerSingleton", "Assets loaded");
 
         // end game init
 

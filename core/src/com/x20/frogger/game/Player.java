@@ -43,7 +43,11 @@ public class Player extends Entity implements Renderable {
             );
             updatePlayerSprite();
         } catch (com.badlogic.gdx.utils.GdxRuntimeException exception) {
-            System.err.println("Sprite failed to load; Assuming headless launch.");
+            Gdx.app.error(
+                "Player",
+                "Sprite failed to load; Assuming headless launch",
+                exception
+            );
         }
         if (FroggerDroid.isFlagDebug()) {
             debugTimer = new IntervalTimer(1f);

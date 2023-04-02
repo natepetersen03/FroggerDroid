@@ -55,7 +55,6 @@ public class GameScreen implements Screen {
         this.game = game;
 
         /// Initialize game logic
-        Gdx.app.log("GameScreen", "Initializing GameLogic...");
         gameLogic = GameLogic.getInstance();
         gameLogic.setLives(getLives(GameConfig.getDifficulty()));
 
@@ -109,7 +108,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-        Gdx.app.log("GameScreen", "Initializing done.");
+        Gdx.app.log("GameScreen", "Initializing done");
     }
 
     @Override
@@ -253,7 +252,7 @@ public class GameScreen implements Screen {
         setButtons(moveTable);
         stage.addActor(moveTable);
 
-        Gdx.app.log("GameScreen", "Loaded GUI.");
+        Gdx.app.log("GameScreen", "Loaded GUI");
 
     }
 

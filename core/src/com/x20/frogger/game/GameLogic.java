@@ -30,7 +30,7 @@ public class GameLogic {
     }
 
     private GameLogic() {
-        Gdx.app.debug("GameLogic", "Singleton initialized");
+        Gdx.app.log("GameLogic", "Initializing GameLogic...");
 
         // init TileDatabase
         TileDatabase.initDatabase();
@@ -65,6 +65,7 @@ public class GameLogic {
     public static synchronized GameLogic getInstance() {
         if (instance == null) {
             instance = new GameLogic();
+            Gdx.app.log("GameLogic", "Singleton initialized");
         }
         return instance;
     }

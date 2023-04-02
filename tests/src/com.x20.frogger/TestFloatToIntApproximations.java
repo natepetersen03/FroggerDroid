@@ -1,4 +1,4 @@
-package com.x20.frogger.tests;
+package com.x20.frogger;
 
 import com.x20.frogger.utils.MiscUtils;
 
