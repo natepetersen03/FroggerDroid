@@ -87,6 +87,8 @@ public abstract class Entity implements Updatable, Renderable, Debuggable {
         return clamped;
     }
 
+    public Rectangle getHitbox() { return hitbox; }
+
     @Override
     public void update() {
 

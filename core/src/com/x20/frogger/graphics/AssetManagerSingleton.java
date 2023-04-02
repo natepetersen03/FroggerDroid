@@ -42,6 +42,7 @@ public class AssetManagerSingleton {
         assetManager.load("mc-style.atlas", TextureAtlas.class);
         assetManager.load("tiles.png", Texture.class, textureParameter);
         assetManager.load("players.png", Texture.class, textureParameter);
+        assetManager.load("vehicles.png", Texture.class, textureParameter);
 
         Gdx.app.log("AssetManagerSingleton", "Assets enqueued.");
     }

@@ -43,7 +43,7 @@ public class GameScreen implements Screen {
     private Viewport gameViewport;
     private TileRenderer tileRenderer;
 
-    // Vehicles
+    //Vehicles
     private Array<Vehicle> vehicles;
     private DataEnums.VehicleType[] vehicleTypes;
 
@@ -81,8 +81,8 @@ public class GameScreen implements Screen {
         // vehicle types
         // todo: replace with proper vehicle classes
         // status: disabled
-        //vehicleTypes = new DataEnums.VehicleType[] {
-        //    DataEnums.VehicleType.IRON_GOLEM,
+        vehicleTypes = new DataEnums.VehicleType[] {
+            DataEnums.VehicleType.IRON_GOLEM,
         //    DataEnums.VehicleType.CREEPER,
         //    DataEnums.VehicleType.SKELETON,
         //    DataEnums.VehicleType.IRON_GOLEM,
@@ -91,7 +91,7 @@ public class GameScreen implements Screen {
         //    DataEnums.VehicleType.CREEPER,
         //    DataEnums.VehicleType.CREEPER,
         //    DataEnums.VehicleType.CREEPER,
-        //};
+        };
 
         // generate vehicle types in level
         // replaces hard coded array above
@@ -103,7 +103,9 @@ public class GameScreen implements Screen {
         //    vehicleTypes[i] = generateVehicleType(rand);
         //}
         //
-        //this.vehicles = spawnVehicles(vehicleTypes);
+        this.vehicles = spawnVehicles(vehicleTypes);
+
+
     }
 
     @Override
@@ -135,12 +137,9 @@ public class GameScreen implements Screen {
             // status: disabled
             //game.getBatch().begin();
             //// render all vehicles in one batch
-            //for (Iterator<Vehicle> iter = vehicles.iterator(); iter.hasNext();) {
-            //    Vehicle vehicle = iter.next();
-            //    game.getBatch().draw(
-            //        vehicle.getVehicleImage(), vehicle.getHitbox().x, vehicle.getHitbox().y
-            //    );
-            //}
+            for (Vehicle vehicle : vehicles) {
+                vehicle.render(game.getBatch());
+            }
 
             // Render player
             gameLogic.getPlayer().render(game.getBatch());
@@ -304,37 +303,17 @@ public class GameScreen implements Screen {
     and reuses them instead of spawning and despawning (due to Vehicle's updatePosition method)
      */
     // status: disabled
-    //private Array<Vehicle> spawnVehicles(DataEnums.VehicleType[] vehicleTypes) {
-    //    Array<Vehicle> spawnedVehicles = new Array<Vehicle>();
-    //    for (int y = 0; y < vehicleTypes.length; y++) {
-    //        int width = getVehicleWidth(vehicleTypes[y]);
-    //        int velocity = getVehicleVelocity(vehicleTypes[y]);
-    //        int spacing = getVehicleSpacing(vehicleTypes[y]);
-    //        Texture sprite;
-    //        switch (vehicleTypes[y]) {
-    //        case IRON_GOLEM:
-    //            sprite = AssetManagerSingleton.getInstance().getAssetManager().get("ironGolem.png", Texture.class);
-    //            break;
-    //        case CREEPER:
-    //            sprite = AssetManagerSingleton.getInstance().getAssetManager().get("creeper.png", Texture.class);
-    //            break;
-    //        case SKELETON:
-    //            sprite = AssetManagerSingleton.getInstance().getAssetManager().get("skeleton.png", Texture.class);
-    //            break;
-    //        default:
-    //            sprite = AssetManagerSingleton.getInstance().getAssetManager().get("grass.png", Texture.class);
-    //            break;
-    //        }
-    //
-    //        for (int x = 0; x < Gdx.graphics.getWidth(); x += spacing * tileSize) {
-    //            Vehicle vehicle = new Vehicle(
-    //                x, 2 * tileSize + (y + 1) * tileSize, tileSize, width, velocity, sprite);
-    //            spawnedVehicles.add(vehicle);
-    //        }
-    //    }
-    //
-    //    return spawnedVehicles;
-    //}
+    private Array<Vehicle> spawnVehicles(DataEnums.VehicleType[] vehicleTypes) {
+
+        Array<Vehicle> spawnedVehicles = new Array<>();
+        for (int yPos = 0; yPos < vehicleTypes.length; yPos++) {
+            for (int xPos = 0; xPos < gameLogic.getTileMap().getWidth(); xPos += 3) {
+                spawnedVehicles.add(new Vehicle(xPos, yPos, vehicleTypes[yPos]));
+            }
+        }
+
+        return spawnedVehicles;
+    }
 
     // used by the spawning algorithm to generate Vehicles
     // not sure what the purpose of separate width values is for
