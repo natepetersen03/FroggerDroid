@@ -7,7 +7,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.x20.frogger.graphics.AssetManagerSingleton;
 
 public class Golem extends Mob{
-    public Golem(Vector2 position) {
+
+    public Golem(int xPos, int yPos) {
         sprite = new TextureRegion(
                 AssetManagerSingleton.getInstance()
                         .getAssetManager().get("vehicles.png", Texture.class),
@@ -15,7 +16,7 @@ public class Golem extends Mob{
         );
         sprite.setRegion(sprite.getRegionX(), 2 * 16, 16, 16);
 
-        this.position = position;
+        this.position = new Vector2(xPos, yPos);
         this.hitbox = new Rectangle();
         hitbox.x = position.x;
         hitbox.y = position.y;
@@ -23,6 +24,7 @@ public class Golem extends Mob{
         hitbox.width = sprite.getRegionWidth();
         hitbox.height = sprite.getRegionWidth();
 
-        this.speed = -20;
+        this.speed = -2;
+        this.points = 20;
     }
 }

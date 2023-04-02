@@ -90,6 +90,12 @@ public class GameLogic {
         // 3. update world (entities)
 
         player.update();
+        for (int i = 0; i < tileMap.getEntities().size(); i++) {
+            for (Entity entity:
+                 tileMap.getEntities().get(i)) {
+                entity.update();
+            }
+        }
         // todo: test extensively. possibility that floating point errors might cause this to fail
         checkForDamagingTile((int) player.position.x, (int) player.position.y);
     }

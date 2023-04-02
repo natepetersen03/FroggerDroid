@@ -18,9 +18,14 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.x20.frogger.data.Controls;
 import com.x20.frogger.data.DataEnums;
+import com.x20.frogger.game.Entity;
 import com.x20.frogger.game.GameConfig;
 import com.x20.frogger.game.GameLogic;
 import com.x20.frogger.game.InputController;
+
+import com.x20.frogger.game.Vehicle;
+import com.x20.frogger.game.tiles.TileMap;
+
 import com.x20.frogger.game.tiles.TileRenderer;
 
 public class GameScreen implements Screen {
@@ -70,8 +75,12 @@ public class GameScreen implements Screen {
         //this.gameViewport = new ExtendViewport(worldString[0].length(), worldString.length, gameCamera);
         this.tileRenderer = new TileRenderer(this.game.getBatch(), gameLogic.getTileMap());
 
+
+        gameLogic.getTileMap().generateMobs();
+
         // set label fields
         this.name = GameConfig.getName();
+
     }
 
     @Override
@@ -100,6 +109,13 @@ public class GameScreen implements Screen {
 
             // Render player
             gameLogic.getPlayer().render(game.getBatch());
+
+            for (int i = 0; i < gameLogic.getTileMap().getEntities().size(); i++) {
+                for (Entity entity:
+                        gameLogic.getTileMap().getEntities().get(i)) {
+                    entity.render(game.getBatch());
+                }
+            }
 
             game.getBatch().end();
 
