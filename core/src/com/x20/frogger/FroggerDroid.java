@@ -70,9 +70,8 @@ public class FroggerDroid extends Game {
         // game asset init
         AssetManagerSingleton.getInstance().loadAssets();
         AssetManagerSingleton.getInstance().getAssetManager().finishLoading();
-        if (FroggerDroid.isFlagDebug()) {
-            System.out.println("Assets finished loading");
-        }
+        Gdx.app.log("AssetManagerSingleton", "Assets Loaded");
+
         // end game init
 
         skinGUI = FTFSkinLoader.loadFTFSkin("mc-style.json");
@@ -80,11 +79,11 @@ public class FroggerDroid extends Game {
         // Flag-specific behaviors
         if (FroggerDroid.isFlagDebug()) {
             Gdx.app.setLogLevel(Application.LOG_DEBUG);
-            System.out.println("Debug mode enabled");
+            Gdx.app.log("Application", "Debug mode enabled");
         }
 
         if (FroggerDroid.isFlagSkipToGame()) {
-            System.out.println("Skipping to GameScreen...");
+            Gdx.app.debug("FroggerDroid", "Skipping to GameScreen...");
             GameConfig.setCharacter(DataEnums.Character.STEVE);
             GameConfig.setName("Debugger");
             GameConfig.setDifficulty(DataEnums.Difficulty.EASY);

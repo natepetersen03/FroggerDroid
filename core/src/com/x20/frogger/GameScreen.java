@@ -164,22 +164,18 @@ public class GameScreen implements Screen {
 
         // debug log
         Gdx.app.debug("Application",
-                "Screen resized to dimensions: " +
-                        gameViewport.getScreenWidth() +
-                        " x " +
-                        gameViewport.getScreenHeight() +
-                        "; World dimensions: " +
-                        gameViewport.getWorldWidth() +
-                        " x " +
-                        gameViewport.getWorldHeight()
+    "Screen resized to dimensions: " +
+            gameViewport.getScreenWidth() +
+            " x " +
+            gameViewport.getScreenHeight()
         );
     }
 
     public void updateScoreLives() {
         // TODO: bad performance, need to store name/
         String text = "([#00FF00]" + name
-                + "[#FFFFFF])  Lives: [#ADD8E6]" + gameLogic.getLives()
-                + "  [#FFFFFF]Score: [#A020F0]" + gameLogic.getScore();
+            + "[#FFFFFF])  Lives: [#ADD8E6]" + gameLogic.getLives()
+            + "  [#FFFFFF]Score: [#A020F0]" + gameLogic.getScore();
         scoreLabel.setText(text);
     }
 
@@ -194,23 +190,6 @@ public class GameScreen implements Screen {
 //            switchToGameOverScreen();
 //        }
 
-        // bounds restriction
-        //bounds x-coordinates: 0 -> 10, y-coordinates: 0 -> 12
-        // todo: update all to work with world coordinates and not screen coordinates
-        // status: disabled
-        //if (character.getX() < 0) {
-        //    character.setX(0);
-        //}
-        //if (character.getX() > Gdx.graphics.getWidth() - character.getWidth()) {
-        //    character.setX(Gdx.graphics.getWidth() - character.getWidth());
-        //}
-        //
-        //if (character.getY() < 0) {
-        //    character.setY(0);
-        //}
-        //if (character.getY() > Gdx.graphics.getHeight() - character.getHeight() - tableHeight) {
-        //    character.setY(Gdx.graphics.getHeight() - character.getHeight() - tableHeight);
-        //}
 
         // score system
         // todo: overhaul and put in separate method
@@ -243,25 +222,6 @@ public class GameScreen implements Screen {
         //    vehicle.updatePosition();
         //}
     }
-
-    // deprecated point system
-    // todo: delete this
-    // yCoord is in screen space
-    // status: disabled
-//    private int getPoints(float yCoord) {
-//        int points = 1;
-//        for (int i = vehicleTypes.length - 1; i > -1; i--) {
-//            System.out.println(i + ": checking position: " + 2 * tileSize + (i + 1));
-//            if (yCoord >= 2 * tileSize + (i + 1) * tileSize) {
-//                points = getVehicleVelocity(vehicleTypes[i]) / 10;
-//            }
-//        }
-//        System.out.println("y-coord: " + yCoord + "points = " + points);
-////        if (yCoord >= 2 * tileSize + (vehicleTypes.length) * tileSize) {
-////            points = 1;
-////        }
-//        return points;
-//    }
 
     private void switchToGameOverScreen() {
         game.setScreen(new GameOverScreen(game));

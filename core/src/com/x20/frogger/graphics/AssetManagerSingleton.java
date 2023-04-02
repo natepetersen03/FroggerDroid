@@ -1,5 +1,6 @@
 package com.x20.frogger.graphics;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.TextureLoader.TextureParameter;
 import com.badlogic.gdx.graphics.Texture;
@@ -42,8 +43,6 @@ public class AssetManagerSingleton {
         assetManager.load("tiles.png", Texture.class, textureParameter);
         assetManager.load("players.png", Texture.class, textureParameter);
 
-        if (FroggerDroid.isFlagDebug()) {
-            System.out.println("Assets enqueued...");
-        }
+        Gdx.app.log("AssetManagerSingleton", "Assets enqueued.");
     }
 }
