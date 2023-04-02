@@ -49,6 +49,10 @@ public class Mover  {
         timing.start();
     }
 
+    /**
+     * Shift origin and target
+     * @param delta Vector2
+     */
     public void addDelta(Vector2 delta) {
         originPos.add(delta);
         targetPos.add(delta);

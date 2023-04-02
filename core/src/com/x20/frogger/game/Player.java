@@ -58,15 +58,28 @@ public class Player extends Entity implements Renderable, Debuggable {
         this(Vector2.Zero);
     }
 
+    /**
+     * Get instance of Mover, which drives movement as a result of player input
+     * @return Mover
+     */
     public Mover getMover() {
         return mover;
     }
 
+    /**
+     * Set position, cancelling any moves-in-progress, and clamping it within bounds
+     * @param x float
+     * @param y float
+     */
     @Override
     public void setPosition(float x, float y) {
         setPosition(new Vector2(x, y));
     }
 
+    /**
+     * Set position, cancelling any moves-in-progress, and clamping it within bounds
+     * @param newPosition Vector2
+     */
     @Override
     public void setPosition(Vector2 newPosition) {
         mover.cancel(newPosition);
@@ -83,31 +96,43 @@ public class Player extends Entity implements Renderable, Debuggable {
 
     /**
      * Teleport to a given position without any additional processing or affecting the mover
-     * @param newPosition new position
+     * @param newPosition Vector2
      */
     public void setPositionRaw(Vector2 newPosition) {
         position = newPosition.cpy();
     }
 
+
     public void setMoveDist(float dist) {
         moveDist = dist;
     }
 
+    /**
+     * Change how fast the player moves due to player input. Also affects the move input cooldown.
+     * @param speed float
+     */
     public void setMoveSpeed(float speed) {
         this.speed = speed;
         mover.setMoveDurationFromSpeed(speed);
     }
 
+    /**
+     * Update player position based on base velocity and currently queued movement
+     */
     @Override
     protected void updatePos() {
+        // Base velocity
         Vector2 deltaPosFromVel = velocity.cpy().scl(Gdx.graphics.getDeltaTime());
         position.add(deltaPosFromVel);
+        // Shift mover's origin and target to account for new position due to base velocity
         mover.addDelta(deltaPosFromVel);
 
+        // Player input-based movement
         if (mover.isMoving()) {
             position = mover.moveToTarget(Gdx.graphics.getDeltaTime());
         }
 
+        // Bounds restriction
         position = clampToBounds(
             position,
             Vector2.Zero,

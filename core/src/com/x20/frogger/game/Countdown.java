@@ -63,10 +63,18 @@ public class Countdown implements Updatable {
     }
 
     /**
-     * Stop/pause countdown. Does not reset time left on countdown.
+     * Pause countdown. Does not reset time left on countdown.
      */
     public void pause() {
         running = false;
+    }
+
+    /**
+     * Stop countdown and reset the time left on the countdown.
+     */
+    public void stop() {
+        pause();
+        reset();
     }
 
     /**

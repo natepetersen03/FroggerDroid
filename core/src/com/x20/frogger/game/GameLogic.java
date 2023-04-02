@@ -114,7 +114,7 @@ public class GameLogic {
         }
     }
 
-    public boolean checkLives(){
+    public boolean checkLives() {
         if (this.lives == 0) {
             return true;
         }
