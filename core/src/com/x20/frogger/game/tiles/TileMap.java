@@ -37,10 +37,7 @@ public class TileMap {
     private Tile[][] tilemap;
 
     private ArrayList<LinkedList<Entity>> entities;
-
-    public Vector2 getDimensions() {
-        return dimensions;
-    }
+    private LinkedList<Entity>[] rowEntitiesArray;
 
     public TileMap() {
 

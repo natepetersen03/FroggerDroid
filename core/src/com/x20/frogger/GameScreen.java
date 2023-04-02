@@ -23,7 +23,6 @@ import com.x20.frogger.game.GameConfig;
 import com.x20.frogger.game.GameLogic;
 import com.x20.frogger.game.InputController;
 
-import com.x20.frogger.game.Vehicle;
 import com.x20.frogger.game.tiles.TileMap;
 
 import com.x20.frogger.game.tiles.TileRenderer;
@@ -143,7 +142,6 @@ public class GameScreen implements Screen {
     }
 
     public void updateScoreLives() {
-        // TODO: bad performance, need to store name/
         String text = "([#00FF00]" + name
             + "[#FFFFFF])  Lives: [#ADD8E6]" + gameLogic.getLives()
             + "  [#FFFFFF]Score: [#A020F0]" + gameLogic.getScore();
