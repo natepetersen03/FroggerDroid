@@ -30,7 +30,7 @@ public class Player extends Entity implements Renderable, Debuggable {
         super();
         position = spawnPosition.cpy();
         moveDir = Vector2.Zero;
-        mover = new Mover(position, 1f/speed);
+        mover = new Mover(position, speed);
         velocity = new Vector2(0, 0);
 
         // todo: make a more robust system for determining the player skin
