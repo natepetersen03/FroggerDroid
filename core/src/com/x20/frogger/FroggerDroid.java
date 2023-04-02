@@ -1,8 +1,12 @@
 package com.x20.frogger;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.x20.frogger.data.DataEnums;
+import com.x20.frogger.game.GameConfig;
 import com.x20.frogger.graphics.AssetManagerSingleton;
 import com.x20.frogger.utils.FTFSkinLoader;
 
@@ -46,12 +50,6 @@ public class FroggerDroid extends Game {
                     break;
             }
         }
-        if (FroggerDroid.isFlagDebug()) {
-            System.out.println("Debug mode enabled");
-            if (FroggerDroid.isFlagSkipToGame()) {
-                System.out.println("Skipping to GameScreen...");
-            }
-        }
     }
 
     public static boolean isFlagDebug() {
@@ -79,7 +77,21 @@ public class FroggerDroid extends Game {
 
         skinGUI = FTFSkinLoader.loadFTFSkin("mc-style.json");
 
-        this.setScreen(new MainMenuScreen(this));
+        // Flag-specific behaviors
+        if (FroggerDroid.isFlagDebug()) {
+            Gdx.app.setLogLevel(Application.LOG_DEBUG);
+            System.out.println("Debug mode enabled");
+        }
+
+        if (FroggerDroid.isFlagSkipToGame()) {
+            System.out.println("Skipping to GameScreen...");
+            GameConfig.setCharacter(DataEnums.Character.STEVE);
+            GameConfig.setName("Debugger");
+            GameConfig.setDifficulty(DataEnums.Difficulty.EASY);
+            this.setScreen(new GameScreen(this));
+        } else {
+            this.setScreen(new MainMenuScreen(this));
+        }
     }
 
     public void render() {

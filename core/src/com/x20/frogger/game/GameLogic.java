@@ -1,5 +1,6 @@
 package com.x20.frogger.game;
 
+import com.badlogic.gdx.Gdx;
 import com.x20.frogger.FroggerDroid;
 import com.x20.frogger.game.tiles.TileDatabase;
 import com.x20.frogger.game.tiles.TileMap;
@@ -29,9 +30,7 @@ public class GameLogic {
     }
 
     private GameLogic() {
-        if (FroggerDroid.isFlagDebug()) {
-            System.out.println("GameLogic singleton initialized");
-        }
+        Gdx.app.debug("GameLogic", "Singleton initialized");
 
         // init TileDatabase
         TileDatabase.initDatabase();
@@ -85,7 +84,6 @@ public class GameLogic {
     // we can use custom events that the GUI elements are subscribed to
     // then when we fire the events, we can notify the subscribers to update
     // see: https://programming.guide/java/create-a-custom-event.html
-
 
 
     public boolean checkGoal(int x, int y) {

@@ -1,13 +1,9 @@
 package com.x20.frogger.tests;
 
-import com.x20.frogger.utils.DebugLog;
+import com.x20.frogger.utils.MiscUtils;
 
-import org.junit.Assert;
-import org.junit.BeforeClass;
 import org.junit.Test;
 
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.Arrays;
 
 public class TestFloatToIntApproximations {
@@ -28,7 +24,7 @@ public class TestFloatToIntApproximations {
         System.out.println(11.99999904632568359375f);
         System.out.println(String.format("%.20f", 11.99999904632568359375f));
 
-        System.out.println(DebugLog.getMaxPrecisionFormat().format(11.99999904632568359375f));
+        System.out.println(MiscUtils.getMaxPrecisionFormat().format(11.99999904632568359375f));
 
 
         System.out.println("Close to 1 and -1");

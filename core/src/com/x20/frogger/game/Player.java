@@ -10,7 +10,7 @@ import com.x20.frogger.data.Controls;
 import com.x20.frogger.data.IntervalUpdatable;
 import com.x20.frogger.data.Renderable;
 import com.x20.frogger.graphics.AssetManagerSingleton;
-import com.x20.frogger.utils.DebugLog;
+import com.x20.frogger.utils.MiscUtils;
 
 public class Player extends Entity implements Renderable {
 
@@ -25,7 +25,7 @@ public class Player extends Entity implements Renderable {
     private Controls.MOVE moveDirEnum = Controls.MOVE.RIGHT;
 
     // debug vars
-    private IntervalTimer debugTimer = new IntervalTimer(0.5f);
+    private IntervalTimer debugTimer;
 
     public Player(Vector2 spawnPosition) {
         super();
@@ -46,6 +46,7 @@ public class Player extends Entity implements Renderable {
             System.err.println("Sprite failed to load; Assuming headless launch.");
         }
         if (FroggerDroid.isFlagDebug()) {
+            debugTimer = new IntervalTimer(1f);
             debugTimer.addListener(new IntervalUpdatable() {
                 @Override
                 public void intervalUpdate() {
@@ -218,6 +219,6 @@ public class Player extends Entity implements Renderable {
 
     @Override
     public void debug() {
-        System.out.println("Position: " + DebugLog.maxPrecisionVector2(position));
+        Gdx.app.debug("Player", "Position: " + MiscUtils.maxPrecisionVector2(position));
     }
 }

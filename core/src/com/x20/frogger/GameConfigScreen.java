@@ -53,15 +53,8 @@ public class GameConfigScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        if (FroggerDroid.isFlagSkipToGame()) {
-            GameConfig.setCharacter(DataEnums.Character.STEVE);
-            GameConfig.setName("Debugger");
-            GameConfig.setDifficulty(DataEnums.Difficulty.EASY);
-            switchToGameScreen();
-        }
+
     }
-
-
 
     @Override
     public void render(float delta) {

@@ -50,32 +50,27 @@ public class GameScreen implements Screen {
     private String name;
 
     public GameScreen(final FroggerDroid game) {
-        if (FroggerDroid.isFlagDebug()) {
-            System.out.println("Loading GameScreen...");
-        }
+        Gdx.app.log("GameScreen", "Initializing...");
+
         this.game = game;
 
         /// Initialize game logic
-        if (FroggerDroid.isFlagDebug()) {
-            System.out.println("Loading GameLogic...");
-        }
+        Gdx.app.log("GameScreen", "Initializing GameLogic...");
         gameLogic = GameLogic.getInstance();
         gameLogic.setLives(getLives(GameConfig.getDifficulty()));
 
 
         // init GUI
-        if (FroggerDroid.isFlagDebug()) {
-            System.out.println("Loading GUI...");
-        }
+        Gdx.app.log("GameScreen", "Loading GUI...");
+
         this.skin = game.getSkinGUI();
         // todo: get these width and height values from a variable somewhere
         this.guiViewport = new ExtendViewport(500, 480);
         constructUI();
 
         /// New Game Viewport
-        if (FroggerDroid.isFlagDebug()) {
-            System.out.println("Loading World Renderer...");
-        }
+        Gdx.app.log("GameScreen", "Loading world viewport...");
+
         // Init
         this.gameCamera = new OrthographicCamera(gameLogic.getTileMap().getWidth(), gameLogic.getTileMap().getHeight());
         this.gameViewport = new FitViewport(gameLogic.getTileMap().getWidth(), gameLogic.getTileMap().getHeight(), gameCamera);
@@ -114,9 +109,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-        if (FroggerDroid.isFlagDebug()) {
-            System.out.println("Done loading GameScreen");
-        }
+        Gdx.app.log("GameScreen", "Initializing done.");
     }
 
     @Override
@@ -168,18 +161,18 @@ public class GameScreen implements Screen {
         // update UI viewport on window resize
         gameViewport.update(width, height, true);
         guiViewport.update(width, height, true);
-        if (FroggerDroid.isFlagDebug()) {
-            System.out.println(
+
+        // debug log
+        Gdx.app.debug("Application",
                 "Screen resized to dimensions: " +
-                    gameViewport.getScreenWidth() +
-                    " x " +
-                    gameViewport.getScreenHeight() +
-                    "; World dimensions: " +
-                    gameViewport.getWorldWidth() +
-                    " x " +
-                    gameViewport.getWorldHeight()
-            );
-        }
+                        gameViewport.getScreenWidth() +
+                        " x " +
+                        gameViewport.getScreenHeight() +
+                        "; World dimensions: " +
+                        gameViewport.getWorldWidth() +
+                        " x " +
+                        gameViewport.getWorldHeight()
+        );
     }
 
     public void updateScoreLives() {
@@ -300,9 +293,8 @@ public class GameScreen implements Screen {
         setButtons(moveTable);
         stage.addActor(moveTable);
 
-        if (FroggerDroid.isFlagDebug()) {
-            System.out.println("Done loading GUI");
-        }
+        Gdx.app.log("GameScreen", "Loaded GUI.");
+
     }
 
     // player controls GUI

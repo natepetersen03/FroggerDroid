@@ -45,9 +45,7 @@ public class MainMenuScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        if (FroggerDroid.isFlagSkipToGame()) {
-            switchToGameConfigScreen();
-        }
+
     }
 
     @Override
