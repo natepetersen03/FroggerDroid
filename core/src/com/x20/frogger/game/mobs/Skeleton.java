@@ -8,20 +8,20 @@ import com.x20.frogger.graphics.AssetManagerSingleton;
 
 public class Skeleton extends Mob{
     public Skeleton(Vector2 position) {
-        entitySprite = new TextureRegion(
+        sprite = new TextureRegion(
                 AssetManagerSingleton.getInstance()
                         .getAssetManager().get("vehicles.png", Texture.class),
                 0, 0, 16, 16
         );
-        entitySprite.setRegion(entitySprite.getRegionX(), 1 * 16, 16, 16);
+        sprite.setRegion(sprite.getRegionX(), 1 * 16, 16, 16);
 
         this.position = position;
         this.hitbox = new Rectangle();
         hitbox.x = position.x;
         hitbox.y = position.y;
 
-        hitbox.width = entitySprite.getRegionWidth();
-        hitbox.height = entitySprite.getRegionWidth();
+        hitbox.width = sprite.getRegionWidth();
+        hitbox.height = sprite.getRegionWidth();
 
         this.speed = 30;
     }

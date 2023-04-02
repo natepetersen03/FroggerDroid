@@ -68,7 +68,7 @@ public class TileMap {
             }
         }
         // Entity array init
-        rowEntitiesArray = new LinkedList<>[getHeight()];
+        rowEntitiesArray = new LinkedList[getHeight()];
         for (int i = 0; i < rowEntitiesArray.length; i++) {
             rowEntitiesArray[i] = new LinkedList<Entity>();
         }

@@ -13,7 +13,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -22,7 +21,6 @@ import com.x20.frogger.data.DataEnums;
 import com.x20.frogger.game.GameConfig;
 import com.x20.frogger.game.GameLogic;
 import com.x20.frogger.game.InputController;
-import com.x20.frogger.game.Vehicle;
 import com.x20.frogger.game.tiles.TileRenderer;
 
 public class GameScreen implements Screen {
@@ -42,10 +40,6 @@ public class GameScreen implements Screen {
     private OrthographicCamera gameCamera;
     private Viewport gameViewport;
     private TileRenderer tileRenderer;
-
-    //Vehicles
-    private Array<Vehicle> vehicles;
-    private DataEnums.VehicleType[] vehicleTypes;
 
     private String name;
 
@@ -78,34 +72,6 @@ public class GameScreen implements Screen {
 
         // set label fields
         this.name = GameConfig.getName();
-        // vehicle types
-        // todo: replace with proper vehicle classes
-        // status: disabled
-        vehicleTypes = new DataEnums.VehicleType[] {
-            DataEnums.VehicleType.IRON_GOLEM,
-        //    DataEnums.VehicleType.CREEPER,
-        //    DataEnums.VehicleType.SKELETON,
-        //    DataEnums.VehicleType.IRON_GOLEM,
-        //    DataEnums.VehicleType.SKELETON,
-        //    DataEnums.VehicleType.CREEPER,
-        //    DataEnums.VehicleType.CREEPER,
-        //    DataEnums.VehicleType.CREEPER,
-        //    DataEnums.VehicleType.CREEPER,
-        };
-
-        // generate vehicle types in level
-        // replaces hard coded array above
-        // todo: replace with vehicle generator
-        // status: disabled
-
-        //for (int i = 0; i < 9; i++) {
-        //    int rand = MathUtils.random(1, 3);
-        //    vehicleTypes[i] = generateVehicleType(rand);
-        //}
-        //
-        this.vehicles = spawnVehicles(vehicleTypes);
-
-
     }
 
     @Override
@@ -131,15 +97,6 @@ public class GameScreen implements Screen {
 
             // Render tilemap
             tileRenderer.render();
-
-            // render vehicles
-            // todo: under reconstruction
-            // status: disabled
-            //game.getBatch().begin();
-            //// render all vehicles in one batch
-            for (Vehicle vehicle : vehicles) {
-                vehicle.render(game.getBatch());
-            }
 
             // Render player
             gameLogic.getPlayer().render(game.getBatch());
@@ -187,38 +144,6 @@ public class GameScreen implements Screen {
 //        if (gameLogic.checkGoal()) {
 //            switchToGameOverScreen();
 //        }
-
-
-        // score system
-        // todo: overhaul and put in separate method
-        // ? should this go here? in the player class?
-        // status: disabled
-
-        //if (maxY < character.getY()) {
-        //    maxY = character.getY();
-        //    // todo: replace with tile data based system
-        //    /*
-        //     * might try making a separate array of point values to store for this
-        //     * maybe just store this in tile data? would be wasteful though since
-        //     * each row of tiles awards the same points... except for the top row,
-        //     * where some spots are goal tiles and others will straight up kill you
-        //     * so we can't just reduce the tile data set to one tile representing the entire row
-        //     */
-        //    score += getPoints(maxY);
-        //    // score += 1;
-        //    updateLabel.setText("([#00FF00]" + GameConfig.getName()
-        //            + "[#FFFFFF])  Lives: [#ADD8E6]" + getLives(GameConfig.getDifficulty())
-        //            + "  [#FFFFFF]Score: [#A020F0]" + score);
-        //}
-
-        // update vehicle position
-        // todo: move into separate method
-        // status: disabled
-
-        //for (Iterator<Vehicle> iter = vehicles.iterator(); iter.hasNext();) {
-        //    Vehicle vehicle = iter.next();
-        //    vehicle.updatePosition();
-        //}
     }
 
     private void switchToGameOverScreen() {
@@ -291,90 +216,6 @@ public class GameScreen implements Screen {
 
         table.add();
         addMovementListeners(upButton, leftButton, rightButton, downButton);
-    }
-
-    // vehicle spawning
-    // todo: rip and tear
-    /*
-    Seems to also assign textures to it
-    todo: pull textures from texture atlas
-    is called only once on creation of GameScreen
-    Spawns vehicles spaced out from each other
-    and reuses them instead of spawning and despawning (due to Vehicle's updatePosition method)
-     */
-    // status: disabled
-    private Array<Vehicle> spawnVehicles(DataEnums.VehicleType[] vehicleTypes) {
-
-        Array<Vehicle> spawnedVehicles = new Array<>();
-        for (int yPos = 0; yPos < vehicleTypes.length; yPos++) {
-            for (int xPos = 0; xPos < gameLogic.getTileMap().getWidth(); xPos += 3) {
-                spawnedVehicles.add(new Vehicle(xPos, yPos, vehicleTypes[yPos]));
-            }
-        }
-
-        return spawnedVehicles;
-    }
-
-    // used by the spawning algorithm to generate Vehicles
-    // not sure what the purpose of separate width values is for
-    // edit: for some reason this is used to build the hitbox of the vehicle.
-    //       not sure why this isn't just a constant size or stored elsewhere
-    // todo: remove
-    public static int getVehicleWidth(DataEnums.VehicleType vehicleType) {
-        switch (vehicleType) {
-        case IRON_GOLEM:
-            return 140;
-        case CREEPER:
-            return 60;
-        case SKELETON:
-            return 110;
-        default:
-            return 100;
-        }
-    }
-
-
-    // todo: store vehicle velocity as a property of a vehicle instance
-    public static int getVehicleVelocity(DataEnums.VehicleType vehicleType) {
-        switch (vehicleType) {
-        case IRON_GOLEM:
-            return 30;
-        case CREEPER:
-            return 130;
-        case SKELETON:
-            return 80;
-        default:
-            return 100;
-        }
-    }
-
-    // used by the vehicle spawner to space out vehicle spawns
-    // note: probably will be replaced by the specific vehicle's spawn-spacing property
-    public static int getVehicleSpacing(DataEnums.VehicleType vehicleType) {
-        switch (vehicleType) {
-        case IRON_GOLEM:
-            return 7;
-        case CREEPER:
-            return 6;
-        case SKELETON:
-            return 4;
-        default:
-            return 10;
-        }
-    }
-
-    // soon to be deprecated
-    public static DataEnums.VehicleType generateVehicleType(int x) {
-        switch (x) {
-        case 1:
-            return DataEnums.VehicleType.IRON_GOLEM;
-        case 2:
-            return DataEnums.VehicleType.CREEPER;
-        case 3:
-            return DataEnums.VehicleType.SKELETON;
-        default:
-            return DataEnums.VehicleType.SKELETON;
-        }
     }
 
     // binds player movement input to player movement
