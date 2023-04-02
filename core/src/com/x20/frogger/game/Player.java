@@ -18,8 +18,8 @@ public class Player extends Entity implements Renderable, Debuggable {
     // todo: player hitbox
     private Vector2 moveDir;
     private Mover mover;
-    private float speed = 10f;
-    private float moveDist = 2f;
+    private float speed = 5f;
+    private float moveDist = 1f;
 
     private Controls.MOVE moveDirEnum = Controls.MOVE.RIGHT;
 
