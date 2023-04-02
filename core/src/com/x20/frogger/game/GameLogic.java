@@ -54,6 +54,8 @@ public class GameLogic {
         /// Player init
         this.player = new Player(tileMap.getWidth() / 2,0);
         // todo: specify a spawn tile position in the TileMap
+
+
     }
 
     public static synchronized GameLogic getInstance() {

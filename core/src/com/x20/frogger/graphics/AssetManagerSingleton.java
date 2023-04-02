@@ -40,6 +40,7 @@ public class AssetManagerSingleton {
         assetManager.load("mc-style.atlas", TextureAtlas.class);
         assetManager.load("tiles.png", Texture.class, textureParameter);
         assetManager.load("players.png", Texture.class, textureParameter);
+        assetManager.load("vehicles.png", Texture.class, textureParameter);
 
         System.out.println("Assets enqueued...");
     }
