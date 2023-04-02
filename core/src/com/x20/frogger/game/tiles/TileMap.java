@@ -1,5 +1,9 @@
 package com.x20.frogger.game.tiles;
 
+import com.x20.frogger.game.Entity;
+
+import java.util.LinkedList;
+
 public class TileMap {
     // todo: add vehicle spawns, player spawn
     // todo: data structure for storing vehicles for efficient collision tests
@@ -23,6 +27,11 @@ public class TileMap {
 
     // access by tilemap[x][y]
     private Tile[][] tilemap;
+    private LinkedList<Entity>[] rowEntitiesArray;
+
+    public TileMap() {
+
+    }
 
     public int getWidth() {
         return tilemap.length;
@@ -39,6 +48,10 @@ public class TileMap {
         return tilemap[x][y];
     }
 
+    public LinkedList<Entity> getEntitiesAtRow(int rowIndex) {
+        return rowEntitiesArray[rowIndex];
+    }
+
     // MUST HAVE A PERFECTLY RECTANGULAR STRING OR BAD THINGS MIGHT HAPPEN
 
     /**
@@ -53,6 +66,11 @@ public class TileMap {
                 // have to go in this order or the map is upside down
                 tilemap[x][str.length - y - 1] = generateTileFromChar(str[y].charAt(x));
             }
+        }
+        // Entity array init
+        rowEntitiesArray = new LinkedList<>[getHeight()];
+        for (int i = 0; i < rowEntitiesArray.length; i++) {
+            rowEntitiesArray[i] = new LinkedList<Entity>();
         }
     }
 

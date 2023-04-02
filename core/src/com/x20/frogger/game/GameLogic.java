@@ -4,10 +4,14 @@ import com.badlogic.gdx.Gdx;
 import com.x20.frogger.game.tiles.TileDatabase;
 import com.x20.frogger.game.tiles.TileMap;
 
+import java.util.LinkedList;
+import java.util.List;
+
 public class GameLogic {
     private static GameLogic instance;
 
     private Player player;
+    private final int DEFAULT_POINTS = 5;
     private int score = 0;
     private int yMax = 0;
 
@@ -57,6 +61,12 @@ public class GameLogic {
         tileMap = new TileMap();
         tileMap.generateTileMapFromStringArray(worldString);
 
+        // Populate entities
+        //for (int i = 0; i < tileMap.getHeight(); i++) {
+        //    List<Entity> row = tileMap.getEntitiesAtRow(i);
+        //    // Generate entities here
+        //}
+
         /// Player init
         this.player = new Player(tileMap.getWidth() / 2,0);
         // todo: specify a spawn tile position in the TileMap
@@ -86,11 +96,16 @@ public class GameLogic {
     // then when we fire the events, we can notify the subscribers to update
     // see: https://programming.guide/java/create-a-custom-event.html
 
-    public void updatePoints() {
+    public void updatePoints(boolean reset) {
         int y = (int) (Math.floor(player.getPosition().y));
         if (y > yMax) {
             yMax = y;
-            // Entity rowEntity = tileMap.getEntities(yMax).peek();
+            Entity rowEntity = tileMap.getEntitiesAtRow(yMax).peek();
+            //if (rowEntity instanceof PointEntity) {
+            //
+            //} else {
+            //    score += DEFAULT_POINTS;
+            //}
 
         }
     }
