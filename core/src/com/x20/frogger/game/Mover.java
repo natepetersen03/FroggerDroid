@@ -7,10 +7,14 @@ public class Mover  {
     private Vector2 originPos;
     private Countdown timing;
 
-    public Mover(Vector2 initialPos, float moveDuration) {
+    public Mover(Vector2 initialPos, float speed) {
         originPos = initialPos.cpy();
         targetPos = initialPos.cpy();
-        timing = new Countdown(moveDuration);
+        timing = new Countdown(1f / speed);
+    }
+
+    public void setMoveDurationFromSpeed(float speed) {
+        timing.setDuration(1f / speed);
     }
 
     public Vector2 getTargetPos() {

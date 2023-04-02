@@ -89,6 +89,15 @@ public class Player extends Entity implements Renderable, Debuggable {
         position = newPosition.cpy();
     }
 
+    public void setMoveDist(float dist) {
+        moveDist = dist;
+    }
+
+    public void setMoveSpeed(float speed) {
+        this.speed = speed;
+        mover.setMoveDurationFromSpeed(speed);
+    }
+
     @Override
     protected void updatePos() {
         Vector2 deltaPosFromVel = velocity.cpy().scl(Gdx.graphics.getDeltaTime());
