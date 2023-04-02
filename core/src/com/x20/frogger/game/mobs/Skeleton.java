@@ -6,8 +6,8 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.x20.frogger.graphics.AssetManagerSingleton;
 
-public class Skeleton extends Mob{
-    public Skeleton(Vector2 position) {
+public class Skeleton extends Mob {
+    public Skeleton(int xPos, int yPos) {
         entitySprite = new TextureRegion(
                 AssetManagerSingleton.getInstance()
                         .getAssetManager().get("vehicles.png", Texture.class),
@@ -15,7 +15,7 @@ public class Skeleton extends Mob{
         );
         entitySprite.setRegion(entitySprite.getRegionX(), 1 * 16, 16, 16);
 
-        this.position = position;
+        this.position = new Vector2(xPos, yPos);
         this.hitbox = new Rectangle();
         hitbox.x = position.x;
         hitbox.y = position.y;
@@ -23,6 +23,7 @@ public class Skeleton extends Mob{
         hitbox.width = entitySprite.getRegionWidth();
         hitbox.height = entitySprite.getRegionWidth();
 
-        this.speed = 30;
+        this.speed = 3.5;
+        this.points = 30;
     }
 }

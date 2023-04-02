@@ -1,5 +1,6 @@
 package com.x20.frogger.game;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -33,5 +34,9 @@ public abstract class Entity implements Updatable {
     @Override
     public void update() {
 
+    }
+
+    public void render(Batch batch) {
+        batch.draw(entitySprite, position.x, position.y, 1, 1);
     }
 }

@@ -8,7 +8,7 @@ import com.x20.frogger.graphics.AssetManagerSingleton;
 
 public class Creeper extends Mob {
 
-    public Creeper(Vector2 position) {
+    public Creeper(int xPos, int yPos) {
         entitySprite = new TextureRegion(
                 AssetManagerSingleton.getInstance()
                         .getAssetManager().get("vehicles.png", Texture.class),
@@ -16,7 +16,7 @@ public class Creeper extends Mob {
         );
         entitySprite.setRegion(entitySprite.getRegionX(), 0 * 16, 16, 16);
 
-        this.position = position;
+        this.position = new Vector2(xPos, yPos);
         this.hitbox = new Rectangle();
         hitbox.x = position.x;
         hitbox.y = position.y;
@@ -24,6 +24,7 @@ public class Creeper extends Mob {
         hitbox.width = entitySprite.getRegionWidth();
         hitbox.height = entitySprite.getRegionWidth();
 
-        this.speed = 10;
+        this.speed = 1.5;
+        this.points = 10;
     }
 }

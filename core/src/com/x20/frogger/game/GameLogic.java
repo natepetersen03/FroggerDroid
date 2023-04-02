@@ -72,5 +72,11 @@ public class GameLogic {
         // 3. update world (entities)
 
         player.update();
+        for (int i = 0; i < tileMap.getEntities().size(); i++) {
+            for (Entity entity:
+                 tileMap.getEntities().get(i)) {
+                entity.update();
+            }
+        }
     }
 }

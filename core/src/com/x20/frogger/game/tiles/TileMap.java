@@ -1,6 +1,14 @@
 package com.x20.frogger.game.tiles;
 
 import com.badlogic.gdx.math.Vector2;
+import com.x20.frogger.game.Entity;
+import com.x20.frogger.game.mobs.Creeper;
+import com.x20.frogger.game.mobs.Golem;
+import com.x20.frogger.game.mobs.Mob;
+import com.x20.frogger.game.mobs.Skeleton;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
 
 public class TileMap {
     // todo: add vehicle spawns, player spawn
@@ -27,6 +35,8 @@ public class TileMap {
     private Tile[][] tilemap;
     private Vector2 dimensions = Vector2.Zero;
 
+    private ArrayList<LinkedList<Entity>> entities;
+
     public Vector2 getDimensions() {
         return dimensions;
     }
@@ -43,6 +53,7 @@ public class TileMap {
         return tilemap[0].length;
     }
 
+    public ArrayList<LinkedList<Entity>> getEntities() { return entities; }
     public Tile getTile(int x, int y) {
         if (x < 0 || x >= getWidth() || y < 0 || y >= getHeight()) {
             throw new IllegalArgumentException("Coordinates out of bounds");
@@ -88,6 +99,37 @@ public class TileMap {
             str[y] = String.valueOf(row);
         }
         return str;
+    }
+
+    public void generateMobs() {
+
+        entities = new ArrayList<>();
+
+        entities.add(new LinkedList<Entity>());
+        entities.get(0).add(new Creeper(0, 1));
+        entities.get(0).add(new Creeper(5, 1));
+        entities.get(0).add(new Creeper(10, 1));
+
+
+        entities.add(new LinkedList<Entity>());
+        entities.get(0).add(new Golem(0, 2));
+        entities.get(0).add(new Golem(5, 2));
+        entities.get(0).add(new Golem(10, 2));
+
+        entities.add(new LinkedList<Entity>());
+        entities.get(0).add(new Creeper(0, 4));
+        entities.get(0).add(new Creeper(5, 4));
+        entities.get(0).add(new Creeper(10, 4));
+
+        entities.add(new LinkedList<Entity>());
+        entities.get(0).add(new Skeleton(0, 5));
+        entities.get(0).add(new Skeleton(5, 5));
+        entities.get(0).add(new Skeleton(10, 5));
+
+        entities.add(new LinkedList<Entity>());
+        entities.get(0).add(new Golem(0, 6));
+        entities.get(0).add(new Golem(5, 6));
+        entities.get(0).add(new Golem(10, 6));
     }
 
     public String toString() {

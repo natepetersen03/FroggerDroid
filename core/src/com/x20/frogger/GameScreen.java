@@ -19,10 +19,12 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.x20.frogger.data.Controls;
 import com.x20.frogger.data.DataEnums;
+import com.x20.frogger.game.Entity;
 import com.x20.frogger.game.GameConfig;
 import com.x20.frogger.game.GameLogic;
 import com.x20.frogger.game.InputController;
 import com.x20.frogger.game.Vehicle;
+import com.x20.frogger.game.tiles.TileMap;
 import com.x20.frogger.game.tiles.TileRenderer;
 
 public class GameScreen implements Screen {
@@ -66,35 +68,7 @@ public class GameScreen implements Screen {
         //this.gameViewport = new ExtendViewport(worldString[0].length(), worldString.length, gameCamera);
         this.tileRenderer = new TileRenderer(this.game.getBatch(), gameLogic.getTileMap());
 
-
-        // vehicle types
-        // todo: replace with proper vehicle classes
-        // status: disabled
-        vehicleTypes = new DataEnums.VehicleType[] {
-            DataEnums.VehicleType.IRON_GOLEM,
-        //    DataEnums.VehicleType.CREEPER,
-        //    DataEnums.VehicleType.SKELETON,
-        //    DataEnums.VehicleType.IRON_GOLEM,
-        //    DataEnums.VehicleType.SKELETON,
-        //    DataEnums.VehicleType.CREEPER,
-        //    DataEnums.VehicleType.CREEPER,
-        //    DataEnums.VehicleType.CREEPER,
-        //    DataEnums.VehicleType.CREEPER,
-        };
-
-        // generate vehicle types in level
-        // replaces hard coded array above
-        // todo: replace with vehicle generator
-        // status: disabled
-
-        //for (int i = 0; i < 9; i++) {
-        //    int rand = MathUtils.random(1, 3);
-        //    vehicleTypes[i] = generateVehicleType(rand);
-        //}
-        //
-        this.vehicles = spawnVehicles(vehicleTypes);
-
-
+        gameLogic.getTileMap().generateMobs();
     }
 
     @Override
@@ -126,12 +100,20 @@ public class GameScreen implements Screen {
             // status: disabled
             //game.getBatch().begin();
             //// render all vehicles in one batch
-            for (Vehicle vehicle : vehicles) {
-                vehicle.render(game.getBatch());
-            }
 
             // Render player
             gameLogic.getPlayer().render(game.getBatch());
+
+            for(Entity entityRow : gameLogic.getTileMap().getEntities().get(0) ) {
+                entityRow.render(game.getBatch());
+            }
+
+            for (int i = 0; i < gameLogic.getTileMap().getEntities().size(); i++) {
+                for (Entity entity:
+                        gameLogic.getTileMap().getEntities().get(i)) {
+                    entity.render(game.getBatch());
+                }
+            }
 
             game.getBatch().end();
 
