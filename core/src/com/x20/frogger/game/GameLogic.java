@@ -1,6 +1,7 @@
 package com.x20.frogger.game;
 
 import com.badlogic.gdx.Gdx;
+import com.x20.frogger.game.mobs.PointEntity;
 import com.x20.frogger.game.tiles.TileDatabase;
 import com.x20.frogger.game.tiles.TileMap;
 
@@ -98,17 +99,16 @@ public class GameLogic {
     // then when we fire the events, we can notify the subscribers to update
     // see: https://programming.guide/java/create-a-custom-event.html
 
-    public void updatePoints() {
+    public void updateScore() {
         int y = (int) (Math.floor(player.getPosition().y));
         if (y > yMax) {
             yMax = y;
             Entity rowEntity = tileMap.getEntitiesAtRow(yMax).peek();
-            //if (rowEntity instanceof PointEntity) {
-            //
-            //} else {
-            //    score += DEFAULT_POINTS;
-            //}
-
+            if (rowEntity instanceof PointEntity) {
+                score += ((PointEntity) rowEntity).getPoints();
+            } else {
+                score += DEFAULT_POINTS;
+            }
         }
     }
 
