@@ -10,7 +10,6 @@ import com.x20.frogger.data.Controls;
 import com.x20.frogger.data.Debuggable;
 import com.x20.frogger.data.Renderable;
 import com.x20.frogger.graphics.AssetManagerSingleton;
-import com.x20.frogger.utils.DebugLog;
 
 public class Player extends Entity implements Renderable, Debuggable {
 
@@ -24,13 +23,13 @@ public class Player extends Entity implements Renderable, Debuggable {
     private Controls.MOVE lastMoveDirection = Controls.MOVE.RIGHT;
 
     // debug vars
-    Countdown debugTimer = new Countdown(.5f);
+    private Countdown debugTimer = new Countdown(.5f);
 
     public Player(Vector2 spawnPosition) {
         super();
         position = spawnPosition.cpy();
         moveDir = Vector2.Zero;
-        mover = new Mover(1);
+        mover = new Mover(1f/speed);
         velocity = new Vector2(0, 0);
 
         // todo: make a more robust system for determining the player skin
@@ -69,8 +68,7 @@ public class Player extends Entity implements Renderable, Debuggable {
 
     @Override
     public void setPosition(Vector2 newPosition) {
-        mover.setMoving(false);
-        mover.resetAccumulator();
+        mover.cancel(newPosition);
         position = newPosition.cpy();
         position = clampToBounds(
             position,
@@ -84,7 +82,7 @@ public class Player extends Entity implements Renderable, Debuggable {
 
     /**
      * Teleport to a given position without any additional processing or affecting the mover
-     * @param newPosition
+     * @param newPosition new position
      */
     public void setPositionRaw(Vector2 newPosition) {
         position = newPosition.cpy();
@@ -92,13 +90,12 @@ public class Player extends Entity implements Renderable, Debuggable {
 
     @Override
     protected void updatePos() {
-        position.add(velocity.cpy().scl(Gdx.graphics.getDeltaTime()));
+        Vector2 deltaPosFromVel = velocity.cpy().scl(Gdx.graphics.getDeltaTime());
+        position.add(deltaPosFromVel);
+        mover.addDelta(deltaPosFromVel);
 
         if (mover.isMoving()) {
-            float delta = speed * Gdx.graphics.getDeltaTime();
-            delta = mover.accumulate(delta);
-            Vector2 deltaVec = moveDir.cpy().scl(delta);
-            position.add(deltaVec);
+            mover.moveToTarget(Gdx.graphics.getDeltaTime());
         }
 
         // todo: DOESN'T WORK. Need to find root of floating point errors
@@ -128,10 +125,8 @@ public class Player extends Entity implements Renderable, Debuggable {
         if (!InputController.QUEUE_MOVEMENTS.isEmpty()) {
             // only process if we're not currently moving from a previous input
             if (!mover.isMoving()) {
-                mover.resetAccumulator();
-                lastMoveDirection = InputController.QUEUE_MOVEMENTS.peek();
-                moveDir = lastMoveDirection.getDirection();
-                mover.setMoving(true);
+                moveDir = InputController.QUEUE_MOVEMENTS.peek().getDirection();
+                mover.deriveTargetPos(moveDir);
             }
             InputController.QUEUE_MOVEMENTS.clear();
         }
@@ -146,7 +141,7 @@ public class Player extends Entity implements Renderable, Debuggable {
 
     // todo: do this without a switch statement
     public void updatePlayerSprite() {
-        switch(GameConfig.getCharacter()) {
+        switch (GameConfig.getCharacter()) {
         case STEVE:
             playerSprite.setRegion(playerSprite.getRegionX(), 0 * 16, 16, 16);
             break;
@@ -189,45 +184,85 @@ public class Player extends Entity implements Renderable, Debuggable {
     }
 
     public class Mover  {
-        private boolean moving = false;
-        private float distance = 0;
-        private float targetDistance = 1;
+        private Vector2 targetPos;
+        private Vector2 originPos;
+        private Countdown timing;
 
-        public Mover(float targetDistance) {
-            this.targetDistance = targetDistance;
+        public Mover(float moveDuration) {
+            originPos = position.cpy();
+            targetPos = position.cpy();
+            timing = new Countdown(moveDuration);
         }
 
-        public void setTargetDisplacement(float target) {
-            targetDistance = target;
+        public Vector2 getTargetPos() {
+            return targetPos;
         }
 
-        public void resetAccumulator() {
-            distance = 0;
-            moving = false;
+        public void setTargetPos(Vector2 targetPos) {
+            this.targetPos = targetPos.cpy();
         }
 
-        public void setMoving(boolean moving) {
-            this.moving = moving;
+        public void deriveTargetPos(Vector2 moveDir) {
+            targetPos = originPos.cpy().add(moveDir);
+        }
+
+        public Vector2 getOriginPos() {
+            return originPos;
+        }
+
+        public void setOriginPos(Vector2 originPos) {
+            this.originPos = originPos.cpy();
+        }
+
+        public Countdown getTiming() {
+            return timing;
         }
 
         public boolean isMoving() {
-            return this.moving;
+            return timing.isRunning();
         }
 
-        public float accumulate(float delta) {
-            moving = true;
-            if (distance > .95 * targetDistance) {
-                char t = 0;
-            }
-            if (distance + delta >= targetDistance) {
-                moving = false;
-                float clampedDelta = delta - (distance + delta - targetDistance);
-                distance += clampedDelta;
-                return clampedDelta;
+        public void startMoving() {
+            timing.start();
+        }
+
+        public void addDelta(Vector2 delta) {
+            originPos.add(delta);
+            targetPos.add(delta);
+        }
+
+
+        /**
+         * Cancels the current move attempt
+         * @param pos if not null, sets origin and target pos to this pos. else, resets target to origin
+         */
+        public void cancel(Vector2 pos) {
+            if (pos != null) {
+                originPos = pos.cpy();
+                targetPos = pos.cpy();
             } else {
-                distance += delta;
-                return delta;
+                targetPos = originPos.cpy();
             }
+            timing.reset();
+            timing.pause();
+        }
+
+        public void cancel() {
+            cancel(null);
+        }
+
+        public Vector2 moveToTarget(float delta) {
+            timing.update(delta);
+            Vector2 fracPos;
+            if (timing.getTimeLeft() == 0) {
+                fracPos = targetPos.cpy();
+                originPos = targetPos.cpy();
+                timing.reset();
+            } else {
+                float frac = 1f - (timing.getTimeLeft() / timing.getDuration());
+                fracPos = originPos.cpy().lerp(targetPos, frac);
+            }
+            return fracPos;
         }
     }
 
@@ -236,16 +271,8 @@ public class Player extends Entity implements Renderable, Debuggable {
         if (FroggerDroid.isFlagDebug()) {
             if (!debugTimer.isRunning()) {
                 debugTimer.restart();
-                System.out.println("Player pos: " +
-                        DebugLog.getMaxPrecisionFormat().format(position.x) + ", " +
-                        DebugLog.getMaxPrecisionFormat().format(position.y)
-                );
-                System.out.println("Mover state: " +
-                        DebugLog.getMaxPrecisionFormat().format(mover.distance) + "/" +
-                        DebugLog.getMaxPrecisionFormat().format(mover.targetDistance)
-                );
-            } else
-            {
+
+            } else {
                 debugTimer.update();
             }
         }

@@ -86,8 +86,12 @@ public class Countdown implements Updatable {
 
     @Override
     public void update() {
+        update(Gdx.graphics.getDeltaTime());
+    }
+
+    public void update(float delta) {
         if (running) {
-            timeLeft = Math.max(timeLeft - Gdx.graphics.getDeltaTime(), 0);
+            timeLeft = Math.max(timeLeft - delta, 0);
             if (timeLeft == 0) {
                 running = false;
             }
