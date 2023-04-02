@@ -182,7 +182,7 @@ public class GameScreen implements Screen {
         gameLogic.update();
         updateScoreLives();
 
-        if (gameLogic.checkLives()) {
+        if (gameLogic.isDead()) {
             switchToGameOverScreen();
         }
 //        if (gameLogic.checkGoal()) {
@@ -439,16 +439,16 @@ public class GameScreen implements Screen {
     // determine number of starting lives from specific difficulty
     // todo: rewrite Difficulty enum to hold value of starting lives directly
     // todo: figure out why this is a string
-    private String getLives(DataEnums.Difficulty difficulty) {
+    private int getLives(DataEnums.Difficulty difficulty) {
         switch (difficulty) {
         case EASY:
-            return "10";
+            return 10;
         case HARD:
-            return "1";
+            return 1;
         case NORMAL:
-            return "5";
+            return 5;
         default:
-            return "NULL";
+            return -1;
         }
     }
 

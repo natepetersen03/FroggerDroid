@@ -1,7 +1,6 @@
 package com.x20.frogger.game;
 
 import com.badlogic.gdx.Gdx;
-import com.x20.frogger.FroggerDroid;
 import com.x20.frogger.game.tiles.TileDatabase;
 import com.x20.frogger.game.tiles.TileMap;
 
@@ -113,15 +112,14 @@ public class GameLogic {
         }
     }
 
-    public boolean checkLives() {
+    public boolean isDead() {
         if (this.lives == 0) {
             return true;
         }
         return false;
     }
 
-    public void setLives(String lives) {
-        int temp = Integer.parseInt(lives);
-        this.lives = temp;
+    public void setLives(int lives) {
+        this.lives = lives;
     }
 }
