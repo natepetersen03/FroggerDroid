@@ -96,7 +96,7 @@ public class GameLogic {
     // then when we fire the events, we can notify the subscribers to update
     // see: https://programming.guide/java/create-a-custom-event.html
 
-    public void updatePoints(boolean reset) {
+    public void updatePoints() {
         int y = (int) (Math.floor(player.getPosition().y));
         if (y > yMax) {
             yMax = y;
