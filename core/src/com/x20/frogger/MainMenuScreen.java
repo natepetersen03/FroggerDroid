@@ -17,7 +17,6 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.x20.frogger.GUI.GameConfigViewModel;
-import com.x20.frogger.graphics.AssetManagerSingleton;
 
 public class MainMenuScreen extends ScreenAdapter {
 
@@ -45,9 +44,7 @@ public class MainMenuScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        if (FroggerDroid.isFlagSkipToGame()) {
-            switchToGameConfigScreen();
-        }
+
     }
 
     @Override

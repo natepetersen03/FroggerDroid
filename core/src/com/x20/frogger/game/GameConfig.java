@@ -7,7 +7,7 @@ import com.x20.frogger.data.Serializable;
 public class GameConfig implements Serializable {
     private static DataEnums.Difficulty difficulty;
     private static DataEnums.Character character;
-    private static String name = FroggerDroid.isFlagDebug() ? "Debugger" : null;
+    private static String name;
 
     public static DataEnums.Difficulty getDifficulty() {
         return difficulty;

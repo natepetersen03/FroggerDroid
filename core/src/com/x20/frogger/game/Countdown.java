@@ -39,6 +39,10 @@ public class Countdown implements Updatable {
         return running;
     }
 
+    public void setRunning(boolean running) {
+        this.running = running;
+    }
+
     /**
      * Manually set the time left
      * @param time seconds
@@ -63,10 +67,18 @@ public class Countdown implements Updatable {
     }
 
     /**
-     * Stop/pause countdown. Does not reset time left on countdown.
+     * Pause countdown. Does not reset time left on countdown.
      */
     public void pause() {
         running = false;
+    }
+
+    /**
+     * Stop countdown and reset the time left on the countdown.
+     */
+    public void stop() {
+        pause();
+        reset();
     }
 
     /**
@@ -76,10 +88,22 @@ public class Countdown implements Updatable {
         timeLeft = duration;
     }
 
+    /**
+     * Reset and start countdown
+     */
+    public void restart() {
+        reset();
+        start();
+    }
+
     @Override
     public void update() {
+        update(Gdx.graphics.getDeltaTime());
+    }
+
+    public void update(float delta) {
         if (running) {
-            timeLeft = Math.max(timeLeft - Gdx.graphics.getDeltaTime(), 0);
+            timeLeft = Math.max(timeLeft - delta, 0);
             if (timeLeft == 0) {
                 running = false;
             }

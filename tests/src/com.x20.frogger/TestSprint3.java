@@ -1,4 +1,4 @@
-package com.x20.frogger.tests;
+package com.x20.frogger;
 
 import static org.junit.Assert.assertEquals;
 

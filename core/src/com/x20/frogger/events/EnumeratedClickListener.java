@@ -1,7 +1,8 @@
-package com.x20.frogger.GUI;
+package com.x20.frogger.events;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.x20.frogger.events.EnumAction;
 
 public class EnumeratedClickListener extends ClickListener {
     private Enum e;

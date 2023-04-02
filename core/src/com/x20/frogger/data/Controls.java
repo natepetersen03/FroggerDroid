@@ -15,7 +15,7 @@ public class Controls {
         }
 
         public Vector2 getDirection() {
-            return direction;
+            return direction.cpy();
         }
     }
 

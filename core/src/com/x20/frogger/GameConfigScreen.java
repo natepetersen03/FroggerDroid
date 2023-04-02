@@ -22,10 +22,9 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.x20.frogger.GUI.CharacterRadio;
 import com.x20.frogger.GUI.DifficultyRadio;
-import com.x20.frogger.GUI.EnumHandler;
+import com.x20.frogger.events.EnumHandler;
 import com.x20.frogger.GUI.GameConfigViewModel;
 import com.x20.frogger.data.DataEnums;
-import com.x20.frogger.game.GameConfig;
 
 public class GameConfigScreen extends ScreenAdapter {
 
@@ -53,15 +52,8 @@ public class GameConfigScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        if (FroggerDroid.isFlagSkipToGame()) {
-            GameConfig.setCharacter(DataEnums.Character.STEVE);
-            GameConfig.setName("Debugger");
-            GameConfig.setDifficulty(DataEnums.Difficulty.EASY);
-            switchToGameScreen();
-        }
+
     }
-
-
 
     @Override
     public void render(float delta) {
