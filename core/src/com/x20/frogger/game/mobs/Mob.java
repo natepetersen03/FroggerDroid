@@ -2,14 +2,16 @@ package com.x20.frogger.game.mobs;
 
 import com.badlogic.gdx.Gdx;
 import com.x20.frogger.game.Entity;
-import com.x20.frogger.game.GameConfig;
 import com.x20.frogger.game.GameLogic;
-import com.x20.frogger.game.tiles.Tile;
-import com.x20.frogger.game.tiles.TileMap;
 
-public class Mob extends Entity implements PointEntity {
-    int points;
-    double speed;
+// todo: update to use Entity's velocity Vector instead of speed
+// for individual mob types,
+// speed is determined by concrete Mob implementations
+// concrete Mob implementations should take a moveDir vector with their constructor
+// to determine velocity of the Mob
+public abstract class Mob extends Entity implements PointEntity {
+    protected int points;
+    protected float speed;
 
     public int getPoints() { return points; }
 
@@ -24,5 +26,19 @@ public class Mob extends Entity implements PointEntity {
         hitbox.x = position.x;
 
 
+    }
+
+    @Override
+    public void animate() {
+        // flip x direction based on last horizontal move
+        if (speed > 0) {
+            if (sprite.isFlipX()) {
+                sprite.flip(true, false);
+            }
+        } else {
+            if (!sprite.isFlipX()) {
+                sprite.flip(true, false);
+            }
+        }
     }
 }
