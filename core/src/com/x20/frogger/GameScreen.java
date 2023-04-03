@@ -75,8 +75,6 @@ public class GameScreen implements Screen {
         this.tileRenderer = new TileRenderer(this.game.getBatch(), gameLogic.getTileMap());
 
 
-        gameLogic.getTileMap().generateMobs();
-
         // set label fields
         this.name = GameConfig.getName();
 
@@ -109,9 +107,8 @@ public class GameScreen implements Screen {
             // Render player
             gameLogic.getPlayer().render(game.getBatch());
 
-            for (int i = 0; i < gameLogic.getTileMap().getEntities().size(); i++) {
-                for (Entity entity:
-                        gameLogic.getTileMap().getEntities().get(i)) {
+            for (int i = 0; i < gameLogic.getTileMap().getHeight(); i++) {
+                for (Entity entity : gameLogic.getTileMap().getEntitiesAtRow(i)) {
                     entity.render(game.getBatch());
                 }
             }

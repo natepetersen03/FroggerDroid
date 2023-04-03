@@ -21,8 +21,11 @@ public class Golem extends Mob{
         hitbox.x = position.x;
         hitbox.y = position.y;
 
-        hitbox.width = sprite.getRegionWidth();
-        hitbox.height = sprite.getRegionWidth();
+        // todo: these are the right pixel values, but we need to do math to position them properly
+        // golem is 12 wide x 14 tall
+
+        hitbox.width = 1;
+        hitbox.height = 1;
 
         this.speed = 3.5f;
         this.points = 20;

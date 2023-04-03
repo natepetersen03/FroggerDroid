@@ -17,7 +17,7 @@ import com.x20.frogger.utils.MiscUtils;
 public class Player extends Entity implements Renderable {
     private Vector2 moveDir;
     private Mover mover;
-    private float speed = 5f;
+    private float speed = 10f;
     private float moveDist = 1f;
 
     private Controls.MOVE moveDirEnum = Controls.MOVE.RIGHT;

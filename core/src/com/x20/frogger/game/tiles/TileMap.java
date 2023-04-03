@@ -35,8 +35,6 @@ public class TileMap {
 
     // access by tilemap[x][y]
     private Tile[][] tilemap;
-
-    private ArrayList<LinkedList<Entity>> entities;
     private LinkedList<Entity>[] rowEntitiesArray;
 
     public TileMap() {
@@ -51,7 +49,6 @@ public class TileMap {
         return tilemap[0].length;
     }
 
-    public ArrayList<LinkedList<Entity>> getEntities() { return entities; }
     public Tile getTile(int x, int y) {
         if (x < 0 || x >= getWidth() || y < 0 || y >= getHeight()) {
             throw new IllegalArgumentException("Coordinates out of bounds");
@@ -108,34 +105,25 @@ public class TileMap {
     }
 
     public void generateMobs() {
+        rowEntitiesArray[1].add(new Creeper(0, 1));
+        rowEntitiesArray[1].add(new Creeper(5, 1));
+        rowEntitiesArray[1].add(new Creeper(10, 1));
 
-        entities = new ArrayList<>();
+        rowEntitiesArray[2].add(new Golem(0, 2));
+        rowEntitiesArray[2].add(new Golem(5, 2));
+        rowEntitiesArray[2].add(new Golem(10, 2));
 
-        entities.add(new LinkedList<Entity>());
-        entities.get(0).add(new Creeper(0, 1));
-        entities.get(0).add(new Creeper(5, 1));
-        entities.get(0).add(new Creeper(10, 1));
+        rowEntitiesArray[4].add(new Creeper(0, 4));
+        rowEntitiesArray[4].add(new Creeper(5, 4));
+        rowEntitiesArray[4].add(new Creeper(10, 4));
 
+        rowEntitiesArray[5].add(new Skeleton(0, 5));
+        rowEntitiesArray[5].add(new Skeleton(5, 5));
+        rowEntitiesArray[5].add(new Skeleton(10, 5));
 
-        entities.add(new LinkedList<Entity>());
-        entities.get(0).add(new Golem(0, 2));
-        entities.get(0).add(new Golem(5, 2));
-        entities.get(0).add(new Golem(10, 2));
-
-        entities.add(new LinkedList<Entity>());
-        entities.get(0).add(new Creeper(0, 4));
-        entities.get(0).add(new Creeper(5, 4));
-        entities.get(0).add(new Creeper(10, 4));
-
-        entities.add(new LinkedList<Entity>());
-        entities.get(0).add(new Skeleton(0, 5));
-        entities.get(0).add(new Skeleton(5, 5));
-        entities.get(0).add(new Skeleton(10, 5));
-
-        entities.add(new LinkedList<Entity>());
-        entities.get(0).add(new Golem(0, 6));
-        entities.get(0).add(new Golem(5, 6));
-        entities.get(0).add(new Golem(10, 6));
+        rowEntitiesArray[6].add(new Golem(0, 6));
+        rowEntitiesArray[6].add(new Golem(5, 6));
+        rowEntitiesArray[6].add(new Golem(10, 6));
     }
 
     public String toString() {

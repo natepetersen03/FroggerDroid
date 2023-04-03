@@ -63,10 +63,7 @@ public class GameLogic {
         tileMap.generateTileMapFromStringArray(worldString);
 
         // Populate entities
-        //for (int i = 0; i < tileMap.getHeight(); i++) {
-        //    List<Entity> row = tileMap.getEntitiesAtRow(i);
-        //    // Generate entities here
-        //}
+        tileMap.generateMobs();
 
         /// Player init
         this.player = new Player(tileMap.getWidth() / 2,0);
@@ -90,15 +87,18 @@ public class GameLogic {
         // 3. update world (entities)
 
         player.update();
-        for (int i = 0; i < tileMap.getEntities().size(); i++) {
-            for (Entity entity:
-                 tileMap.getEntities().get(i)) {
-                entity.update();
+        for (int i = 0; i < tileMap.getHeight(); i++) {
+            for (Entity entity : tileMap.getEntitiesAtRow(i)) {
+                 entity.update();
             }
         }
         // todo: test extensively. possibility that floating point errors might cause this to fail
         checkForDamagingTile((int) player.position.x, (int) player.position.y);
+<<<<<<< HEAD
         updateScore();
+=======
+        checkForDamagingEntities((int) player.position.y);
+>>>>>>> origin/danielwater
     }
 
     // todo: this would probably be something the Player does in its own update method
@@ -110,7 +110,7 @@ public class GameLogic {
         int y = (int) (Math.floor(player.getPosition().y));
         if (y > yMax) {
             yMax = y;
-            Entity rowEntity = tileMap.getEntitiesAtRow(yMax).peek();
+            Entity rowEntity = tileMap.getEntitiesAtRow(yMax-1).peek();
             if (rowEntity instanceof PointEntity) {
                 score += ((PointEntity) rowEntity).getPoints();
             } else {
@@ -130,6 +130,7 @@ public class GameLogic {
     public void checkForDamagingTile(int x, int y) {
         // todo: test extensively. possibility that floating point errors might cause this to fail
         if (tileMap.getTile(x, y).getTileData().isDamaging()) {
+<<<<<<< HEAD
             this.lives -= 1;
             this.yMax = 0;
             switch (GameConfig.getDifficulty()) {
@@ -139,8 +140,17 @@ public class GameLogic {
             default:
                 this.score /= 2;
                 break;
+=======
+            playerFail();
+        }
+    }
+
+    public void checkForDamagingEntities(int y) {
+        for (Entity entity : tileMap.getEntitiesAtRow(y)) {
+            if (player.getHitbox().overlaps(entity.getHitbox())) {
+                playerFail();
+>>>>>>> origin/danielwater
             }
-            respawnPlayer();
         }
     }
 
@@ -150,5 +160,21 @@ public class GameLogic {
 
     public void respawnPlayer() {
         player.setPosition(tileMap.getWidth() / 2, 0);
+    }
+
+    public void playerFail() {
+        this.lives -= 1;
+        switch (GameConfig.getDifficulty()) {
+            case HARD:
+                this.score = 0;
+                break;
+            case NORMAL:
+                this.score = 0;
+                break;
+            default:
+                this.score /= 2;
+                break;
+        }
+        respawnPlayer();
     }
 }
