@@ -24,7 +24,7 @@ public class Creeper extends Mob {
         hitbox.width = sprite.getRegionWidth();
         hitbox.height = sprite.getRegionWidth();
 
-        this.speed = 1.5;
+        this.speed = 1.5f;
         this.points = 10;
     }
 }
