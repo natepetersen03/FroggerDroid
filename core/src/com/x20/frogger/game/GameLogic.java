@@ -94,6 +94,7 @@ public class GameLogic {
         }
         // todo: test extensively. possibility that floating point errors might cause this to fail
         checkForDamagingTile((int) player.position.x, (int) player.position.y);
+        updateScore();
         checkForDamagingEntities((int) player.position.y);
     }
 
@@ -129,8 +130,7 @@ public class GameLogic {
             playerFail();
         }
     }
-
-    public void checkForDamagingEntities(int y) {
+    public void checkForDamagingEntities (int y) {
         for (Entity entity : tileMap.getEntitiesAtRow(y)) {
             if (player.getHitbox().overlaps(entity.getHitbox())) {
                 playerFail();
@@ -148,6 +148,7 @@ public class GameLogic {
 
     public void playerFail() {
         this.lives -= 1;
+        this.yMax = 0;
         switch (GameConfig.getDifficulty()) {
             case HARD:
                 this.score = 0;
