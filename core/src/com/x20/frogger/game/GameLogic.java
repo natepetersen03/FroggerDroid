@@ -157,7 +157,7 @@ public class GameLogic {
                 this.score = 0;
                 break;
             default:
-                this.score /= 2;
+                this.score = 0;
                 break;
         }
         respawnPlayer();
