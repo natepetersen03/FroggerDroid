@@ -80,8 +80,8 @@ public class TestSprint4 {
 
     @Test
     public void testCreeperHitboxWidth() {
-        LinkedList<Entity> testRow = gameLogic.getTileMap().getEntitiesAtRow(0);
-        assertEquals(testRow.get(0).getHitbox().width, 12f/16f ,0);
+        LinkedList<Entity> testRow = gameLogic.getTileMap().getEntitiesAtRow(1);
+        assertEquals(testRow.get(0).getHitbox().width, 8f/16f ,0);
     }
 
 }
