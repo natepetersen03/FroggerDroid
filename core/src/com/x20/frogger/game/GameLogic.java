@@ -151,15 +151,15 @@ public class GameLogic {
         this.lives -= 1;
         this.yMax = 0;
         switch (GameConfig.getDifficulty()) {
-            case HARD:
-                this.score = 0;
-                break;
-            case NORMAL:
-                this.score = 0;
-                break;
-            default:
-                this.score = 0;
-                break;
+        case HARD:
+            this.score = 0;
+            break;
+        case NORMAL:
+            this.score = 0;
+            break;
+        default:
+            this.score = 0;
+            break;
         }
         respawnPlayer();
     }
