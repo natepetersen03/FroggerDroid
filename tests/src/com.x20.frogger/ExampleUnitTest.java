@@ -36,4 +36,5 @@ public class ExampleUnitTest {
         System.out.println("Running JUnit version " + Version.id());
         assertEquals(4, 2 + 2);
     }
+
 }

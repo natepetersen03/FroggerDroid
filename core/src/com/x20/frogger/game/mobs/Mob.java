@@ -13,7 +13,7 @@ public abstract class Mob extends Entity implements PointEntity {
     protected int points;
     protected float speed;
 
-    public float getSpeed() { return speed; };
+    public float getSpeed() { return speed; }
     public int getPoints() { return points; }
 
     public void update() {

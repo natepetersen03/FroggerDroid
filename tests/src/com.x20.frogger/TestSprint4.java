@@ -42,18 +42,20 @@ public class TestSprint4 {
     }
 
     //Nate's Tests
-//    @Test
-//    public void testScoreLifeLost() {
-//        gameLogic.playerFail();
-//        assertEquals(gameLogic.getScore(), 0);
-//    }
-//
-//    @Test
-//    public void testLivesLifeLost() {
-//        gameLogic.setLives(10);
-//        gameLogic.playerFail();
-//        assertEquals(gameLogic.getLives(),  9);
-//    }
+    @Test
+    public void testScoreLifeLostMedium() {
+        GameConfig.setDifficulty(DataEnums.Difficulty.NORMAL);
+        gameLogic.playerFail();
+        assertEquals(gameLogic.getScore(), 0);
+    }
+
+    @Test
+    public void testScoreLifeLostEasy() {
+        GameConfig.setDifficulty(DataEnums.Difficulty.NORMAL);
+        int score = gameLogic.getScore();
+        gameLogic.playerFail();
+        assertEquals(gameLogic.getScore(),  score / 2);
+   }
 
     //Daniel's Tests
     @Test
