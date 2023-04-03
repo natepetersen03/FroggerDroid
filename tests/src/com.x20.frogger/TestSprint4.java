@@ -10,6 +10,7 @@ import com.x20.frogger.data.DataEnums;
 import com.x20.frogger.game.Entity;
 import com.x20.frogger.game.GameConfig;
 import com.x20.frogger.game.GameLogic;
+import com.x20.frogger.game.Player;
 import com.x20.frogger.game.mobs.Mob;
 import com.x20.frogger.game.tiles.TileMap;
 import com.x20.frogger.graphics.AssetManagerSingleton;
@@ -18,6 +19,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.Before;
 
+import java.text.Normalizer;
 import java.util.LinkedList;
 
 
@@ -95,5 +97,23 @@ public class TestSprint4 {
     public void testSkeletonHitboxWidth() {
         LinkedList<Entity> testRow = gameLogic.getTileMap().getEntitiesAtRow(5);
         assertEquals(testRow.get(0).getHitbox().width, 6f/16f ,0);
+    }
+
+    // Don's Tests
+    @Test
+    public void testSkeletonVelocity() {
+        LinkedList<Entity> testRow = gameLogic.getTileMap().getEntitiesAtRow(5);
+        assertEquals(((Mob) (testRow.get(0))).getSpeed(), -2f ,0);
+    }
+
+    @Test
+    public void testLifeLostOnWater() {
+        GameConfig.setDifficulty(DataEnums.Difficulty.NORMAL);
+        gameLogic.setLives(5);
+        Player player = gameLogic.getPlayer();
+        gameLogic.getPlayer().setPosition(player.getPosition().x, 8);
+        gameLogic.update();
+        System.out.println(player.getPosition());
+        assertEquals(gameLogic.getLives(), 4);
     }
 }
