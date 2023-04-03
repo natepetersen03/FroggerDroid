@@ -63,10 +63,7 @@ public class GameLogic {
         tileMap.generateTileMapFromStringArray(worldString);
 
         // Populate entities
-        //for (int i = 0; i < tileMap.getHeight(); i++) {
-        //    List<Entity> row = tileMap.getEntitiesAtRow(i);
-        //    // Generate entities here
-        //}
+        tileMap.generateMobs();
 
         /// Player init
         this.player = new Player(tileMap.getWidth() / 2,0);

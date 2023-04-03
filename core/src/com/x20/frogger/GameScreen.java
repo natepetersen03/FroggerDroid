@@ -75,8 +75,6 @@ public class GameScreen implements Screen {
         this.tileRenderer = new TileRenderer(this.game.getBatch(), gameLogic.getTileMap());
 
 
-        gameLogic.getTileMap().generateMobs();
-
         // set label fields
         this.name = GameConfig.getName();
 

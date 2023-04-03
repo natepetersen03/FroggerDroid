@@ -105,7 +105,6 @@ public class TileMap {
     }
 
     public void generateMobs() {
-
         rowEntitiesArray[1].add(new Creeper(0, 1));
         rowEntitiesArray[1].add(new Creeper(5, 1));
         rowEntitiesArray[1].add(new Creeper(10, 1));
