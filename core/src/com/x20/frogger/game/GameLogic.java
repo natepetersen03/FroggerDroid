@@ -88,7 +88,7 @@ public class GameLogic {
         player.update();
         for (int i = 0; i < tileMap.getHeight(); i++) {
             for (Entity entity : tileMap.getEntitiesAtRow(i)) {
-                 entity.update();
+                entity.update();
             }
         }
         // todo: test extensively. possibility that floating point errors might cause this to fail
@@ -129,7 +129,7 @@ public class GameLogic {
             playerFail();
         }
     }
-    public void checkForDamagingEntities (int y) {
+    public void checkForDamagingEntities(int y) {
         for (Entity entity : tileMap.getEntitiesAtRow(y)) {
             if (player.getHitbox().overlaps(entity.getHitbox())) {
                 playerFail();
@@ -137,9 +137,13 @@ public class GameLogic {
         }
     }
 
-    public boolean isDead() { return (this.lives == 0); }
+    public boolean isDead() {
+        return (this.lives == 0);
+    }
 
-    public void setLives(int lives) { this.lives = lives; }
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
 
     public void respawnPlayer() {
         player.setPosition(tileMap.getWidth() / 2, 0);
