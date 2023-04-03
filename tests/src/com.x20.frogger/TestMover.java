@@ -17,7 +17,7 @@ import org.junit.Test;
 
 
 public class TestMover {
-    Player player;
+    private Player player;
     private static HeadlessApplication application;
 
     @BeforeClass

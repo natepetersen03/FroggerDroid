@@ -35,7 +35,8 @@ public class TileRenderData {
     public TileRenderData(int textureX, int textureY, int width, int height, int frames, int fps) {
         try {
             this.tileTextureRegion = new TextureRegion(
-                    AssetManagerSingleton.getInstance().getAssetManager().get("tiles.png", Texture.class),
+                    AssetManagerSingleton.getInstance().getAssetManager()
+                        .get("tiles.png", Texture.class),
                     textureX, textureY, width, height
             );
         } catch (Exception e) {

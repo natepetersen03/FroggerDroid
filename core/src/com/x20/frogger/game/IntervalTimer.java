@@ -10,15 +10,14 @@ public class IntervalTimer implements Updatable {
     private float interval;
     private float timeCounter;
     private boolean running = false;
-    LinkedList<IntervalUpdatable> listeners;
+    private LinkedList<IntervalUpdatable> listeners;
 
 
     /**
      * Constructor
      * @param interval time in seconds
      */
-    public IntervalTimer(float interval)
-    {
+    public IntervalTimer(float interval) {
         this.interval = interval;
         listeners = new LinkedList<>();
     }
