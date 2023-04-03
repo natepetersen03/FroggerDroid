@@ -22,9 +22,6 @@ import com.x20.frogger.game.Entity;
 import com.x20.frogger.game.GameConfig;
 import com.x20.frogger.game.GameLogic;
 import com.x20.frogger.game.InputController;
-
-import com.x20.frogger.game.tiles.TileMap;
-
 import com.x20.frogger.game.tiles.TileRenderer;
 
 public class GameScreen implements Screen {
@@ -69,10 +66,14 @@ public class GameScreen implements Screen {
         Gdx.app.log("GameScreen", "Loading world viewport...");
 
         // Init
-        this.gameCamera = new OrthographicCamera(gameLogic.getTileMap().getWidth(), gameLogic.getTileMap().getHeight());
-        this.gameViewport = new FitViewport(gameLogic.getTileMap().getWidth(), gameLogic.getTileMap().getHeight(), gameCamera);
-        //this.gameViewport = new ExtendViewport(worldString[0].length(), worldString.length, gameCamera);
-        this.tileRenderer = new TileRenderer(this.game.getBatch(), gameLogic.getTileMap());
+        this.gameCamera
+            = new OrthographicCamera(gameLogic.getTileMap().getWidth(),
+            gameLogic.getTileMap().getHeight());
+        this.gameViewport
+            = new FitViewport(gameLogic.getTileMap().getWidth(),
+                gameLogic.getTileMap().getHeight(), gameCamera);
+        this.tileRenderer
+            = new TileRenderer(this.game.getBatch(), gameLogic.getTileMap());
 
 
         // set label fields
@@ -131,10 +132,9 @@ public class GameScreen implements Screen {
 
         // debug log
         Gdx.app.debug("Application",
-    "Screen resized to dimensions: " +
-            gameViewport.getScreenWidth() +
-            " x " +
-            gameViewport.getScreenHeight()
+            "Screen resized to dimensions: "
+            + gameViewport.getScreenWidth() + " x "
+            + gameViewport.getScreenHeight()
         );
     }
 
@@ -152,9 +152,9 @@ public class GameScreen implements Screen {
         if (gameLogic.isDead()) {
             switchToGameOverScreen();
         }
-//        if (gameLogic.checkGoal()) {
-//            switchToGameOverScreen();
-//        }
+        //if (gameLogic.checkGoal()) {
+        //    switchToGameOverScreen();
+        //}
     }
 
     private void switchToGameOverScreen() {
@@ -178,7 +178,8 @@ public class GameScreen implements Screen {
         skin.getFont("Pixelify").getData().markupEnabled = true;
         scoreLabel = new Label("([#00FF00]" + name
                 + "[#FFFFFF])  Lives: [#ADD8E6]" + getLives(GameConfig.getDifficulty())
-                + "  [#FFFFFF]Score: [#A020F0]" + GameLogic.getInstance().getScore(), skin, "dark-bg");
+                + "  [#FFFFFF]Score: [#A020F0]" + GameLogic.getInstance().getScore(),
+            skin, "dark-bg");
         scoreLabel.setAlignment(Align.top);
         table.add(scoreLabel).growX();
         stage.addActor(table);
