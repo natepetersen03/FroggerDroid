@@ -107,23 +107,23 @@ public class TileMap {
     public void generateMobs() {
         rowEntitiesArray[1].add(new Creeper(0, 1));
         rowEntitiesArray[1].add(new Creeper(5, 1));
-        rowEntitiesArray[1].add(new Creeper(10, 1));
+//        rowEntitiesArray[1].add(new Creeper(10, 1));
 
         rowEntitiesArray[2].add(new Golem(0, 2));
         rowEntitiesArray[2].add(new Golem(5, 2));
-        rowEntitiesArray[2].add(new Golem(10, 2));
+//        rowEntitiesArray[2].add(new Golem(10, 2));
 
         rowEntitiesArray[4].add(new Creeper(0, 4));
         rowEntitiesArray[4].add(new Creeper(5, 4));
-        rowEntitiesArray[4].add(new Creeper(10, 4));
+//        rowEntitiesArray[4].add(new Creeper(10, 4));
 
         rowEntitiesArray[5].add(new Skeleton(0, 5));
         rowEntitiesArray[5].add(new Skeleton(5, 5));
-        rowEntitiesArray[5].add(new Skeleton(10, 5));
+//        rowEntitiesArray[5].add(new Skeleton(10, 5));
 
         rowEntitiesArray[6].add(new Golem(0, 6));
         rowEntitiesArray[6].add(new Golem(5, 6));
-        rowEntitiesArray[6].add(new Golem(10, 6));
+//        rowEntitiesArray[6].add(new Golem(10, 6));
     }
 
     public String toString() {

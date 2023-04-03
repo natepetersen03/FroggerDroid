@@ -31,6 +31,8 @@ public class Player extends Entity implements Renderable {
         mover = new Mover(position, speed);
         velocity = new Vector2(0, 0);
         hitbox = new Rectangle(0, 0, 1, 1);
+        hitbox.width = 6f/16f;
+        hitbox.height = 15f/16f;
 
         // todo: make a more robust system for determining the player skin
         try {

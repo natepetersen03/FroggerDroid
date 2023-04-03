@@ -22,10 +22,12 @@ public class Golem extends Mob{
         hitbox.y = position.y;
 
         // todo: these are the right pixel values, but we need to do math to position them properly
+        hitbox.width = 12f/16f;
+        hitbox.height = 14f/16f;
         // golem is 12 wide x 14 tall
 
-        hitbox.width = 1;
-        hitbox.height = 1;
+//        hitbox.width = 1;
+//        hitbox.height = 1;
 
         this.speed = 3.5f;
         this.points = 20;

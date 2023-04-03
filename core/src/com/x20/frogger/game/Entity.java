@@ -57,7 +57,9 @@ public abstract class Entity implements Updatable, Renderable, Debuggable {
     }
 
     protected void updateHitboxPosition() {
-        hitbox.setPosition(position.x, position.y);
+        float x = position.x + hitbox.width/2;
+        float y = position.y + hitbox.height/2;
+        hitbox.setPosition(x,y);
     }
 
     // todo: use with logs/turtles to see if player would go offscreen when moving
@@ -91,13 +93,14 @@ public abstract class Entity implements Updatable, Renderable, Debuggable {
 
     @Override
     public void update() {
-
     }
 
     @Override
     public void render(Batch batch) {
         animate();
-        batch.draw(sprite, position.x, position.y, 1, 1);
+        float x = position.x;
+        float y = position.y;
+        batch.draw(sprite, x, y, 1, 1);
     }
 
     @Override

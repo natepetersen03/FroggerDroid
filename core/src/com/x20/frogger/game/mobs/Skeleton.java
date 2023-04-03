@@ -22,11 +22,11 @@ public class Skeleton extends Mob {
         hitbox.y = position.y;
 
         // todo: these are the right pixel values, but we need to do math to position them properly
-        // hitbox.width = 9f/16f;
-        // hitbox.height = 15f/16f;
+        hitbox.width = 6f/16f;
+        hitbox.height = 15f/16f;
 
-        hitbox.width = 1f;
-        hitbox.height = 1f;
+//        hitbox.width = 1f;
+//        hitbox.height = 1f;
 
         this.speed = -2f;
         this.points = 30;
