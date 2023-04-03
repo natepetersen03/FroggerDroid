@@ -84,4 +84,16 @@ public class TestSprint4 {
         assertEquals(testRow.get(0).getHitbox().width, 8f/16f ,0);
     }
 
+    //Darren's Tests
+    @Test
+    public void testGolemHitboxWidth() {
+        LinkedList<Entity> testRow = gameLogic.getTileMap().getEntitiesAtRow(2);
+        assertEquals(testRow.get(0).getHitbox().width, 12f/16f ,0);
+    }
+
+    @Test
+    public void testSkeletonHitboxWidth() {
+        LinkedList<Entity> testRow = gameLogic.getTileMap().getEntitiesAtRow(5);
+        assertEquals(testRow.get(0).getHitbox().width, 6f/16f ,0);
+    }
 }
