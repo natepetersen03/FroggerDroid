@@ -70,4 +70,18 @@ public class TestSprint4 {
         assertEquals(((Mob) (testRow.get(0))).getSpeed(), 3.5f ,0);
     }
 
+    //Owen's Tests
+    @Test
+    public void testScoreLifeLostHard() {
+        GameConfig.setDifficulty(DataEnums.Difficulty.HARD);
+        gameLogic.playerFail();
+        assertEquals(gameLogic.getScore(), 0);
+    }
+
+    @Test
+    public void testCreeperHitboxWidth() {
+        LinkedList<Entity> testRow = gameLogic.getTileMap().getEntitiesAtRow(0);
+        assertEquals(testRow.get(0).getHitbox().width, 12f/16f ,0);
+    }
+
 }
