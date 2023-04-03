@@ -30,8 +30,8 @@ public class Creeper extends Mob {
         hitbox.x = position.x;
         hitbox.y = position.y;
 
-        hitbox.width = 8f/16f;
-        hitbox.height = 13f/16f;
+        hitbox.width = 8f / 16f;
+        hitbox.height = 13f / 16f;
 
         this.speed = 1.5f;
         this.points = 10;

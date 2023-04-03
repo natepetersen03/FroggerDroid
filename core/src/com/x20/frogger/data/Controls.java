@@ -7,7 +7,7 @@ public class Controls {
         RIGHT(new Vector2(1, 0)),
         UP(new Vector2(0, 1)),
         LEFT(new Vector2(-1, 0)),
-        DOWN(new Vector2(0, 0-1));
+        DOWN(new Vector2(0, 0 - 1));
 
         private final Vector2 direction;
         private MOVE(Vector2 direction) {

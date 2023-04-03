@@ -57,9 +57,9 @@ public abstract class Entity implements Updatable, Renderable, Debuggable {
     }
 
     protected void updateHitboxPosition() {
-        float x = position.x + hitbox.width/2;
-        float y = position.y + hitbox.height/2;
-        hitbox.setPosition(x,y);
+        float x = position.x + hitbox.width / 2;
+        float y = position.y + hitbox.height / 2;
+        hitbox.setPosition(x, y);
     }
 
     // todo: use with logs/turtles to see if player would go offscreen when moving
@@ -75,9 +75,9 @@ public abstract class Entity implements Updatable, Renderable, Debuggable {
      * Limits coordinates within a rectangular boundary defined by mins, maxes.
      * DOES NOT ACCOUNT FOR WIDTH/HEIGHT OF AN ENTITY, if using an entity's position
      * Does not modify the original vector.
-     * @param location
-     * @param mins
-     * @param maxes
+     * @param location location
+     * @param mins mins
+     * @param maxes maxes
      * @return A new vector within the bounds
      */
     public Vector2 clampToBounds(Vector2 location, Vector2 mins, Vector2 maxes) {
@@ -89,7 +89,9 @@ public abstract class Entity implements Updatable, Renderable, Debuggable {
         return clamped;
     }
 
-    public Rectangle getHitbox() { return hitbox; }
+    public Rectangle getHitbox() {
+        return hitbox;
+    }
 
     @Override
     public void update() {
