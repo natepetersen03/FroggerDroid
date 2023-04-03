@@ -21,8 +21,12 @@ public class Creeper extends Mob {
         hitbox.x = position.x;
         hitbox.y = position.y;
 
-        hitbox.width = sprite.getRegionWidth();
-        hitbox.height = sprite.getRegionWidth();
+        // todo: these are the right pixel values, but we need to do math to position them properly
+        //hitbox.width = 8f/16f;
+        //hitbox.height = 13f/16f;
+
+        hitbox.width = 1f;
+        hitbox.height = 1f;
 
         this.speed = 1.5f;
         this.points = 10;
