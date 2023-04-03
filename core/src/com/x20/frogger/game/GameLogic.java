@@ -4,16 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.x20.frogger.game.mobs.PointEntity;
 import com.x20.frogger.game.tiles.TileDatabase;
 import com.x20.frogger.game.tiles.TileMap;
-import com.x20.frogger.graphics.AssetManagerSingleton;
-
-import java.util.LinkedList;
-import java.util.List;
 
 public class GameLogic {
     private static GameLogic instance;
 
     private Player player;
-    private final int DEFAULT_POINTS = 5;
+    private final int defaultPoints = 5;
     private int score = 0;
     private int yMax = 0;
 
@@ -29,14 +25,16 @@ public class GameLogic {
         return score;
     }
 
-    public int getLives() { return lives; }
+    public int getLives() {
+        return lives;
+    }
 
     public TileMap getTileMap() {
         return tileMap;
     }
 
     private GameLogic() {
-//        Gdx.app.log("GameLogic", "Initializing GameLogic...");
+        Gdx.app.log("GameLogic", "Initializing GameLogic...");
 
         // init TileDatabase
         TileDatabase.initDatabase();
@@ -67,7 +65,7 @@ public class GameLogic {
         tileMap.generateMobs();
 
         /// Player init
-        this.player = new Player(tileMap.getWidth() / 2,0);
+        this.player = new Player(tileMap.getWidth() / 2, 0);
         // todo: specify a spawn tile position in the TileMap
 
 
@@ -108,11 +106,11 @@ public class GameLogic {
         int y = (int) (Math.floor(player.getPosition().y));
         if (y > yMax) {
             yMax = y;
-            Entity rowEntity = tileMap.getEntitiesAtRow(yMax-1).peek();
+            Entity rowEntity = tileMap.getEntitiesAtRow(yMax - 1).peek();
             if (rowEntity instanceof PointEntity) {
                 score += ((PointEntity) rowEntity).getPoints();
             } else {
-                score += DEFAULT_POINTS;
+                score += defaultPoints;
             }
         }
     }

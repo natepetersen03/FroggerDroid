@@ -1,6 +1,5 @@
 package com.x20.frogger.game;
 
-import com.x20.frogger.FroggerDroid;
 import com.x20.frogger.data.DataEnums;
 import com.x20.frogger.data.Serializable;
 

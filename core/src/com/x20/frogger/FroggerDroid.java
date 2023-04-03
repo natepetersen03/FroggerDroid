@@ -37,17 +37,17 @@ public class FroggerDroid extends Game {
         for (String arg : args) {
             String a = arg.toLowerCase();
             switch (a) {
-                case "-debug":
-                    flagDebug = true;
-                    break;
-                case "-skip":
-                    flagSkipToGame = true;
-                    break;
-                case "-god":
-                    flagInvulnerable = true;
-                    break;
-                default:
-                    break;
+            case "-debug":
+                flagDebug = true;
+                break;
+            case "-skip":
+                flagSkipToGame = true;
+                break;
+            case "-god":
+                flagInvulnerable = true;
+                break;
+            default:
+                break;
             }
         }
     }
