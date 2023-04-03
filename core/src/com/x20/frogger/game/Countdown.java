@@ -8,13 +8,11 @@ public class Countdown implements Updatable {
     private float timeLeft;
     private boolean running = false;
 
-    public Countdown(float duration)
-    {
+    public Countdown(float duration) {
         this(duration, duration);
     }
 
-    public Countdown(float duration, float startTime)
-    {
+    public Countdown(float duration, float startTime) {
         this.duration = duration;
         this.timeLeft = startTime;
     }
