@@ -5,3 +5,4 @@ sourceSets.test.java.srcDirs = [ "src/" ]
 sourceSets.test.resources.srcDirs = ["../assets"]
 
 eclipse.project.name = appName + "-tests"
+

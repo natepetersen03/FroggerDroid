@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.x20.frogger.game.mobs.PointEntity;
 import com.x20.frogger.game.tiles.TileDatabase;
 import com.x20.frogger.game.tiles.TileMap;
+import com.x20.frogger.graphics.AssetManagerSingleton;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -35,7 +36,7 @@ public class GameLogic {
     }
 
     private GameLogic() {
-        Gdx.app.log("GameLogic", "Initializing GameLogic...");
+//        Gdx.app.log("GameLogic", "Initializing GameLogic...");
 
         // init TileDatabase
         TileDatabase.initDatabase();

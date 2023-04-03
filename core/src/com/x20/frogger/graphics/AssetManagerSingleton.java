@@ -44,6 +44,6 @@ public class AssetManagerSingleton {
         assetManager.load("players.png", Texture.class, textureParameter);
         assetManager.load("vehicles.png", Texture.class, textureParameter);
 
-        Gdx.app.log("AssetManagerSingleton", "Assets enqueued.");
+//        Gdx.app.log("AssetManagerSingleton", "Assets enqueued.");
     }
 }

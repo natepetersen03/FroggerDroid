@@ -1,5 +1,6 @@
 package com.x20.frogger.game.mobs;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -9,12 +10,20 @@ import com.x20.frogger.graphics.AssetManagerSingleton;
 public class Golem extends Mob{
 
     public Golem(int xPos, int yPos) {
-        sprite = new TextureRegion(
-                AssetManagerSingleton.getInstance()
-                        .getAssetManager().get("vehicles.png", Texture.class),
-                0, 0, 16, 16
-        );
-        sprite.setRegion(sprite.getRegionX(), 2 * 16, 16, 16);
+        try {
+            sprite = new TextureRegion(
+                    AssetManagerSingleton.getInstance()
+                            .getAssetManager().get("vehicles.png", Texture.class),
+                    0, 0, 16, 16
+            );
+            sprite.setRegion(sprite.getRegionX(), 2 * 16, 16, 16);
+        } catch (com.badlogic.gdx.utils.GdxRuntimeException exception) {
+            Gdx.app.error(
+                    "Golem",
+                    "Sprite failed to load; Assuming headless launch",
+                    exception
+            );
+        }
 
         this.position = new Vector2(xPos, yPos);
         this.hitbox = new Rectangle();

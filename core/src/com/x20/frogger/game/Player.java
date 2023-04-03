@@ -160,7 +160,7 @@ public class Player extends Entity implements Renderable {
         super.updateHitboxPosition();
     }
 
-    private void processInput() {
+    public void processInput() {
         if (!InputController.QUEUE_MOVEMENTS.isEmpty()) {
             // only process if we're not currently moving from a previous input
             if (!mover.isMoving()) {
