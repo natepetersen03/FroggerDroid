@@ -94,11 +94,8 @@ public class GameLogic {
         }
         // todo: test extensively. possibility that floating point errors might cause this to fail
         checkForDamagingTile((int) player.position.x, (int) player.position.y);
-<<<<<<< HEAD
         updateScore();
-=======
         checkForDamagingEntities((int) player.position.y);
->>>>>>> origin/danielwater
     }
 
     // todo: this would probably be something the Player does in its own update method
@@ -130,26 +127,13 @@ public class GameLogic {
     public void checkForDamagingTile(int x, int y) {
         // todo: test extensively. possibility that floating point errors might cause this to fail
         if (tileMap.getTile(x, y).getTileData().isDamaging()) {
-<<<<<<< HEAD
-            this.lives -= 1;
-            this.yMax = 0;
-            switch (GameConfig.getDifficulty()) {
-            case HARD:
-                this.score = 0;
-                break;
-            default:
-                this.score /= 2;
-                break;
-=======
             playerFail();
         }
     }
-
-    public void checkForDamagingEntities(int y) {
+    public void checkForDamagingEntities (int y) {
         for (Entity entity : tileMap.getEntitiesAtRow(y)) {
             if (player.getHitbox().overlaps(entity.getHitbox())) {
                 playerFail();
->>>>>>> origin/danielwater
             }
         }
     }
@@ -164,6 +148,7 @@ public class GameLogic {
 
     public void playerFail() {
         this.lives -= 1;
+        this.yMax = 0;
         switch (GameConfig.getDifficulty()) {
             case HARD:
                 this.score = 0;
