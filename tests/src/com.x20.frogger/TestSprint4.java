@@ -116,4 +116,26 @@ public class TestSprint4 {
         System.out.println(player.getPosition());
         assertEquals(gameLogic.getLives(), 4);
     }
+
+    @Test
+    public void testXPositionResetOnWater() {
+        GameConfig.setDifficulty(DataEnums.Difficulty.NORMAL);
+        gameLogic.setLives(5);
+        Player player = gameLogic.getPlayer();
+        gameLogic.getPlayer().setPosition(player.getPosition().x, 8);
+        gameLogic.update();
+        System.out.println(player.getPosition());
+        assertEquals(player.getPosition().x, 5.0, 0);
+    }
+
+    @Test
+    public void testYPositionResetOnWater() {
+        GameConfig.setDifficulty(DataEnums.Difficulty.NORMAL);
+        gameLogic.setLives(5);
+        Player player = gameLogic.getPlayer();
+        gameLogic.getPlayer().setPosition(player.getPosition().x, 8);
+        gameLogic.update();
+        System.out.println(player.getPosition());
+        assertEquals(player.getPosition().y, 0, 0);
+    }
 }
