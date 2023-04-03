@@ -24,7 +24,7 @@ public class Skeleton extends Mob {
         hitbox.width = sprite.getRegionWidth();
         hitbox.height = sprite.getRegionWidth();
 
-        this.speed = 3.5;
+        this.speed = -2f;
         this.points = 30;
     }
 }

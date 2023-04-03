@@ -24,7 +24,7 @@ public class Golem extends Mob{
         hitbox.width = sprite.getRegionWidth();
         hitbox.height = sprite.getRegionWidth();
 
-        this.speed = -2;
+        this.speed = 3.5f;
         this.points = 20;
     }
 }
