@@ -1,7 +1,6 @@
 package com.x20.frogger.events;
 
 import com.badlogic.gdx.math.Vector2;
-import com.x20.frogger.events.EventListener;
 
 public class MoveListener implements EventListener {
 

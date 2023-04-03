@@ -1,30 +1,25 @@
 package com.x20.frogger;
+
 import static org.junit.Assert.assertEquals;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
-import com.badlogic.gdx.graphics.Texture;
-import com.x20.frogger.GameScreen;
 import com.x20.frogger.data.DataEnums;
 import com.x20.frogger.game.Entity;
 import com.x20.frogger.game.GameConfig;
 import com.x20.frogger.game.GameLogic;
 import com.x20.frogger.game.Player;
 import com.x20.frogger.game.mobs.Mob;
-import com.x20.frogger.game.tiles.TileMap;
-import com.x20.frogger.graphics.AssetManagerSingleton;
 
+import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.junit.Before;
 
-import java.text.Normalizer;
 import java.util.LinkedList;
 
 
 public class TestSprint4 {
-    GameLogic gameLogic;
+    private GameLogic gameLogic;
 
     private static HeadlessApplication app;
     private static HeadlessApplicationConfiguration appConfig;
@@ -36,7 +31,7 @@ public class TestSprint4 {
         // https://stackoverflow.com/questions/42252209/is-there-any-way-to-create-integration-test-for-libgdx-application
         appConfig = new HeadlessApplicationConfiguration();
         appConfig.updatesPerSecond = 60;
-        app = new HeadlessApplication(new FroggerDroid() , appConfig);
+        app = new HeadlessApplication(new FroggerDroid(), appConfig);
     }
     @Before
     public void setup() {
@@ -56,20 +51,20 @@ public class TestSprint4 {
         GameConfig.setDifficulty(DataEnums.Difficulty.NORMAL);
         int score = gameLogic.getScore();
         gameLogic.playerFail();
-        assertEquals(gameLogic.getScore(),  score / 2);
-   }
+        assertEquals(gameLogic.getScore(), score / 2);
+    }
 
     //Daniel's Tests
     @Test
     public void testCreeperVelocity() {
         LinkedList<Entity> testRow = gameLogic.getTileMap().getEntitiesAtRow(1);
-        assertEquals(((Mob) (testRow.get(0))).getSpeed(), 1.5f ,0);
+        assertEquals(((Mob) (testRow.get(0))).getSpeed(), 1.5f, 0);
     }
 
     @Test
     public void testGolemVelocity() {
         LinkedList<Entity> testRow = gameLogic.getTileMap().getEntitiesAtRow(2);
-        assertEquals(((Mob) (testRow.get(0))).getSpeed(), 3.5f ,0);
+        assertEquals(((Mob) (testRow.get(0))).getSpeed(), 3.5f, 0);
     }
 
     //Owen's Tests
@@ -83,27 +78,27 @@ public class TestSprint4 {
     @Test
     public void testCreeperHitboxWidth() {
         LinkedList<Entity> testRow = gameLogic.getTileMap().getEntitiesAtRow(1);
-        assertEquals(testRow.get(0).getHitbox().width, 8f/16f ,0);
+        assertEquals(testRow.get(0).getHitbox().width, 8f / 16f, 0);
     }
 
     //Darren's Tests
     @Test
     public void testGolemHitboxWidth() {
         LinkedList<Entity> testRow = gameLogic.getTileMap().getEntitiesAtRow(2);
-        assertEquals(testRow.get(0).getHitbox().width, 12f/16f ,0);
+        assertEquals(testRow.get(0).getHitbox().width, 12f / 16f, 0);
     }
 
     @Test
     public void testSkeletonHitboxWidth() {
         LinkedList<Entity> testRow = gameLogic.getTileMap().getEntitiesAtRow(5);
-        assertEquals(testRow.get(0).getHitbox().width, 6f/16f ,0);
+        assertEquals(testRow.get(0).getHitbox().width, 6f / 16f, 0);
     }
 
     // Don's Tests
     @Test
     public void testSkeletonVelocity() {
         LinkedList<Entity> testRow = gameLogic.getTileMap().getEntitiesAtRow(5);
-        assertEquals(((Mob) (testRow.get(0))).getSpeed(), -2f ,0);
+        assertEquals(((Mob) (testRow.get(0))).getSpeed(), -2f, 0);
     }
 
     @Test

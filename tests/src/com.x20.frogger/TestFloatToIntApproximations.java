@@ -11,7 +11,8 @@ public class TestFloatToIntApproximations {
         int i1 = Math.round(a);
         int i2 = (int) a;
         int i3 = (int) Math.floor(a);
-        int i4 = Math.abs(Math.floor(a) - a) <= threshold ? (int) Math.floor(a) : (int) Math.ceil(a);
+        int i4 =
+            Math.abs(Math.floor(a) - a) <= threshold ? (int) Math.floor(a) : (int) Math.ceil(a);
 
         int i5 = Math.abs(Math.ceil(a) - a) <= threshold ? (int) Math.ceil(a) : (int) Math.floor(a);
         return new int[] {i1, i2, i3, i4, i5}; // i5 is the one we'll use

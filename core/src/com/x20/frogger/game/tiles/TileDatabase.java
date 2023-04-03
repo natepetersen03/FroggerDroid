@@ -1,10 +1,6 @@
 package com.x20.frogger.game.tiles;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.x20.frogger.FroggerDroid;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,7 +29,7 @@ public class TileDatabase {
         generateEntry(
             new TileID("water", 'w'),
             new TileProperties(false, true, 0.1f),
-            new TileSpriteData(2*16, 0, 16, 16, 2, 1)
+            new TileSpriteData(2 * 16, 0, 16, 16, 2, 1)
         );
 
         generateEntry(
@@ -49,7 +45,7 @@ public class TileDatabase {
         );
 
         init = true;
-//        Gdx.app.log("TileDatabase", "Initialized");
+        Gdx.app.log("TileDatabase", "Initialized");
 
     }
 
@@ -80,7 +76,8 @@ public class TileDatabase {
     ) {
         database.put(id.name,
             new Tile(
-                new TileData(id.name, properties.isSolid, properties.isDamaging, properties.xVelocity),
+                new TileData(
+                    id.name, properties.isSolid, properties.isDamaging, properties.xVelocity),
                 new TileRenderData(
                     spriteData.textureX, spriteData.textureY,
                     spriteData.width, spriteData.height,

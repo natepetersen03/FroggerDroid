@@ -33,7 +33,7 @@ public class TestTileDatabaseData {
         // https://stackoverflow.com/questions/42252209/is-there-any-way-to-create-integration-test-for-libgdx-application
         HeadlessApplicationConfiguration config = new HeadlessApplicationConfiguration();
         config.updatesPerSecond = 60;
-        application = new HeadlessApplication(new FroggerDroid() , config);
+        application = new HeadlessApplication(new FroggerDroid(), config);
     }
 
     @Test

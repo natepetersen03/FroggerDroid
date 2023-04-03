@@ -1,14 +1,9 @@
 package com.x20.frogger.game.tiles;
-import com.badlogic.gdx.math.Vector2;
+
 import com.x20.frogger.game.Entity;
 import com.x20.frogger.game.mobs.Creeper;
 import com.x20.frogger.game.mobs.Golem;
-import com.x20.frogger.game.mobs.Mob;
 import com.x20.frogger.game.mobs.Skeleton;
-
-import java.util.ArrayList;
-
-import com.x20.frogger.game.Entity;
 
 import java.util.LinkedList;
 
@@ -107,23 +102,23 @@ public class TileMap {
     public void generateMobs() {
         rowEntitiesArray[1].add(new Creeper(0, 1));
         rowEntitiesArray[1].add(new Creeper(5, 1));
-//        rowEntitiesArray[1].add(new Creeper(10, 1));
+        //rowEntitiesArray[1].add(new Creeper(10, 1));
 
         rowEntitiesArray[2].add(new Golem(0, 2));
         rowEntitiesArray[2].add(new Golem(5, 2));
-//        rowEntitiesArray[2].add(new Golem(10, 2));
+        //rowEntitiesArray[2].add(new Golem(10, 2));
 
         rowEntitiesArray[4].add(new Creeper(0, 4));
         rowEntitiesArray[4].add(new Creeper(5, 4));
-//        rowEntitiesArray[4].add(new Creeper(10, 4));
+        //rowEntitiesArray[4].add(new Creeper(10, 4));
 
         rowEntitiesArray[5].add(new Skeleton(0, 5));
         rowEntitiesArray[5].add(new Skeleton(5, 5));
-//        rowEntitiesArray[5].add(new Skeleton(10, 5));
+        //rowEntitiesArray[5].add(new Skeleton(10, 5));
 
         rowEntitiesArray[6].add(new Golem(0, 6));
         rowEntitiesArray[6].add(new Golem(5, 6));
-//        rowEntitiesArray[6].add(new Golem(10, 6));
+        //rowEntitiesArray[6].add(new Golem(10, 6));
     }
 
     public String toString() {
