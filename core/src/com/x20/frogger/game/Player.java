@@ -10,6 +10,7 @@ import com.x20.frogger.FroggerDroid;
 import com.x20.frogger.data.Controls;
 import com.x20.frogger.data.IntervalUpdatable;
 import com.x20.frogger.data.Renderable;
+import com.x20.frogger.events.MoveListener;
 import com.x20.frogger.graphics.AssetManagerSingleton;
 import com.x20.frogger.utils.MiscUtils;
 
@@ -180,6 +181,7 @@ public class Player extends Entity implements Renderable {
         updatePos();
     }
 
+
     // todo: do this without a switch statement
     public void assignCharacterSprite() {
         switch (GameConfig.getCharacter()) {
@@ -229,4 +231,5 @@ public class Player extends Entity implements Renderable {
     public void debug() {
         Gdx.app.debug("Player", "Position: " + MiscUtils.maxPrecisionVector2(position));
     }
+
 }

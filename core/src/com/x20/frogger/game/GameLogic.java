@@ -98,6 +98,7 @@ public class GameLogic {
         }
         // todo: test extensively. possibility that floating point errors might cause this to fail
         checkForDamagingTile((int) player.position.x, (int) player.position.y);
+        updateScore();
     }
 
     // todo: this would probably be something the Player does in its own update method
@@ -130,6 +131,7 @@ public class GameLogic {
         // todo: test extensively. possibility that floating point errors might cause this to fail
         if (tileMap.getTile(x, y).getTileData().isDamaging()) {
             this.lives -= 1;
+            this.yMax = 0;
             switch (GameConfig.getDifficulty()) {
             case HARD:
                 this.score = 0;
