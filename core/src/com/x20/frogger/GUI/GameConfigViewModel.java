@@ -6,6 +6,10 @@ import com.x20.frogger.game.GameConfig;
 
 public class GameConfigViewModel {
 
+    private GameConfigViewModel() {
+
+    }
+
     private static Button goButton;
     public static void setGoButton(Button button) {
         goButton = button;
