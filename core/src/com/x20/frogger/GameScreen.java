@@ -17,7 +17,7 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.x20.frogger.data.Controls;
-import com.x20.frogger.data.DataEnums;
+import com.x20.frogger.events.GameStateListener;
 import com.x20.frogger.game.Entity;
 import com.x20.frogger.game.GameConfig;
 import com.x20.frogger.game.GameLogic;
@@ -28,6 +28,7 @@ public class GameScreen implements Screen {
     // Game state
     private final FroggerDroid game;
     private GameLogic gameLogic;
+    private GameStateListener gameStateListener;
     private boolean paused;
 
     // GUI
@@ -42,8 +43,6 @@ public class GameScreen implements Screen {
     private Viewport gameViewport;
     private TileRenderer tileRenderer;
 
-    private String name;
-
     public GameScreen(final FroggerDroid game) {
         Gdx.app.log("GameScreen", "Initializing...");
 
@@ -51,8 +50,9 @@ public class GameScreen implements Screen {
 
         /// Initialize game logic
         gameLogic = GameLogic.getInstance();
-        gameLogic.setLives(getLives(GameConfig.getDifficulty()));
-
+        if (!gameLogic.isRunning()) {
+            gameLogic.newGame();
+        }
 
         // init GUI
         Gdx.app.log("GameScreen", "Loading GUI...");
@@ -61,6 +61,29 @@ public class GameScreen implements Screen {
         // todo: get these width and height values from a variable somewhere
         this.guiViewport = new ExtendViewport(500, 480);
         constructUI();
+
+        // attach UI GameState listener
+        gameStateListener = new GameStateListener() {
+            @Override
+            public void onScoreUpdate(ScoreEvent e) {
+                updateScoreLives();
+            }
+
+            @Override
+            public void onLivesUpdate(LivesEvent e) {
+                updateScoreLives();
+            }
+
+            @Override
+            public void onGameEnd(GameEndEvent e) {
+                if (e.didPlayerWin()) {
+                    switchToGameWinScreen();
+                } else {
+                    switchToGameOverScreen();
+                }
+            }
+        };
+        gameLogic.addGameStateListener(gameStateListener);
 
         /// New Game Viewport
         Gdx.app.log("GameScreen", "Loading world viewport...");
@@ -74,10 +97,6 @@ public class GameScreen implements Screen {
                 gameLogic.getTileMap().getHeight(), gameCamera);
         this.tileRenderer
             = new TileRenderer(this.game.getBatch(), gameLogic.getTileMap());
-
-
-        // set label fields
-        this.name = GameConfig.getName();
 
     }
 
@@ -139,7 +158,7 @@ public class GameScreen implements Screen {
     }
 
     public void updateScoreLives() {
-        String text = "([#00FF00]" + name
+        String text = "([#00FF00]" + GameConfig.getName()
             + "[#FFFFFF])  Lives: [#ADD8E6]" + gameLogic.getLives()
             + "  [#FFFFFF]Score: [#A020F0]" + gameLogic.getScore();
         scoreLabel.setText(text);
@@ -147,14 +166,6 @@ public class GameScreen implements Screen {
 
     public void update() {
         gameLogic.update();
-        updateScoreLives();
-
-        if (gameLogic.isDead()) {
-            switchToGameOverScreen();
-        }
-        if (gameLogic.checkGoal((int) gameLogic.getPlayer().getPosition().x, (int) gameLogic.getPlayer().getPosition().y)) {
-            switchToGameWinScreen();
-        }
     }
 
     private void switchToGameOverScreen() {
@@ -181,9 +192,9 @@ public class GameScreen implements Screen {
 
         table.row();
         skin.getFont("Pixelify").getData().markupEnabled = true;
-        scoreLabel = new Label("([#00FF00]" + name
-                + "[#FFFFFF])  Lives: [#ADD8E6]" + getLives(GameConfig.getDifficulty())
-                + "  [#FFFFFF]Score: [#A020F0]" + GameLogic.getInstance().getScore(),
+        scoreLabel = new Label("([#00FF00]" + GameConfig.getName()
+                + "[#FFFFFF])  Lives: [#ADD8E6]" + GameConfig.getDifficulty().getLives()
+                + "  [#FFFFFF]Score: [#A020F0]" + gameLogic.getScore(),
             skin, "dark-bg");
         scoreLabel.setAlignment(Align.top);
         table.add(scoreLabel).growX();
@@ -271,22 +282,6 @@ public class GameScreen implements Screen {
                 InputController.queueMoveInput(Controls.MOVE.DOWN);
             }
         });
-    }
-
-    // determine number of starting lives from specific difficulty
-    // todo: rewrite Difficulty enum to hold value of starting lives directly
-    // todo: figure out why this is a string
-    private int getLives(DataEnums.Difficulty difficulty) {
-        switch (difficulty) {
-        case EASY:
-            return 10;
-        case HARD:
-            return 1;
-        case NORMAL:
-            return 5;
-        default:
-            return -1;
-        }
     }
 
     @Override

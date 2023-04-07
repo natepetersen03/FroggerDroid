@@ -140,7 +140,7 @@ public class GameWinScreen extends ScreenAdapter {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 Gdx.app.exit();
-                System.exit(-1);
+                System.exit(0);
             }
         });
     }

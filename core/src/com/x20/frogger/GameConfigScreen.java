@@ -25,6 +25,7 @@ import com.x20.frogger.GUI.DifficultyRadio;
 import com.x20.frogger.events.EnumHandler;
 import com.x20.frogger.GUI.GameConfigViewModel;
 import com.x20.frogger.data.DataEnums;
+import com.x20.frogger.game.GameConfig;
 
 public class GameConfigScreen extends ScreenAdapter {
 
@@ -52,7 +53,7 @@ public class GameConfigScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-
+        GameConfig.reset();
     }
 
     @Override
@@ -85,7 +86,6 @@ public class GameConfigScreen extends ScreenAdapter {
         stage = new Stage(new ExtendViewport(500, 480));
 
         Gdx.input.setInputProcessor(stage);
-        GameConfigViewModel gameConfigViewModel = new GameConfigViewModel();
 
         Table table = new Table();
         table.setTouchable(enabled);
@@ -108,7 +108,7 @@ public class GameConfigScreen extends ScreenAdapter {
         TextButton textButton = new TextButton("Play", skin);
         setPlayButton(table, textButton);
 
-        gameConfigViewModel.setGoButton(textButton);
+        GameConfigViewModel.setGoButton(textButton);
 
         stage.addActor(table);
     }

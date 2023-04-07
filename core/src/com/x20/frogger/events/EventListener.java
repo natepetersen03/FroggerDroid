@@ -5,7 +5,7 @@ package com.x20.frogger.events;
  */
 public interface EventListener {
     default void onEvent(Event e) {
-
+        throw new RuntimeException("Event " + e.toString() + " caught, but not handled");
     }
     static interface Event {
 
