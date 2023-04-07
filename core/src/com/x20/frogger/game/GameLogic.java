@@ -2,19 +2,24 @@ package com.x20.frogger.game;
 
 import com.badlogic.gdx.Gdx;
 import com.x20.frogger.FroggerDroid;
+import com.x20.frogger.events.GameStateListener;
 import com.x20.frogger.game.mobs.PointEntity;
 import com.x20.frogger.game.tiles.TileDatabase;
 import com.x20.frogger.game.tiles.TileMap;
+
+import java.util.LinkedList;
 
 public class GameLogic {
     private static GameLogic instance;
 
     private Player player;
     private final int defaultPoints = 5;
+    private int lives; // todo: consider moving this to Player
     private int score = 0;
     private int yMax = 0;
 
-    private int lives;
+    private LinkedList<GameStateListener> gameStateListeners = new LinkedList<>();
+
     private TileMap tileMap;
     private String[] worldString;
 
@@ -33,6 +38,8 @@ public class GameLogic {
     public TileMap getTileMap() {
         return tileMap;
     }
+
+
 
     private GameLogic() {
         Gdx.app.log("GameLogic", "Initializing GameLogic...");
@@ -80,6 +87,10 @@ public class GameLogic {
         return instance;
     }
 
+    public void addGameStateListener(GameStateListener listener) {
+        gameStateListeners.add(listener);
+    }
+
     public void update() {
         // steps:
         // 1. update input (handled by GUI in GameScreen.java)
@@ -93,13 +104,14 @@ public class GameLogic {
             }
         }
 
-        updateScore();
+        updateScore(false);
         // todo: test extensively. possibility that floating point errors might cause this to fail
-        if (!FroggerDroid.isFlagInvulnerable())
-        {
+        if (!FroggerDroid.isFlagInvulnerable()) {
             checkForDamagingTile((int) player.position.x, (int) player.position.y);
             checkForDamagingEntities((int) player.position.y);
         }
+
+        checkGoal((int) player.getPosition().x, (int) player.getPosition().y);
     }
 
     // todo: this would probably be something the Player does in its own update method
@@ -107,33 +119,55 @@ public class GameLogic {
     // then when we fire the events, we can notify the subscribers to update
     // see: https://programming.guide/java/create-a-custom-event.html
 
-    public void updateScore() {
-        int y = (int) (Math.floor(player.getPosition().y));
-        if (y > yMax) {
-            yMax = y;
-            Entity rowEntity = tileMap.getEntitiesAtRow(yMax - 1).peek();
-            if (rowEntity instanceof PointEntity) {
-                score += ((PointEntity) rowEntity).getPoints();
-            } else {
-                score += defaultPoints;
+    public void updateScore(boolean respawned) {
+        int lastScore = 0;
+        if (!respawned) {
+            int y = (int) (Math.floor(player.getPosition().y));
+            if (y > yMax) {
+                yMax = y;
+                Entity rowEntity = tileMap.getEntitiesAtRow(yMax - 1).peek();
+                if (rowEntity instanceof PointEntity) {
+                    score += ((PointEntity) rowEntity).getPoints();
+                } else {
+                    score += defaultPoints;
+                }
+            }
+        } else {
+            yMax = 0;
+            switch (GameConfig.getDifficulty()) {
+            case HARD:
+                this.score = 0;
+                break;
+            case NORMAL:
+                this.score = 0;
+                break;
+            default:
+                this.score = 0;
+                break;
+            }
+        }
+
+        // Only send the event if it actually changes, otherwise this is just as inefficient,
+        // if not more, than polling for score every frame
+        if (score != lastScore) {
+            for (GameStateListener listener : gameStateListeners) {
+                listener.onScoreUpdate(new GameStateListener.ScoreEvent());
             }
         }
     }
 
-    public boolean checkGoal(int x, int y) {
-        // todo: test extensively. possibility that floating point errors might cause this to fail
+    public void checkGoal(int x, int y) {
         if (tileMap.getTile(x, y).getTileData().getName().equals("goal")) {
-            return true;
+            playerWin();
         }
-        return false;
     }
 
     public void checkForDamagingTile(int x, int y) {
-        // todo: test extensively. possibility that floating point errors might cause this to fail
         if (tileMap.getTile(x, y).getTileData().isDamaging()) {
             playerFail();
         }
     }
+
     public void checkForDamagingEntities(int y) {
         for (Entity entity : tileMap.getEntitiesAtRow(y)) {
             if (player.getHitbox().overlaps(entity.getHitbox())) {
@@ -147,7 +181,13 @@ public class GameLogic {
     }
 
     public void setLives(int lives) {
-        this.lives = lives;
+        if (this.lives != lives) {
+            this.lives = lives;
+            // notify whoever wants to know about this
+            for (GameStateListener listener : gameStateListeners) {
+                listener.onLivesUpdate(new GameStateListener.LivesEvent());
+            }
+        }
     }
 
     public void respawnPlayer() {
@@ -155,19 +195,20 @@ public class GameLogic {
     }
 
     public void playerFail() {
-        this.lives -= 1;
-        this.yMax = 0;
-        switch (GameConfig.getDifficulty()) {
-        case HARD:
-            this.score = 0;
-            break;
-        case NORMAL:
-            this.score = 0;
-            break;
-        default:
-            this.score = 0;
-            break;
+        setLives(this.lives - 1);
+        if (this.lives == 0) {
+            for (GameStateListener listener : gameStateListeners) {
+                listener.onGameEnd(new GameStateListener.GameEndEvent(false));
+            }
         }
         respawnPlayer();
+        updateScore(true);
+    }
+
+    public void playerWin() {
+        // for now, just end the game with a win
+        for (GameStateListener listener : gameStateListeners) {
+            listener.onGameEnd(new GameStateListener.GameEndEvent(false));
+        }
     }
 }

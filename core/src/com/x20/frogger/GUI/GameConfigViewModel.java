@@ -35,7 +35,7 @@ public class GameConfigViewModel {
     }
 
     public static void setName(String name) {
-        GameConfig.setName(name);
+        GameConfig.setName(name.trim());
         checkValid();
     }
 
