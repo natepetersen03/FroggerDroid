@@ -1,6 +1,7 @@
 package com.x20.frogger.game;
 
 import com.badlogic.gdx.Gdx;
+import com.x20.frogger.FroggerDroid;
 import com.x20.frogger.game.mobs.PointEntity;
 import com.x20.frogger.game.tiles.TileDatabase;
 import com.x20.frogger.game.tiles.TileMap;
@@ -91,10 +92,14 @@ public class GameLogic {
                 entity.update();
             }
         }
-        // todo: test extensively. possibility that floating point errors might cause this to fail
-        checkForDamagingTile((int) player.position.x, (int) player.position.y);
+
         updateScore();
-        checkForDamagingEntities((int) player.position.y);
+        // todo: test extensively. possibility that floating point errors might cause this to fail
+        if (!FroggerDroid.isFlagInvulnerable())
+        {
+            checkForDamagingTile((int) player.position.x, (int) player.position.y);
+            checkForDamagingEntities((int) player.position.y);
+        }
     }
 
     // todo: this would probably be something the Player does in its own update method
