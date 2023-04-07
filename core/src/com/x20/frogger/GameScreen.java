@@ -50,7 +50,9 @@ public class GameScreen implements Screen {
 
         /// Initialize game logic
         gameLogic = GameLogic.getInstance();
-        gameLogic.setLives(GameConfig.getDifficulty().getLives());
+        if (!gameLogic.isRunning()) {
+            gameLogic.newGame();
+        }
 
         // init GUI
         Gdx.app.log("GameScreen", "Loading GUI...");

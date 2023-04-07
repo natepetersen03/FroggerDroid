@@ -11,6 +11,7 @@ import java.util.LinkedList;
 
 public class GameLogic {
     private static GameLogic instance;
+    private boolean isRunning = false;
 
     private Player player;
     private final int defaultPoints = 5;
@@ -46,6 +47,22 @@ public class GameLogic {
 
         // init TileDatabase
         TileDatabase.initDatabase();
+    }
+
+    public static synchronized GameLogic getInstance() {
+        if (instance == null) {
+            instance = new GameLogic();
+            Gdx.app.log("GameLogic", "Singleton initialized");
+        }
+        return instance;
+    }
+
+    public boolean isRunning() {
+        return isRunning;
+    }
+
+    public void newGame() {
+        // todo: other logic for New Game initialization
 
         /// Generate tiles
         // todo: random level generation/selection from pre-made levels based on difficulty?
@@ -76,15 +93,11 @@ public class GameLogic {
         this.player = new Player(tileMap.getWidth() / 2, 0);
         // todo: specify a spawn tile position in the TileMap
 
+        // Lives and score init
+        setLives(GameConfig.getDifficulty().getLives());
 
-    }
-
-    public static synchronized GameLogic getInstance() {
-        if (instance == null) {
-            instance = new GameLogic();
-            Gdx.app.log("GameLogic", "Singleton initialized");
-        }
-        return instance;
+        isRunning = true;
+        Gdx.app.log("GameLogic", "Game started");
     }
 
     public void addGameStateListener(GameStateListener listener) {
@@ -92,6 +105,10 @@ public class GameLogic {
     }
 
     public void update() {
+        if (!isRunning) {
+            return;
+        }
+
         // steps:
         // 1. update input (handled by GUI in GameScreen.java)
         // 2. update player
@@ -197,9 +214,7 @@ public class GameLogic {
     public void playerFail() {
         setLives(this.lives - 1);
         if (this.lives == 0) {
-            for (GameStateListener listener : gameStateListeners) {
-                listener.onGameEnd(new GameStateListener.GameEndEvent(false));
-            }
+            endGame(false);
         }
         respawnPlayer();
         updateScore(true);
@@ -207,8 +222,14 @@ public class GameLogic {
 
     public void playerWin() {
         // for now, just end the game with a win
+        endGame(true);
+    }
+
+    public void endGame(boolean playerWon) {
         for (GameStateListener listener : gameStateListeners) {
-            listener.onGameEnd(new GameStateListener.GameEndEvent(false));
+            listener.onGameEnd(new GameStateListener.GameEndEvent(playerWon));
         }
+        isRunning = false;
+        Gdx.app.log("GameLogic", "Game ended");
     }
 }
