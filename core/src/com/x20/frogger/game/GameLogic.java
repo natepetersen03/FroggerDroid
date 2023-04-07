@@ -120,7 +120,7 @@ public class GameLogic {
     // see: https://programming.guide/java/create-a-custom-event.html
 
     public void updateScore(boolean respawned) {
-        int lastScore = 0;
+        int lastScore = score;
         if (!respawned) {
             int y = (int) (Math.floor(player.getPosition().y));
             if (y > yMax) {
@@ -136,13 +136,13 @@ public class GameLogic {
             yMax = 0;
             switch (GameConfig.getDifficulty()) {
             case HARD:
-                this.score = 0;
+                score = 0;
                 break;
             case NORMAL:
-                this.score = 0;
+                score = 0;
                 break;
             default:
-                this.score = 0;
+                score = 0;
                 break;
             }
         }
