@@ -152,13 +152,18 @@ public class GameScreen implements Screen {
         if (gameLogic.isDead()) {
             switchToGameOverScreen();
         }
-        //if (gameLogic.checkGoal()) {
-        //    switchToGameOverScreen();
-        //}
+        if (gameLogic.checkGoal((int) gameLogic.getPlayer().getPosition().x, (int) gameLogic.getPlayer().getPosition().y)) {
+            switchToGameWinScreen();
+        }
     }
 
     private void switchToGameOverScreen() {
         game.setScreen(new GameOverScreen(game));
+        this.dispose();
+    }
+
+    private void switchToGameWinScreen() {
+        game.setScreen(new GameWinScreen(game));
         this.dispose();
     }
 
