@@ -194,7 +194,7 @@ public class GameScreen implements Screen {
         skin.getFont("Pixelify").getData().markupEnabled = true;
         scoreLabel = new Label("([#00FF00]" + GameConfig.getName()
                 + "[#FFFFFF])  Lives: [#ADD8E6]" + GameConfig.getDifficulty().getLives()
-                + "  [#FFFFFF]Score: [#A020F0]" + GameLogic.getInstance().getScore(),
+                + "  [#FFFFFF]Score: [#A020F0]" + gameLogic.getScore(),
             skin, "dark-bg");
         scoreLabel.setAlignment(Align.top);
         table.add(scoreLabel).growX();
