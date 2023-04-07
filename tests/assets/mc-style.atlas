@@ -1,0 +1,69 @@
+
+mc-style.png
+size: 256, 256
+format: RGBA8888
+filter: Linear, Linear
+repeat: none
+white-pixel
+  rotate: false
+  xy: 1, 1
+  size: 1, 1
+  orig: 1, 1
+  offset: 0, 0
+  index: -1
+PngItem_1204334_64x64
+  rotate: false
+  xy: 133, 70
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+button_alex
+  rotate: false
+  xy: 1, 136
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+button_enderman
+  rotate: false
+  xy: 1, 70
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+button_steve
+  rotate: false
+  xy: 67, 136
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+down_64x64
+  rotate: false
+  xy: 67, 70
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+left_64x64
+  rotate: false
+  xy: 133, 136
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+right_64x64
+  rotate: false
+  xy: 67, 4
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1
+up_1_64x64
+  rotate: false
+  xy: 1, 4
+  size: 64, 64
+  orig: 64, 64
+  offset: 0, 0
+  index: -1

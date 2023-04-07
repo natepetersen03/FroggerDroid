@@ -1,5 +1,9 @@
 buildscript {
-    
+    configurations.all {
+        resolutionStrategy.dependencySubstitution {
+            substitute module('org.hamcrest:hamcrest-core:1.1') with module('junit:junit:4.10')
+        }
+    }
 
     repositories {
         mavenLocal()
@@ -62,7 +66,9 @@ project(":desktop") {
 project(":android") {
     apply plugin: "com.android.application"
 
-    configurations { natives }
+    configurations {
+        natives
+    }
 
     dependencies {
         implementation project(":core")
@@ -86,13 +92,13 @@ project(":android") {
 project(":core") {
     apply plugin: "java-library"
 
-
     dependencies {
         api "com.badlogicgames.gdx:gdx:$gdxVersion"
         implementation "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
 
     }
 }
+
 
 // not supported, but left for future
 project(":ios") {
@@ -106,6 +112,24 @@ project(":ios") {
         api "com.mobidevelop.robovm:robovm-cocoatouch:$roboVMVersion"
         api "com.badlogicgames.gdx:gdx-backend-robovm:$gdxVersion"
         api "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-ios"
-        
+
+    }
+}
+
+project(":tests") {
+    apply plugin: "java-library"
+
+    dependencies {
+        implementation project(":core")
+
+        implementation "junit:junit:4.+"
+        implementation "org.mockito:mockito-all:1.9.+"
+
+        testImplementation 'junit:junit:4.+'
+        testImplementation "org.mockito:mockito-all:1.9.+"
+
+        api "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+        testImplementation "com.badlogicgames.gdx:gdx:$gdxVersion"
+        testImplementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
     }
 }

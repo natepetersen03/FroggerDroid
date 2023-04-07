@@ -2,133 +2,168 @@ package com.x20.frogger;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.x20.frogger.GUI.GameConfigViewModel;
+import com.x20.frogger.data.Controls;
 import com.x20.frogger.data.DataEnums;
+import com.x20.frogger.game.Entity;
 import com.x20.frogger.game.GameConfig;
+import com.x20.frogger.game.GameLogic;
+import com.x20.frogger.game.InputController;
+import com.x20.frogger.game.tiles.TileRenderer;
 
 public class GameScreen implements Screen {
+    // Game state
     private final FroggerDroid game;
-
-    private Texture dropImage;
-    private Texture bucketImage;
-    private Sound dropSound;
-    private Music rainMusic;
-    private OrthographicCamera camera;
-    private Rectangle bucket;
-    private Vector3 touchPos = Vector3.Zero;
-    private Array<Rectangle> raindrops;
-    private long lastDropTime; // in nanoseconds
+    private GameLogic gameLogic;
     private boolean paused;
-    private int dropsGathered;
 
-    private Stage stage;
+    // GUI
     private Skin skin;
-    private Viewport viewport;
-    Label updateLabel;
+    private Viewport guiViewport;
+    private Stage stage;
+    private Label scoreLabel;
 
-    private int tileSize;
-    private float tableHeight;
-    private int score;
-    private float maxY;
 
-    private Sprite character;
+    // Game rendering
+    private OrthographicCamera gameCamera;
+    private Viewport gameViewport;
+    private TileRenderer tileRenderer;
+
+    private String name;
 
     public GameScreen(final FroggerDroid game) {
+        Gdx.app.log("GameScreen", "Initializing...");
+
         this.game = game;
-        this.camera = new OrthographicCamera();
-        this.camera.setToOrtho(false, 800, 480);
-        this.viewport = new ExtendViewport(800, 400, camera);
-        this.stage = new Stage(viewport);
+
+        /// Initialize game logic
+        gameLogic = GameLogic.getInstance();
+        gameLogic.setLives(getLives(GameConfig.getDifficulty()));
+
+
+        // init GUI
+        Gdx.app.log("GameScreen", "Loading GUI...");
 
         this.skin = game.getSkinGUI();
-        this.score = 0;
-        this.maxY = 0;
+        // todo: get these width and height values from a variable somewhere
+        this.guiViewport = new ExtendViewport(500, 480);
         constructUI();
 
-        this.tileSize = 64;
+        /// New Game Viewport
+        Gdx.app.log("GameScreen", "Loading world viewport...");
 
-        TextureAtlas atlas = game.getAssetManager().get("mc-style.atlas");
-        TextureRegion region = atlas.findRegion(GameConfigViewModel.getCharacterAtlas());
-        this.character = new Sprite(region);
-        character.setPosition(Gdx.graphics.getWidth()/2 - character.getWidth()/2, 0);
+        // Init
+        this.gameCamera
+            = new OrthographicCamera(gameLogic.getTileMap().getWidth(),
+            gameLogic.getTileMap().getHeight());
+        this.gameViewport
+            = new FitViewport(gameLogic.getTileMap().getWidth(),
+                gameLogic.getTileMap().getHeight(), gameCamera);
+        this.tileRenderer
+            = new TileRenderer(this.game.getBatch(), gameLogic.getTileMap());
+
+
+        // set label fields
+        this.name = GameConfig.getName();
+
     }
 
     @Override
     public void show() {
-        game.getAssetManager().finishLoading();
+        Gdx.app.log("GameScreen", "Initializing done");
     }
 
     @Override
     public void render(float delta) {
         if (!paused) {
+            // game update call
+            update();
+
+            // clear screen
             Gdx.gl.glClearColor(1f, 1f, 1f, 1f);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-            stage.act();
-            stage.draw();
-
-            update();
+            // Render game viewport first
+            gameViewport.apply(true);
+            game.getBatch().setProjectionMatrix(gameViewport.getCamera().combined);
 
             game.getBatch().begin();
-            character.draw(game.getBatch());
+
+            // Render tilemap
+            tileRenderer.render();
+
+            // Render player
+            gameLogic.getPlayer().render(game.getBatch());
+
+            for (int i = 0; i < gameLogic.getTileMap().getHeight(); i++) {
+                for (Entity entity : gameLogic.getTileMap().getEntitiesAtRow(i)) {
+                    entity.render(game.getBatch());
+                }
+            }
+
             game.getBatch().end();
+
+            // Then render GUI viewport
+            guiViewport.apply(true);
+            game.getBatch().setProjectionMatrix(guiViewport.getCamera().combined);
+            stage.act();
+            stage.draw();
         }
     }
 
     @Override
     public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
+        // update UI viewport on window resize
+        gameViewport.update(width, height, true);
+        guiViewport.update(width, height, true);
+
+        // debug log
+        Gdx.app.debug("Application",
+            "Screen resized to dimensions: "
+            + gameViewport.getScreenWidth() + " x "
+            + gameViewport.getScreenHeight()
+        );
+    }
+
+    public void updateScoreLives() {
+        String text = "([#00FF00]" + name
+            + "[#FFFFFF])  Lives: [#ADD8E6]" + gameLogic.getLives()
+            + "  [#FFFFFF]Score: [#A020F0]" + gameLogic.getScore();
+        scoreLabel.setText(text);
     }
 
     public void update() {
-        // bounds restriction
-        if (character.getX() < 0) {
-            character.setX(0);
-        }
-        if (character.getX() > Gdx.graphics.getWidth() - character.getWidth()) {
-            character.setX(Gdx.graphics.getWidth() - character.getWidth());
-        }
+        gameLogic.update();
+        updateScoreLives();
 
-        if (character.getY() < 0) {
-            character.setY(0);
+        if (gameLogic.isDead()) {
+            switchToGameOverScreen();
         }
-        if (character.getY() > Gdx.graphics.getHeight() - character.getHeight() - tableHeight) {
-            character.setY(Gdx.graphics.getHeight() - character.getHeight() - tableHeight);
-        }
+        //if (gameLogic.checkGoal()) {
+        //    switchToGameOverScreen();
+        //}
+    }
 
-        if (maxY < character.getY()) {
-            maxY = character.getY();
-            score += 1;
-            updateLabel.setText("([#00FF00]" + GameConfig.getName()
-                    + "[#FFFFFF])  Lives: [#ADD8E6]" + getLives(GameConfig.getDifficulty())
-                    + "  [#FFFFFF]Score: [#A020F0]" + score);
-        }
+    private void switchToGameOverScreen() {
+        game.setScreen(new GameOverScreen(game));
+        this.dispose();
     }
 
     private void constructUI() {
-
-        stage = new Stage(new ExtendViewport(500, 480));
+        stage = new Stage(guiViewport);
         Gdx.input.setInputProcessor(stage);
 
         Table table = new Table();
@@ -141,20 +176,24 @@ public class GameScreen implements Screen {
 
         table.row();
         skin.getFont("Pixelify").getData().markupEnabled = true;
-        updateLabel = new Label("([#00FF00]" + GameConfig.getName()
+        scoreLabel = new Label("([#00FF00]" + name
                 + "[#FFFFFF])  Lives: [#ADD8E6]" + getLives(GameConfig.getDifficulty())
-                + "  [#FFFFFF]Score: [#A020F0]" + score, skin, "dark-bg");
-        updateLabel.setAlignment(Align.top);
-        this.tableHeight = 200;
-        table.add(updateLabel).growX();
+                + "  [#FFFFFF]Score: [#A020F0]" + GameLogic.getInstance().getScore(),
+            skin, "dark-bg");
+        scoreLabel.setAlignment(Align.top);
+        table.add(scoreLabel).growX();
         stage.addActor(table);
 
         Table moveTable = new Table();
         setButtons(moveTable);
         stage.addActor(moveTable);
 
+        Gdx.app.log("GameScreen", "Loaded GUI");
+
     }
 
+    // player controls GUI
+    // todo: refactor
     private void setButtons(Table table) {
         table.setColor(skin.getColor("white"));
         table.padLeft(0.0f);
@@ -191,46 +230,58 @@ public class GameScreen implements Screen {
         addMovementListeners(upButton, leftButton, rightButton, downButton);
     }
 
-    private void addMovementListeners(ImageButton up, ImageButton left, ImageButton right, ImageButton down) {
+    // binds player movement input to player movement
+    // todo: rip and tear
+    // status: callbacks updated
+    private void addMovementListeners(
+        Button up,
+        Button left,
+        Button right,
+        Button down
+    ) {
         up.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                character.setY(character.getY() + tileSize);
+                InputController.queueMoveInput(Controls.MOVE.UP);
             }
         });
 
         right.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                character.setX(character.getX() + tileSize);
+                InputController.queueMoveInput(Controls.MOVE.RIGHT);
             }
         });
 
         left.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                character.setX(character.getX() - tileSize);
+                InputController.queueMoveInput(Controls.MOVE.LEFT);
             }
         });
 
         down.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                character.setY(character.getY() - tileSize);
+                InputController.queueMoveInput(Controls.MOVE.DOWN);
             }
         });
     }
 
-    private String getLives(DataEnums.Difficulty difficulty) {
-        switch(difficulty){
-            case EASY:
-                return "10";
-            case HARD:
-                return "1";
-            case NORMAL:
-                return "5";
+    // determine number of starting lives from specific difficulty
+    // todo: rewrite Difficulty enum to hold value of starting lives directly
+    // todo: figure out why this is a string
+    private int getLives(DataEnums.Difficulty difficulty) {
+        switch (difficulty) {
+        case EASY:
+            return 10;
+        case HARD:
+            return 1;
+        case NORMAL:
+            return 5;
+        default:
+            return -1;
         }
-        return "NULL";
     }
 
     @Override

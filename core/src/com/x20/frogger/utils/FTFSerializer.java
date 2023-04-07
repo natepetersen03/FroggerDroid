@@ -63,6 +63,7 @@ public class FTFSerializer extends Json.ReadOnlySerializer<FreeTypeFontGenerator
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(skinFile.parent().child(path));
         BitmapFont font = generator.generateFont(parameter);
         skin.add(jsonData.name, font);
+        // not supporting incremental FFT generators right now
         if (parameter.incremental) {
             generator.dispose();
             return null;

@@ -1,26 +1,20 @@
 package com.x20.frogger;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.x20.frogger.utils.FTFSkinLoader;
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.TextureLoader;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.x20.frogger.data.DataEnums;
+import com.x20.frogger.game.GameConfig;
+import com.x20.frogger.graphics.AssetManagerSingleton;
+import com.x20.frogger.utils.FTFSkinLoader;
 
 
 public class FroggerDroid extends Game {
 
     private SpriteBatch batch;
-    private AssetManager assetManager = new AssetManager();
     private Skin skinGUI;
-
-    public AssetManager getAssetManager() {
-        return assetManager;
-    }
 
     public SpriteBatch getBatch() {
         return batch;
@@ -30,26 +24,73 @@ public class FroggerDroid extends Game {
         return skinGUI;
     }
 
+    // debug flags
+    private static boolean flagDebug = false;
+    private static boolean flagSkipToGame = false;
+    private boolean flagInvulnerable;
+
+    public FroggerDroid() {
+
+    }
+
+    public FroggerDroid(String[] args) {
+        for (String arg : args) {
+            String a = arg.toLowerCase();
+            switch (a) {
+            case "-debug":
+                flagDebug = true;
+                break;
+            case "-skip":
+                flagSkipToGame = true;
+                break;
+            case "-god":
+                flagInvulnerable = true;
+                break;
+            default:
+                break;
+            }
+        }
+    }
+
+    public static boolean isFlagDebug() {
+        return flagDebug;
+    }
+
+    public static boolean isFlagSkipToGame() {
+        return flagSkipToGame;
+    }
+
+    public static boolean isFlagInvulnerable() {
+        return isFlagInvulnerable();
+    }
+
     public void create() {
         batch = new SpriteBatch();
 
         // game asset init
-        TextureLoader.TextureParameter parameter = new TextureLoader.TextureParameter();
-        parameter.minFilter = Texture.TextureFilter.Linear;
-        parameter.magFilter = Texture.TextureFilter.Nearest;
-        parameter.genMipMaps = false;
+        AssetManagerSingleton.getInstance().loadAssets();
+        AssetManagerSingleton.getInstance().getAssetManager().finishLoading();
+        Gdx.app.log("AssetManagerSingleton", "Assets loaded");
 
-        assetManager.load("mc-style.atlas", TextureAtlas.class);
-
-        assetManager.load("drop.png", Texture.class);
-        assetManager.load("bucket.png", Texture.class);
-        assetManager.load("drop.wav", Sound.class);
-        assetManager.load("rain.wav", Music.class);
         // end game init
 
         skinGUI = FTFSkinLoader.loadFTFSkin("mc-style.json");
 
-        this.setScreen(new MainMenuScreen(this));
+        // Flag-specific behaviors
+        if (FroggerDroid.isFlagDebug()) {
+            Gdx.app.setLogLevel(Application.LOG_DEBUG);
+            Gdx.app.log("Application", "Debug mode enabled");
+        }
+
+        if (FroggerDroid.isFlagSkipToGame()) {
+            Gdx.app.debug("FroggerDroid", "Skipping to GameScreen...");
+            GameConfig.setCharacter(DataEnums.Character.STEVE);
+            GameConfig.setName("Debugger");
+            GameConfig.setDifficulty(DataEnums.Difficulty.EASY);
+            this.setScreen(new GameScreen(this));
+        } else {
+            this.setScreen(new MainMenuScreen(this));
+        }
     }
 
     public void render() {
@@ -58,7 +99,7 @@ public class FroggerDroid extends Game {
 
     public void dispose() {
         batch.dispose();
-        assetManager.dispose();
+        AssetManagerSingleton.getInstance().getAssetManager().dispose();
         skinGUI.dispose();
     }
 

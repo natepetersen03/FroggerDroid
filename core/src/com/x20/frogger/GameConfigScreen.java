@@ -22,7 +22,7 @@ import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.x20.frogger.GUI.CharacterRadio;
 import com.x20.frogger.GUI.DifficultyRadio;
-import com.x20.frogger.GUI.EnumHandler;
+import com.x20.frogger.events.EnumHandler;
 import com.x20.frogger.GUI.GameConfigViewModel;
 import com.x20.frogger.data.DataEnums;
 
@@ -40,8 +40,8 @@ public class GameConfigScreen extends ScreenAdapter {
         this.camera.setToOrtho(false, 800, 480);
         this.viewport = new ExtendViewport(800, 400, camera);
         this.stage = new Stage(viewport);
-
         this.skin = game.getSkinGUI();
+
         constructGUI();
     }
 
@@ -52,8 +52,7 @@ public class GameConfigScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        // load all assets before displaying ready
-        game.getAssetManager().finishLoading();
+
     }
 
     @Override

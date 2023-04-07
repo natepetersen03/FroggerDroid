@@ -32,4 +32,19 @@ public class DataEnums {
             return string;
         }
     }
+
+    public enum VehicleType {
+        IRON_GOLEM("Iron Golem"),
+        CREEPER("Creeper"),
+        SKELETON("Skeleton");
+        private final String string;
+
+        private VehicleType(String string) {
+            this.string = string;
+        }
+
+        public String toString() {
+            return string;
+        }
+    }
 }

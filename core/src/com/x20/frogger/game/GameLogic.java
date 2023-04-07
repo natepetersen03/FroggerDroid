@@ -1,46 +1,168 @@
 package com.x20.frogger.game;
-import com.x20.frogger.data.Controls;
+
+import com.badlogic.gdx.Gdx;
+import com.x20.frogger.game.mobs.PointEntity;
+import com.x20.frogger.game.tiles.TileDatabase;
+import com.x20.frogger.game.tiles.TileMap;
 
 public class GameLogic {
     private static GameLogic instance;
 
-    // todo: get tile board information here (for bounds)
-    // the following are TEMPORARY variables for the purposes of testing
-    private int xMin = 0;
-    private int xMax = 20;
-    private int yMin = 0;
-    private int yMax = 20;
+    private Player player;
+    private final int defaultPoints = 5;
+    private int score = 0;
+    private int yMax = 0;
 
-    // other info the Game needs to know about
-    private Player player = new Player();
+    private int lives;
+    private TileMap tileMap;
+    private String[] worldString;
 
     public Player getPlayer() {
         return player;
     }
 
+    public int getScore() {
+        return score;
+    }
+
+    public int getLives() {
+        return lives;
+    }
+
+    public TileMap getTileMap() {
+        return tileMap;
+    }
+
     private GameLogic() {
-        System.out.println("GameLogic singleton initialized");
+        Gdx.app.log("GameLogic", "Initializing GameLogic...");
+
+        // init TileDatabase
+        TileDatabase.initDatabase();
+
+        /// Generate tiles
+        // todo: random level generation/selection from pre-made levels based on difficulty?
+        // possibly add vertical scrolling if the level is very tall
+        // consider building a World class that holds spawn information for both player and vehicles
+        // as well as score information
+        worldString = new String[] {
+            "sgsgsgsgsgs",
+            "wwwwwwwwwww",
+            "wwwwwwwwwww",
+            "wwwwwwwwwww",
+            "sssssssssss",
+            "rrrrrrrrrrr",
+            "rrrrrrrrrrr",
+            "rrrrrrrrrrr",
+            "sssssssssss",
+            "rrrrrrrrrrr",
+            "rrrrrrrrrrr",
+            "sssssssssss"
+        };
+        tileMap = new TileMap();
+        tileMap.generateTileMapFromStringArray(worldString);
+
+        // Populate entities
+        tileMap.generateMobs();
+
+        /// Player init
+        this.player = new Player(tileMap.getWidth() / 2, 0);
+        // todo: specify a spawn tile position in the TileMap
+
+
     }
 
     public static synchronized GameLogic getInstance() {
         if (instance == null) {
             instance = new GameLogic();
+            Gdx.app.log("GameLogic", "Singleton initialized");
         }
         return instance;
     }
 
+    public void update() {
+        // steps:
+        // 1. update input (handled by GUI in GameScreen.java)
+        // 2. update player
+        // 3. update world (entities)
 
-    // todo: move to Player.java
-    public void processMovement() {
-        if (!InputController.QUEUE_MOVEMENTS.isEmpty()) {
-            // replace with EnumHandler
-            switch (InputController.QUEUE_MOVEMENTS.poll()) {
-            default:
-                break;
+        player.update();
+        for (int i = 0; i < tileMap.getHeight(); i++) {
+            for (Entity entity : tileMap.getEntitiesAtRow(i)) {
+                entity.update();
             }
-            System.out.println("Inputs processed");
-            System.out.println("Player position: " + player.getX() + ", " + player.getY());
-            InputController.QUEUE_MOVEMENTS.clear();
         }
+        // todo: test extensively. possibility that floating point errors might cause this to fail
+        checkForDamagingTile((int) player.position.x, (int) player.position.y);
+        updateScore();
+        checkForDamagingEntities((int) player.position.y);
+    }
+
+    // todo: this would probably be something the Player does in its own update method
+    // we can use custom events that the GUI elements are subscribed to
+    // then when we fire the events, we can notify the subscribers to update
+    // see: https://programming.guide/java/create-a-custom-event.html
+
+    public void updateScore() {
+        int y = (int) (Math.floor(player.getPosition().y));
+        if (y > yMax) {
+            yMax = y;
+            Entity rowEntity = tileMap.getEntitiesAtRow(yMax - 1).peek();
+            if (rowEntity instanceof PointEntity) {
+                score += ((PointEntity) rowEntity).getPoints();
+            } else {
+                score += defaultPoints;
+            }
+        }
+    }
+
+    public boolean checkGoal(int x, int y) {
+        // todo: test extensively. possibility that floating point errors might cause this to fail
+        if (tileMap.getTile(x, y).getTileData().getName().equals("goal")) {
+            return true;
+        }
+        return false;
+    }
+
+    public void checkForDamagingTile(int x, int y) {
+        // todo: test extensively. possibility that floating point errors might cause this to fail
+        if (tileMap.getTile(x, y).getTileData().isDamaging()) {
+            playerFail();
+        }
+    }
+    public void checkForDamagingEntities(int y) {
+        for (Entity entity : tileMap.getEntitiesAtRow(y)) {
+            if (player.getHitbox().overlaps(entity.getHitbox())) {
+                playerFail();
+            }
+        }
+    }
+
+    public boolean isDead() {
+        return (this.lives == 0);
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
+    }
+
+    public void respawnPlayer() {
+        player.setPosition(tileMap.getWidth() / 2, 0);
+    }
+
+    public void playerFail() {
+        this.lives -= 1;
+        this.yMax = 0;
+        switch (GameConfig.getDifficulty()) {
+        case HARD:
+            this.score = 0;
+            break;
+        case NORMAL:
+            this.score = 0;
+            break;
+        default:
+            this.score = 0;
+            break;
+        }
+        respawnPlayer();
     }
 }

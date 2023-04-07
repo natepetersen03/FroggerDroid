@@ -1,4 +1,4 @@
-sourceCompatibility = 1.7
+sourceCompatibility = 1.8
 dependencies {
     implementation 'org.testng:testng:6.9.6'
 }
@@ -7,3 +7,9 @@ dependencies {
 sourceSets.main.java.srcDirs = [ "src/" ]
 
 eclipse.project.name = appName + "-core"
+
+configurations.all {
+    resolutionStrategy.dependencySubstitution {
+        substitute module('org.hamcrest:hamcrest-core:1.1') with module('junit:junit:4.10')
+    }
+}
