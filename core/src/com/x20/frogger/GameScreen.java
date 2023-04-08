@@ -79,7 +79,8 @@ public class GameScreen implements Screen {
                 if (e.didPlayerWin()) {
                     switchToGameWinScreen();
                 } else {
-                    switchToGameOverScreen();
+                    switchToGameWinScreen();
+//                    switchToGameOverScreen();
                 }
             }
         };

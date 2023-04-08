@@ -108,11 +108,16 @@ public class GameWinScreen extends ScreenAdapter {
         Animation animation = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP,
                 Gdx.files.internal("animation.gif").read());
         AnimatedActor actor = new AnimatedActor(animation);
+        // fix some scaling issues
+        float scale = 300.0f / actor.getWidth();
+        actor.setWidth(actor.getWidth() * scale);
+        actor.setHeight(actor.getHeight()*scale);
         table.add(actor)
+                .spaceTop(8.0f)
                 .spaceBottom(8.0f)
-                .fillX()
                 .minWidth(300.0f)
                 .minHeight(42.0f)
+                .fillX()
                 .colspan(3);
         table.row();
     }
