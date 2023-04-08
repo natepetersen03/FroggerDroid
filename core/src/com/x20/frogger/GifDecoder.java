@@ -1,4 +1,8 @@
 package com.x20.frogger;
+/* Copyright by Johannes Borchardt */
+/* LibGdx conversion 2014 by Anton Persson */
+/* Released under Apache 2.0 */
+/* https://code.google.com/p/animated-gifs-in-android/ */
 
 import java.io.InputStream;
 import java.util.Vector;
