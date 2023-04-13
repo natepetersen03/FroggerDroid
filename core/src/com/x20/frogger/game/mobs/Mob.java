@@ -16,8 +16,13 @@ public abstract class Mob extends Entity implements PointEntity {
     protected int points;
     protected float speed;
 
-    public float getSpeed() { return speed; }
-    public int getPoints() { return points; }
+    public float getSpeed() {
+        return speed;
+    }
+
+    public int getPoints() {
+        return points;
+    }
 
     public Mob(Vector2 position, float speed, int points, Rectangle hitbox) {
         this.position = position;

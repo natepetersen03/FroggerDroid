@@ -7,7 +7,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.x20.frogger.graphics.AssetManagerSingleton;
 
-public class Golem extends Mob{
+
+public class Golem extends Mob {
+
     public Golem(int xPos, int yPos) {
         super(new Vector2(xPos, yPos), 1.0f, 30, new Rectangle(xPos, yPos, 6f / 16f, 15f / 16f));
         try {

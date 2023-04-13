@@ -10,7 +10,6 @@ import com.x20.frogger.FroggerDroid;
 import com.x20.frogger.data.Controls;
 import com.x20.frogger.data.IntervalUpdatable;
 import com.x20.frogger.data.Renderable;
-import com.x20.frogger.events.MoveListener;
 import com.x20.frogger.graphics.AssetManagerSingleton;
 import com.x20.frogger.utils.MiscUtils;
 
@@ -32,8 +31,8 @@ public class Player extends Entity implements Renderable {
         mover = new Mover(position, speed);
         velocity = new Vector2(0, 0);
         hitbox = new Rectangle(0, 0, 1, 1);
-        hitbox.width = 6f/16f;
-        hitbox.height = 15f/16f;
+        hitbox.width = 6f / 16f;
+        hitbox.height = 15f / 16f;
 
         // todo: make a more robust system for determining the player skin
         try {

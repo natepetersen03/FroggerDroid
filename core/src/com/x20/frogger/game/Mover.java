@@ -3,8 +3,6 @@ package com.x20.frogger.game;
 import com.badlogic.gdx.math.Vector2;
 import com.x20.frogger.events.MoveListener;
 
-import org.apache.tools.ant.taskdefs.Move;
-
 import java.util.LinkedList;
 import java.util.List;
 

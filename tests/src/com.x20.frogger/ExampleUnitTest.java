@@ -27,7 +27,7 @@ public class ExampleUnitTest {
         // https://stackoverflow.com/questions/42252209/is-there-any-way-to-create-integration-test-for-libgdx-application
         appConfig = new HeadlessApplicationConfiguration();
         appConfig.updatesPerSecond = 60;
-        app = new HeadlessApplication(new FroggerDroid() , appConfig);
+        app = new HeadlessApplication(new FroggerDroid(), appConfig);
     }
 
 
