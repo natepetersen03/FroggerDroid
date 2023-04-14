@@ -125,9 +125,6 @@ public class GameLogic {
             for (Entity entity : tileMap.getEntitiesAtRow(i)) {
                 entity.update();
             }
-            for (WaterEntity entity : tileMap.getLogsAtRow(i)) {
-                entity.update();
-            }
         }
 
         updateScore(false);
@@ -216,12 +213,15 @@ public class GameLogic {
     public void checkForLogs(int y) {
         this.playerOnLog = false;
         player.setVelocity(Vector2.Zero);
-        for (WaterEntity entity : tileMap.getLogsAtRow(y)) {
-            if (player.getHitbox().overlaps(entity.getHitbox())) {
-                Gdx.app.debug("GameLogic", "Log overlap detected");
-                this.playerOnLog = true;
-                player.glueToLog(entity);
-                break;
+        for (Entity entity : tileMap.getEntitiesAtRow(y)) {
+            if (entity instanceof WaterEntity) {
+                WaterEntity waterEntity = (WaterEntity) entity;
+                if (entity.getHitbox().contains(player.getPosition())) {
+                    Gdx.app.debug("GameLogic", "Log overlap detected");
+                    this.playerOnLog = true;
+                    player.glueToLog(waterEntity);
+                    break;
+                }
             }
         }
     }

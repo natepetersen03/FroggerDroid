@@ -22,7 +22,6 @@ import com.x20.frogger.game.Entity;
 import com.x20.frogger.game.GameConfig;
 import com.x20.frogger.game.GameLogic;
 import com.x20.frogger.game.InputController;
-import com.x20.frogger.game.mobs.WaterEntity;
 import com.x20.frogger.game.tiles.TileRenderer;
 
 public class GameScreen implements Screen {
@@ -78,10 +77,9 @@ public class GameScreen implements Screen {
             @Override
             public void onGameEnd(GameEndEvent e) {
                 if (e.didPlayerWin()) {
-                    switchToGameOverScreen();
-                } else {
                     switchToGameWinScreen();
-                        switchToGameWinScreen();
+                } else {
+                    switchToGameOverScreen();
                 }
             }
         };
@@ -128,9 +126,6 @@ public class GameScreen implements Screen {
 
             for (int i = 0; i < gameLogic.getTileMap().getHeight(); i++) {
                 for (Entity entity : gameLogic.getTileMap().getEntitiesAtRow(i)) {
-                    entity.render(game.getBatch());
-                }
-                for (WaterEntity entity : gameLogic.getTileMap().getLogsAtRow(i)) {
                     entity.render(game.getBatch());
                 }
             }
