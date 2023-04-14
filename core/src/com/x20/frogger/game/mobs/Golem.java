@@ -11,7 +11,7 @@ import com.x20.frogger.graphics.AssetManagerSingleton;
 public class Golem extends Mob {
 
     public Golem(int xPos, int yPos) {
-        super(new Vector2(xPos, yPos), 1.0f, 30, new Rectangle(xPos, yPos, 6f / 16f, 15f / 16f));
+        super(new Vector2(xPos, yPos), 1.0f, 30, new Rectangle(xPos, yPos, 12f / 16f, 14f / 16f));
         try {
             sprite = new TextureRegion(
                     AssetManagerSingleton.getInstance()

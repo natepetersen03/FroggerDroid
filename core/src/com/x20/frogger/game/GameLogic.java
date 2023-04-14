@@ -99,6 +99,8 @@ public class GameLogic {
 
         // Lives and score init
         setLives(GameConfig.getDifficulty().getLives());
+        score = 0;
+        yMax = 0;
 
         isRunning = true;
         Gdx.app.log("GameLogic", "Game started");
@@ -233,11 +235,12 @@ public class GameLogic {
 
     public void playerFail() {
         setLives(this.lives - 1);
-        if (this.lives == 0) {
+        if (this.lives > 0) {
+            updateScore(true);
+            respawnPlayer();
+        } else {
             endGame(false);
         }
-        respawnPlayer();
-        updateScore(true);
     }
 
     public void playerWin() {

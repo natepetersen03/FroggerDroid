@@ -162,19 +162,19 @@ public class Player extends Entity implements Renderable {
     }
 
     public void glueToLog(WaterEntity entity) {
-//        velocity = (entity.getVelocity());
-        if (InputController.QUEUE_MOVEMENTS.isEmpty()) {
-            float speed = entity.getSpeed();
-            float x = position.x;
-
-            x += speed * Gdx.graphics.getDeltaTime();
-            if (x < -1 && speed < 0) {
-                x = GameLogic.getInstance().getTileMap().getWidth() + 1;
-            } else if (x > GameLogic.getInstance().getTileMap().getWidth() + 1 && speed > 0) {
-                x = -1;
-            }
-            setPosition(x, position.y);
-        }
+        velocity = (entity.getVelocity());
+        //if (InputController.QUEUE_MOVEMENTS.isEmpty()) {
+        //    float speed = entity.getSpeed();
+        //    float x = position.x;
+        //
+        //    x += speed * Gdx.graphics.getDeltaTime();
+        //    if (x < -1 && speed < 0) {
+        //        x = GameLogic.getInstance().getTileMap().getWidth() + 1;
+        //    } else if (x > GameLogic.getInstance().getTileMap().getWidth() + 1 && speed > 0) {
+        //        x = -1;
+        //    }
+        //    setPosition(x, position.y);
+        //}
     }
 
     public void processInput() {

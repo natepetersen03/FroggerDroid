@@ -14,11 +14,6 @@ import com.x20.frogger.game.GameLogic;
 // to determine velocity of the Mob
 public abstract class Mob extends Entity implements PointEntity {
     protected int points;
-    protected float speed;
-
-    public float getSpeed() {
-        return speed;
-    }
 
     public int getPoints() {
         return points;
@@ -26,33 +21,18 @@ public abstract class Mob extends Entity implements PointEntity {
 
     public Mob(Vector2 position, float speed, int points, Rectangle hitbox) {
         this.position = position;
-        this.speed = speed;
+        this.velocity = new Vector2(speed, 0);
         this.points = points;
         this.hitbox = hitbox;
     }
 
     public void update() {
-        position.x += speed * Gdx.graphics.getDeltaTime();
+        super.updatePos();
 
-        if (position.x < -1 && speed < 0) {
+        if (position.x < -1 && velocity.x < 0) {
             position.x = GameLogic.getInstance().getTileMap().getWidth() + 1;
-        } else if (position.x > GameLogic.getInstance().getTileMap().getWidth() + 1 && speed > 0) {
+        } else if (position.x > GameLogic.getInstance().getTileMap().getWidth() + 1 && velocity.x > 0) {
             position.x = -1;
-        }
-        hitbox.x = position.x;
-    }
-
-    @Override
-    public void animate() {
-        // flip x direction based on last horizontal move
-        if (speed > 0) {
-            if (sprite.isFlipX()) {
-                sprite.flip(true, false);
-            }
-        } else {
-            if (!sprite.isFlipX()) {
-                sprite.flip(true, false);
-            }
         }
     }
 }

@@ -57,8 +57,8 @@ public abstract class Entity implements Updatable, Renderable, Debuggable {
     }
 
     protected void updateHitboxPosition() {
-        float x = position.x + hitbox.width / 2;
-        float y = position.y + hitbox.height / 2;
+        float x = position.x + ((1 - hitbox.width) / 2);
+        float y = position.y;
         hitbox.setPosition(x, y);
     }
 
