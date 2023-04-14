@@ -77,10 +77,10 @@ public class GameScreen implements Screen {
             @Override
             public void onGameEnd(GameEndEvent e) {
                 if (e.didPlayerWin()) {
-                    switchToGameWinScreen();
+                    switchToGameOverScreen();
                 } else {
                     switchToGameWinScreen();
-//                    switchToGameOverScreen();
+                        switchToGameWinScreen();
                 }
             }
         };
