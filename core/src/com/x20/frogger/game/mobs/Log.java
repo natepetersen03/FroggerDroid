@@ -11,12 +11,13 @@ import com.x20.frogger.graphics.AssetManagerSingleton;
 public class Log extends WaterEntity {
 
     public Log(int xPos, int yPos) {
-        super(new Vector2(xPos, yPos), 1.0f, 30, new Rectangle(xPos, yPos, 16f / 16f, 16f / 16f), 3);
+        super(new Vector2(xPos, yPos), 1.0f, 30, new Rectangle(xPos, yPos, 16f / 16f, 16f / 16f));
         try {
-            sprite = new TextureRegion(new Texture(Gdx.files.internal("log.png")),
-                    0, 0, 16, 16
+            sprite = new TextureRegion(
+                    AssetManagerSingleton.getInstance()
+                            .getAssetManager().get("tiles.png", Texture.class),
+                    2 * 16, 1 * 16, 16, 16
             );
-            sprite.setRegion(sprite.getRegionX(), 16, 16, 16);
         } catch (com.badlogic.gdx.utils.GdxRuntimeException exception) {
             Gdx.app.error(
                     "Log",

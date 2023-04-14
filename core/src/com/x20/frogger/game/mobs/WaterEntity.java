@@ -14,31 +14,31 @@ import com.x20.frogger.game.GameLogic;
 // to determine velocity of the Mob
 public abstract class WaterEntity extends Entity implements PointEntity {
     protected int points;
-    public int yScale;
 
     public int getPoints() {
         return points;
     }
 
 
-    public WaterEntity(Vector2 position, float speed, int points, Rectangle hitbox, int yScale) {
+    public WaterEntity(Vector2 position, float speed, int points, Rectangle hitbox) {
         this.position = position;
         this.velocity = new Vector2(speed, 0);
         this.points = points;
         this.hitbox = hitbox;
-        this.yScale = yScale;
     }
 
     public void update() {
         updatePos();
 
+        if (position.x < -1 && velocity.x < 0) {
+            position.x = GameLogic.getInstance().getTileMap().getWidth() + 1;
+        } else if (position.x > GameLogic.getInstance().getTileMap().getWidth() + 1 && velocity.x > 0) {
+            position.x = -1;
+        }
     }
 
     @Override
     public void render(Batch batch) {
         animate();
-        float x = position.x;
-        float y = position.y;
-        batch.draw(sprite, x, y + (yScale/2)/16f, 1 + (2/16f), (16f - yScale)/16f);
     }
 }

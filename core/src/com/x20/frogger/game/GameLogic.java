@@ -1,6 +1,7 @@
 package com.x20.frogger.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import com.x20.frogger.FroggerDroid;
 import com.x20.frogger.events.GameStateListener;
 import com.x20.frogger.game.mobs.PointEntity;
@@ -130,10 +131,10 @@ public class GameLogic {
 
         updateScore(false);
         // todo: test extensively. possibility that floating point errors might cause this to fail
+        checkForLogs((int) player.position.y);
         if (!FroggerDroid.isFlagInvulnerable()) {
-            checkForLogs((int) player.position.y);
             if (!playerOnLog) {
-//                checkForDamagingTile((int) player.position.x, (int) player.position.y);
+                checkForDamagingTile((int) player.position.x, (int) player.position.y);
                 checkForDamagingEntities((int) player.position.y);
             }
         }
@@ -204,15 +205,16 @@ public class GameLogic {
     }
 
     public void checkForLogs(int y) {
+        this.playerOnLog = false;
+        player.setVelocity(Vector2.Zero);
         for (WaterEntity entity : tileMap.getLogsAtRow(y)) {
             if (player.getHitbox().overlaps(entity.getHitbox())) {
-                System.out.println("OVERLAP");
+                Gdx.app.debug("[GameLogic]", "Log overlap detected");
                 this.playerOnLog = true;
                 player.glueToLog(entity);
                 break;
             }
         }
-        this.playerOnLog = false;
     }
 
     public boolean isDead() {
