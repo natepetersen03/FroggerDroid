@@ -1,7 +1,5 @@
 package com.x20.frogger.game.mobs;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.x20.frogger.game.Entity;
@@ -32,7 +30,9 @@ public abstract class WaterEntity extends Entity implements PointEntity {
 
         if (position.x < -1 && velocity.x < 0) {
             position.x = GameLogic.getInstance().getTileMap().getWidth() + 1;
-        } else if (position.x > GameLogic.getInstance().getTileMap().getWidth() + 1 && velocity.x > 0) {
+        } else if (position.x > GameLogic.getInstance().getTileMap().getWidth() + 1
+            && velocity.x > 0
+        ) {
             position.x = -1;
         }
     }

@@ -1,7 +1,5 @@
 package com.x20.frogger.game.mobs;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.x20.frogger.game.Entity;
@@ -21,7 +19,10 @@ public abstract class Mob extends Entity implements PointEntity {
 
     /**
      * Creates a new Mob, HORIZONTALLY CENTERED at the provided spawn position
-     * @param spawnPosition
+     * @param spawnPosition spawn position
+     * @param speed horizontal speed. negative = left
+     * @param points point value assigned
+     * @param hitbox Rectangle
      */
     public Mob(Vector2 spawnPosition, float speed, int points, Rectangle hitbox) {
         this.position = new Vector2(spawnPosition.x + (width / 2), spawnPosition.y);
@@ -35,7 +36,9 @@ public abstract class Mob extends Entity implements PointEntity {
 
         if ((position.x + width / 2) < 0 && velocity.x < 0) {
             position.x = GameLogic.getInstance().getTileMap().getWidth() + (width / 2);
-        } else if ((position.x - (width / 2)) > GameLogic.getInstance().getTileMap().getWidth() && velocity.x > 0) {
+        } else if ((position.x - (width / 2)) > GameLogic.getInstance().getTileMap().getWidth()
+            && velocity.x > 0
+        ) {
             position.x = 0 - (width / 2);
         }
     }

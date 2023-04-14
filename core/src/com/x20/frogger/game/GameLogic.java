@@ -124,7 +124,8 @@ public class GameLogic {
         for (int i = 0; i < tileMap.getHeight(); i++) {
             for (Entity entity : tileMap.getEntitiesAtRow(i)) {
                 entity.update();
-            }for (WaterEntity entity : tileMap.getLogsAtRow(i)) {
+            }
+            for (WaterEntity entity : tileMap.getLogsAtRow(i)) {
                 entity.update();
             }
         }

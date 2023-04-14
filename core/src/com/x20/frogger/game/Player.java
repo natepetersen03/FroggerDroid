@@ -27,7 +27,7 @@ public class Player extends Entity implements Renderable {
 
     /**
      * Creates a new Player, HORIZONTALLY CENTERED at the provided spawn position
-     * @param spawnPosition
+     * @param spawnPosition spawn position
      */
     public Player(Vector2 spawnPosition) {
         super();
