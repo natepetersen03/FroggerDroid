@@ -95,6 +95,8 @@ public class GameLogic {
 
         // Lives and score init
         setLives(GameConfig.getDifficulty().getLives());
+        score = 0;
+        yMax = 0;
 
         isRunning = true;
         Gdx.app.log("GameLogic", "Game started");
