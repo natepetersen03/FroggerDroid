@@ -1,5 +1,6 @@
 package com.x20.frogger.game.tiles;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.x20.frogger.graphics.AssetManagerSingleton;
@@ -39,11 +40,11 @@ public class TileRenderData {
                         .get("tiles.png", Texture.class),
                     textureX, textureY, width, height
             );
-        } catch (Exception e) {
-            // temporary exception catcher so we can still run unit tests without
-            // attaching the headless backend
-            // todo: phase this out if we do attach the headless backend
-            System.out.println("Unable to load texture! Has the OpenGL context loaded?");
+        } catch (com.badlogic.gdx.utils.GdxRuntimeException exception) {
+            Gdx.app.error(
+                "TileRenderData",
+                "Sprite failed to load; Assuming headless launch"
+            );
         }
         this.textureX = Math.max(textureX, 0);
         this.textureY = Math.max(textureY, 0);

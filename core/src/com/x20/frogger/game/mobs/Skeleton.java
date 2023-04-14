@@ -20,8 +20,7 @@ public class Skeleton extends Mob {
         } catch (com.badlogic.gdx.utils.GdxRuntimeException exception) {
             Gdx.app.error(
                     "Skeleton",
-                    "Sprite failed to load; Assuming headless launch",
-                    exception
+                    "Sprite failed to load; Assuming headless launch"
             );
         }
     }

@@ -99,7 +99,11 @@ public class GameLogic {
         // todo: specify a spawn tile position in the TileMap
 
         // Lives and score init
-        setLives(GameConfig.getDifficulty().getLives());
+        try {
+            setLives(GameConfig.getDifficulty().getLives());
+        } catch (NullPointerException e) {
+            Gdx.app.error("GameLogic", "Difficulty is null; assuming unit test mode");
+        }
         score = 0;
         yMax = 0;
 

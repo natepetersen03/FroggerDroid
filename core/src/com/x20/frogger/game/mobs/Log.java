@@ -21,8 +21,7 @@ public class Log extends WaterEntity {
         } catch (com.badlogic.gdx.utils.GdxRuntimeException exception) {
             Gdx.app.error(
                     "Log",
-                    "Sprite failed to load; Assuming headless launch",
-                    exception
+                    "Sprite failed to load; Assuming headless launch"
             );
         }
     }
