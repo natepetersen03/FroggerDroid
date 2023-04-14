@@ -31,4 +31,10 @@ public class GameConfig implements Serializable {
     public static void setName(String name) {
         GameConfig.name = name;
     }
+
+    public static void reset() {
+        character = null;
+        name = null;
+        difficulty = null;
+    }
 }

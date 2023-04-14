@@ -17,7 +17,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.x20.frogger.game.GameLogic;
 import com.x20.frogger.graphics.AssetManagerSingleton;
 
-public class GameOverScreen extends ScreenAdapter {
+public class GameWinScreen extends ScreenAdapter {
     private final FroggerDroid game;
     private OrthographicCamera camera;
     private Viewport viewport;
@@ -28,7 +28,7 @@ public class GameOverScreen extends ScreenAdapter {
     private TextButton restartButton;
     private TextButton exitButton;
 
-    public GameOverScreen(final FroggerDroid game) {
+    public GameWinScreen(final FroggerDroid game) {
         this.game = game;
         this.camera = new OrthographicCamera();
         this.camera.setToOrtho(false, 800, 480);
@@ -87,7 +87,7 @@ public class GameOverScreen extends ScreenAdapter {
     }
 
     private void setHeaderLabel(Table table) {
-        Label label = new Label("Game Over!", skin, "dark-bg");
+        Label label = new Label("You Won!", skin, "dark-bg");
         table.add(label)
                 .spaceBottom(8.0f)
                 .fillX()

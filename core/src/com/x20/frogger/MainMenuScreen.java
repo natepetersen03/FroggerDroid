@@ -77,7 +77,6 @@ public class MainMenuScreen extends ScreenAdapter {
         stage = new Stage(new ExtendViewport(500, 480));
 
         Gdx.input.setInputProcessor(stage);
-        GameConfigViewModel gameConfigViewModel = new GameConfigViewModel();
 
         Table table = new Table();
         table.setTouchable(enabled);
@@ -90,7 +89,7 @@ public class MainMenuScreen extends ScreenAdapter {
         TextButton textButton = new TextButton("Play", skin);
         setPlayButton(table, textButton);
 
-        gameConfigViewModel.setGoButton(textButton);
+        GameConfigViewModel.setGoButton(textButton);
 
         stage.addActor(table);
     }
