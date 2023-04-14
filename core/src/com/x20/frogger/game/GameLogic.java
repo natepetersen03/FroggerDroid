@@ -213,11 +213,12 @@ public class GameLogic {
 
     public void playerFail() {
         setLives(this.lives - 1);
-        if (this.lives == 0) {
+        if (this.lives > 0) {
+            updateScore(true);
+            respawnPlayer();
+        } else {
             endGame(false);
         }
-        respawnPlayer();
-        updateScore(true);
     }
 
     public void playerWin() {
