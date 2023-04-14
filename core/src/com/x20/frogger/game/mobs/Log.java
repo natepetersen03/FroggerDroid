@@ -8,20 +8,19 @@ import com.badlogic.gdx.math.Vector2;
 import com.x20.frogger.graphics.AssetManagerSingleton;
 
 
-public class Golem extends Mob {
+public class Log extends WaterEntity {
 
-    public Golem(int xPos, int yPos) {
-        super(new Vector2(xPos, yPos), 1.0f, 30, new Rectangle(xPos, yPos, 12f / 16f, 14f / 16f));
+    public Log(int xPos, int yPos) {
+        super(new Vector2(xPos, yPos), 1.0f, 30, new Rectangle(xPos, yPos, 16f / 16f, 16f / 16f));
         try {
             sprite = new TextureRegion(
                     AssetManagerSingleton.getInstance()
-                            .getAssetManager().get("vehicles.png", Texture.class),
-                    0, 0, 16, 16
+                            .getAssetManager().get("tiles.png", Texture.class),
+                    2 * 16, 1 * 16, 16, 16
             );
-            sprite.setRegion(sprite.getRegionX(), 1 * 16, 16, 16);
         } catch (com.badlogic.gdx.utils.GdxRuntimeException exception) {
             Gdx.app.error(
-                    "Golem",
+                    "Log",
                     "Sprite failed to load; Assuming headless launch",
                     exception
             );

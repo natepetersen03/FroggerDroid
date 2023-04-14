@@ -1,9 +1,11 @@
 package com.x20.frogger.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import com.x20.frogger.FroggerDroid;
 import com.x20.frogger.events.GameStateListener;
 import com.x20.frogger.game.mobs.PointEntity;
+import com.x20.frogger.game.mobs.WaterEntity;
 import com.x20.frogger.game.tiles.TileDatabase;
 import com.x20.frogger.game.tiles.TileMap;
 
@@ -18,6 +20,8 @@ public class GameLogic {
     private int lives; // todo: consider moving this to Player
     private int score = 0;
     private int yMax = 0;
+
+    private boolean playerOnLog = false;
 
     private LinkedList<GameStateListener> gameStateListeners = new LinkedList<>();
 
@@ -88,6 +92,7 @@ public class GameLogic {
 
         // Populate entities
         tileMap.generateMobs();
+        tileMap.generateLogs();
 
         /// Player init
         this.player = new Player(tileMap.getWidth() / 2, 0);
@@ -95,6 +100,8 @@ public class GameLogic {
 
         // Lives and score init
         setLives(GameConfig.getDifficulty().getLives());
+        score = 0;
+        yMax = 0;
 
         isRunning = true;
         Gdx.app.log("GameLogic", "Game started");
@@ -109,7 +116,6 @@ public class GameLogic {
             return;
         }
 
-        // steps:
         // 1. update input (handled by GUI in GameScreen.java)
         // 2. update player
         // 3. update world (entities)
@@ -123,9 +129,12 @@ public class GameLogic {
 
         updateScore(false);
         // todo: test extensively. possibility that floating point errors might cause this to fail
+        checkForLogs((int) player.position.y);
         if (!FroggerDroid.isFlagInvulnerable()) {
-            checkForDamagingTile((int) player.position.x, (int) player.position.y);
-            checkForDamagingEntities((int) player.position.y);
+            if (!playerOnLog) {
+                checkForDamagingTile((int) player.position.x, (int) player.position.y);
+                checkForDamagingEntities((int) player.position.y);
+            }
         }
 
         checkGoal((int) player.getPosition().x, (int) player.getPosition().y);
@@ -174,14 +183,22 @@ public class GameLogic {
     }
 
     public void checkGoal(int x, int y) {
-        if (tileMap.getTile(x, y).getTileData().getName().equals("goal")) {
-            playerWin();
+        try {
+            if (tileMap.getTile(x, y).getTileData().getName().equals("goal")) {
+                playerWin();
+            }
+        } catch (IllegalArgumentException exception) {
+            Gdx.app.error("GameLogic", "Player is out of bounds!");
         }
     }
 
     public void checkForDamagingTile(int x, int y) {
-        if (tileMap.getTile(x, y).getTileData().isDamaging()) {
-            playerFail();
+        try {
+            if (tileMap.getTile(x, y).getTileData().isDamaging()) {
+                playerFail();
+            }
+        } catch (IllegalArgumentException exception) {
+            Gdx.app.error("GameLogic", "Player is out of bounds!");
         }
     }
 
@@ -189,6 +206,22 @@ public class GameLogic {
         for (Entity entity : tileMap.getEntitiesAtRow(y)) {
             if (player.getHitbox().overlaps(entity.getHitbox())) {
                 playerFail();
+            }
+        }
+    }
+
+    public void checkForLogs(int y) {
+        this.playerOnLog = false;
+        player.setVelocity(Vector2.Zero);
+        for (Entity entity : tileMap.getEntitiesAtRow(y)) {
+            if (entity instanceof WaterEntity) {
+                WaterEntity waterEntity = (WaterEntity) entity;
+                if (entity.getHitbox().contains(player.getPosition())) {
+                    Gdx.app.debug("GameLogic", "Log overlap detected");
+                    this.playerOnLog = true;
+                    player.glueToLog(waterEntity);
+                    break;
+                }
             }
         }
     }
@@ -208,16 +241,17 @@ public class GameLogic {
     }
 
     public void respawnPlayer() {
-        player.setPosition(tileMap.getWidth() / 2, 0);
+        player.setPosition(tileMap.getWidth() / 2 + (player.getWidth() / 2), 0);
     }
 
     public void playerFail() {
         setLives(this.lives - 1);
-        if (this.lives == 0) {
+        if (this.lives > 0) {
+            updateScore(true);
+            respawnPlayer();
+        } else {
             endGame(false);
         }
-        respawnPlayer();
-        updateScore(true);
     }
 
     public void playerWin() {

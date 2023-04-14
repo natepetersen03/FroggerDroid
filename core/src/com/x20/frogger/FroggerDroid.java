@@ -29,6 +29,8 @@ public class FroggerDroid extends Game {
     private static boolean flagSkipToGame = false;
     private static boolean flagInvulnerable = false;
 
+    private static boolean flagWin = false;
+
     public FroggerDroid() {
 
     }
@@ -45,6 +47,9 @@ public class FroggerDroid extends Game {
                 break;
             case "-god":
                 flagInvulnerable = true;
+                break;
+            case "-win":
+                flagWin = true;
                 break;
             default:
                 break;
@@ -63,6 +68,9 @@ public class FroggerDroid extends Game {
     public static boolean isFlagInvulnerable() {
         return flagInvulnerable;
     }
+    public static boolean isFlagWin() {
+        return flagWin;
+    }
 
     public void create() {
         batch = new SpriteBatch();
@@ -80,6 +88,14 @@ public class FroggerDroid extends Game {
         if (FroggerDroid.isFlagDebug()) {
             Gdx.app.setLogLevel(Application.LOG_DEBUG);
             Gdx.app.log("Application", "Debug mode enabled");
+        }
+
+        if (FroggerDroid.isFlagWin()) {
+            Gdx.app.debug("FroggerDroid", "Skipping to WinScreen...");
+            GameConfig.setCharacter(DataEnums.Character.STEVE);
+            GameConfig.setName("Debugger");
+            GameConfig.setDifficulty(DataEnums.Difficulty.EASY);
+            this.setScreen(new GameWinScreen(this));
         }
 
         if (FroggerDroid.isFlagSkipToGame()) {

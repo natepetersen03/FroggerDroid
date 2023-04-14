@@ -58,13 +58,13 @@ public class TestSprint4 {
     @Test
     public void testCreeperVelocity() {
         LinkedList<Entity> testRow = gameLogic.getTileMap().getEntitiesAtRow(1);
-        assertEquals(((Mob) (testRow.get(0))).getSpeed(), 1.5f, 0);
+        assertEquals(((Mob) (testRow.get(0))).getVelocity().x, 1.5f, 0);
     }
 
     @Test
     public void testGolemVelocity() {
         LinkedList<Entity> testRow = gameLogic.getTileMap().getEntitiesAtRow(2);
-        assertEquals(((Mob) (testRow.get(0))).getSpeed(), 3.5f, 0);
+        assertEquals(((Mob) (testRow.get(0))).getVelocity().x, 3.5f, 0);
     }
 
     //Owen's Tests
@@ -98,7 +98,7 @@ public class TestSprint4 {
     @Test
     public void testSkeletonVelocity() {
         LinkedList<Entity> testRow = gameLogic.getTileMap().getEntitiesAtRow(5);
-        assertEquals(((Mob) (testRow.get(0))).getSpeed(), -2f, 0);
+        assertEquals(((Mob) (testRow.get(0))).getVelocity().x, -2f, 0);
     }
 
     @Test

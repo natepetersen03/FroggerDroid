@@ -1,7 +1,5 @@
 package com.x20.frogger.game.mobs;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.x20.frogger.game.Entity;
@@ -14,47 +12,34 @@ import com.x20.frogger.game.GameLogic;
 // to determine velocity of the Mob
 public abstract class Mob extends Entity implements PointEntity {
     protected int points;
-    protected float speed;
-
-    public float getSpeed() {
-        return speed;
-    }
 
     public int getPoints() {
         return points;
     }
 
-    public Mob(Vector2 position, float speed, int points, Rectangle hitbox) {
-        this.position = position;
-        this.speed = speed;
+    /**
+     * Creates a new Mob, HORIZONTALLY CENTERED at the provided spawn position
+     * @param spawnPosition spawn position
+     * @param speed horizontal speed. negative = left
+     * @param points point value assigned
+     * @param hitbox Rectangle
+     */
+    public Mob(Vector2 spawnPosition, float speed, int points, Rectangle hitbox) {
+        this.position = new Vector2(spawnPosition.x + (width / 2), spawnPosition.y);
+        this.velocity = new Vector2(speed, 0);
         this.points = points;
         this.hitbox = hitbox;
     }
 
     public void update() {
-        position.x += speed * Gdx.graphics.getDeltaTime();
+        super.updatePos();
 
-        if (position.x < -1 && speed < 0) {
-            position.x = GameLogic.getInstance().getTileMap().getWidth() + 1;
-        } else if (position.x > GameLogic.getInstance().getTileMap().getWidth() + 1 && speed > 0) {
-            position.x = -1;
-        }
-        hitbox.x = position.x;
-
-
-    }
-
-    @Override
-    public void animate() {
-        // flip x direction based on last horizontal move
-        if (speed > 0) {
-            if (sprite.isFlipX()) {
-                sprite.flip(true, false);
-            }
-        } else {
-            if (!sprite.isFlipX()) {
-                sprite.flip(true, false);
-            }
+        if ((position.x + width / 2) < 0 && velocity.x < 0) {
+            position.x = GameLogic.getInstance().getTileMap().getWidth() + (width / 2);
+        } else if ((position.x - (width / 2)) > GameLogic.getInstance().getTileMap().getWidth()
+            && velocity.x > 0
+        ) {
+            position.x = 0 - (width / 2);
         }
     }
 }

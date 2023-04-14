@@ -124,14 +124,15 @@ public class GameScreen implements Screen {
             // Render tilemap
             tileRenderer.render();
 
-            // Render player
-            gameLogic.getPlayer().render(game.getBatch());
-
             for (int i = 0; i < gameLogic.getTileMap().getHeight(); i++) {
                 for (Entity entity : gameLogic.getTileMap().getEntitiesAtRow(i)) {
                     entity.render(game.getBatch());
                 }
             }
+
+
+            // Render player
+            gameLogic.getPlayer().render(game.getBatch());
 
             game.getBatch().end();
 

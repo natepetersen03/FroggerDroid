@@ -3,7 +3,9 @@ package com.x20.frogger.game.tiles;
 import com.x20.frogger.game.Entity;
 import com.x20.frogger.game.mobs.Creeper;
 import com.x20.frogger.game.mobs.Golem;
+import com.x20.frogger.game.mobs.Log;
 import com.x20.frogger.game.mobs.Skeleton;
+import com.x20.frogger.game.mobs.WaterEntity;
 
 import java.util.LinkedList;
 
@@ -31,6 +33,7 @@ public class TileMap {
     // access by tilemap[x][y]
     private Tile[][] tilemap;
     private LinkedList<Entity>[] rowEntitiesArray;
+    private LinkedList<WaterEntity>[] rowLogsArray;
 
     public TileMap() {
 
@@ -117,8 +120,23 @@ public class TileMap {
         //rowEntitiesArray[5].add(new Skeleton(10, 5));
 
         rowEntitiesArray[6].add(new Golem(0, 6));
-        rowEntitiesArray[6].add(new Golem(5, 6));
-        //rowEntitiesArray[6].add(new Golem(10, 6));
+        rowEntitiesArray[6].add(new Golem(10, 6));
+    }
+
+    public void generateLogs() {
+        rowEntitiesArray[9].add(new Log(0, 9));
+        rowEntitiesArray[9].add(new Log(1, 9));
+        rowEntitiesArray[9].add(new Log(2, 9));
+        rowEntitiesArray[9].add(new Log(6, 9));
+        rowEntitiesArray[9].add(new Log(7, 9));
+        rowEntitiesArray[9].add(new Log(8, 9));
+
+        rowEntitiesArray[8].add(new Log(3, 8));
+        rowEntitiesArray[8].add(new Log(4, 8));
+        rowEntitiesArray[8].add(new Log(5, 8));
+        rowEntitiesArray[8].add(new Log(9, 8));
+        rowEntitiesArray[8].add(new Log(10, 8));
+        rowEntitiesArray[8].add(new Log(11, 8));
     }
 
     public String toString() {

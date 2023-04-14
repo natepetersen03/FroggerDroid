@@ -10,6 +10,7 @@ import com.x20.frogger.FroggerDroid;
 import com.x20.frogger.data.Controls;
 import com.x20.frogger.data.IntervalUpdatable;
 import com.x20.frogger.data.Renderable;
+import com.x20.frogger.game.mobs.WaterEntity;
 import com.x20.frogger.graphics.AssetManagerSingleton;
 import com.x20.frogger.utils.MiscUtils;
 
@@ -24,9 +25,13 @@ public class Player extends Entity implements Renderable {
     // debug vars
     private IntervalTimer debugTimer;
 
+    /**
+     * Creates a new Player, HORIZONTALLY CENTERED at the provided spawn position
+     * @param spawnPosition spawn position
+     */
     public Player(Vector2 spawnPosition) {
         super();
-        position = spawnPosition.cpy();
+        position = new Vector2(spawnPosition.x + (width / 2), spawnPosition.y);
         moveDir = Vector2.Zero;
         mover = new Mover(position, speed);
         velocity = new Vector2(0, 0);
@@ -66,10 +71,6 @@ public class Player extends Entity implements Renderable {
         this(new Vector2(x, y));
     }
 
-    public Player() {
-        this(Vector2.Zero);
-    }
-
     /**
      * Get instance of Mover, which drives movement as a result of player input
      * @return Mover
@@ -96,14 +97,7 @@ public class Player extends Entity implements Renderable {
     public void setPosition(Vector2 newPosition) {
         mover.cancel(newPosition);
         position = newPosition.cpy();
-        position = clampToBounds(
-            position,
-            Vector2.Zero,
-            new Vector2(
-                GameLogic.getInstance().getTileMap().getWidth() - 1,
-                GameLogic.getInstance().getTileMap().getHeight() - 1
-            )
-        );
+        stayInBounds();
         super.updateHitboxPosition();
     }
 
@@ -147,16 +141,24 @@ public class Player extends Entity implements Renderable {
         }
 
         // Bounds restriction
+        stayInBounds();
+
+        super.updateHitboxPosition();
+    }
+
+    private void stayInBounds() {
         position = clampToBounds(
             position,
-            Vector2.Zero,
+            new Vector2(width / 2, 0),
             new Vector2(
-                GameLogic.getInstance().getTileMap().getWidth() - 1,
+                GameLogic.getInstance().getTileMap().getWidth() - 1 + (width / 2),
                 GameLogic.getInstance().getTileMap().getHeight() - 1
             )
         );
+    }
 
-        super.updateHitboxPosition();
+    public void glueToLog(WaterEntity entity) {
+        velocity = (entity.getVelocity());
     }
 
     public void processInput() {
@@ -224,8 +226,7 @@ public class Player extends Entity implements Renderable {
 
     @Override
     public void render(Batch batch) {
-        animate();
-        batch.draw(sprite, position.x, position.y, 1, 1);
+        super.render(batch);
     }
 
     @Override

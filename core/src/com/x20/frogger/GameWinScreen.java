@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.x20.frogger.game.AnimatedActor;
 import com.x20.frogger.game.GameLogic;
 import com.x20.frogger.graphics.AssetManagerSingleton;
 
@@ -34,7 +36,6 @@ public class GameWinScreen extends ScreenAdapter {
         this.camera.setToOrtho(false, 800, 480);
         this.viewport = new ExtendViewport(800, 400, camera);
         this.stage = new Stage(viewport);
-
         this.skin = game.getSkinGUI();
         constructGUI();
     }
@@ -79,6 +80,7 @@ public class GameWinScreen extends ScreenAdapter {
         table.setFillParent(true);
 
         setHeaderLabel(table);
+        setAnimation(table);
         setScoreLabel(table);
         setRestartButton(table);
         setExitButton(table);
@@ -95,6 +97,24 @@ public class GameWinScreen extends ScreenAdapter {
                 .minHeight(42.0f)
                 .colspan(3);
         label.setAlignment(Align.center);
+        table.row();
+    }
+
+    private void setAnimation(Table table) {
+        Animation animation = GifDecoder.loadGIFAnimation(Animation.PlayMode.LOOP,
+                Gdx.files.internal("animation.gif").read());
+        AnimatedActor actor = new AnimatedActor(animation);
+        // fix some scaling issues
+        float scale = 300.0f / actor.getWidth();
+        actor.setWidth(actor.getWidth() * scale);
+        actor.setHeight(actor.getHeight() * scale);
+        table.add(actor)
+                .spaceTop(8.0f)
+                .spaceBottom(8.0f)
+                .minWidth(300.0f)
+                .minHeight(42.0f)
+                .fillX()
+                .colspan(3);
         table.row();
     }
 
