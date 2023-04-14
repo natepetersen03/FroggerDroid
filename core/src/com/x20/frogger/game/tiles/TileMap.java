@@ -3,7 +3,9 @@ package com.x20.frogger.game.tiles;
 import com.x20.frogger.game.Entity;
 import com.x20.frogger.game.mobs.Creeper;
 import com.x20.frogger.game.mobs.Golem;
+import com.x20.frogger.game.mobs.Log;
 import com.x20.frogger.game.mobs.Skeleton;
+import com.x20.frogger.game.mobs.WaterEntity;
 
 import java.util.LinkedList;
 
@@ -31,6 +33,7 @@ public class TileMap {
     // access by tilemap[x][y]
     private Tile[][] tilemap;
     private LinkedList<Entity>[] rowEntitiesArray;
+    private LinkedList<WaterEntity>[] rowLogsArray;
 
     public TileMap() {
 
@@ -54,6 +57,9 @@ public class TileMap {
     public LinkedList<Entity> getEntitiesAtRow(int rowIndex) {
         return rowEntitiesArray[rowIndex];
     }
+    public LinkedList<WaterEntity> getLogsAtRow(int rowIndex) {
+        return rowLogsArray[rowIndex];
+    }
 
     // MUST HAVE A PERFECTLY RECTANGULAR STRING OR BAD THINGS MIGHT HAPPEN
 
@@ -74,6 +80,11 @@ public class TileMap {
         rowEntitiesArray = new LinkedList[getHeight()];
         for (int i = 0; i < rowEntitiesArray.length; i++) {
             rowEntitiesArray[i] = new LinkedList<Entity>();
+        }
+        // Entity array init
+        rowLogsArray = new LinkedList[getHeight()];
+        for (int i = 0; i < rowLogsArray.length; i++) {
+            rowLogsArray[i] = new LinkedList<WaterEntity>();
         }
     }
 
@@ -117,8 +128,23 @@ public class TileMap {
         //rowEntitiesArray[5].add(new Skeleton(10, 5));
 
         rowEntitiesArray[6].add(new Golem(0, 6));
-        rowEntitiesArray[6].add(new Golem(5, 6));
-        //rowEntitiesArray[6].add(new Golem(10, 6));
+        rowEntitiesArray[6].add(new Golem(10, 6));
+    }
+
+    public void generateLogs() {
+        rowLogsArray[9].add(new Log(0,9));
+        rowLogsArray[9].add(new Log(1,9));
+        rowLogsArray[9].add(new Log(2,9));
+        rowLogsArray[9].add(new Log(6,9));
+        rowLogsArray[9].add(new Log(7,9));
+        rowLogsArray[9].add(new Log(8,9));
+
+        rowLogsArray[8].add(new Log(3,8));
+        rowLogsArray[8].add(new Log(4,8));
+        rowLogsArray[8].add(new Log(5,8));
+        rowLogsArray[8].add(new Log(9,8));
+        rowLogsArray[8].add(new Log(10,8));
+        rowLogsArray[8].add(new Log(11,8));
     }
 
     public String toString() {

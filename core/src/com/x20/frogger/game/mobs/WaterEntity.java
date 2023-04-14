@@ -1,7 +1,7 @@
 package com.x20.frogger.game.mobs;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.x20.frogger.game.Entity;
@@ -12,9 +12,11 @@ import com.x20.frogger.game.GameLogic;
 // speed is determined by concrete Mob implementations
 // concrete Mob implementations should take a moveDir vector with their constructor
 // to determine velocity of the Mob
-public abstract class Mob extends Entity implements PointEntity {
+public abstract class WaterEntity extends Entity implements PointEntity {
     protected int points;
     protected float speed;
+
+    public int yScale;
 
     public float getSpeed() {
         return speed;
@@ -24,11 +26,13 @@ public abstract class Mob extends Entity implements PointEntity {
         return points;
     }
 
-    public Mob(Vector2 position, float speed, int points, Rectangle hitbox) {
+
+    public WaterEntity(Vector2 position, float speed, int points, Rectangle hitbox, int yScale) {
         this.position = position;
         this.speed = speed;
         this.points = points;
         this.hitbox = hitbox;
+        this.yScale = yScale;
     }
 
     public void update() {
@@ -40,12 +44,13 @@ public abstract class Mob extends Entity implements PointEntity {
             position.x = -1;
         }
         hitbox.x = position.x;
+
+
     }
 
-    @Override
     public void animate() {
         // flip x direction based on last horizontal move
-        if (speed > 0) {
+        if (velocity.x > 0) {
             if (sprite.isFlipX()) {
                 sprite.flip(true, false);
             }
@@ -54,5 +59,13 @@ public abstract class Mob extends Entity implements PointEntity {
                 sprite.flip(true, false);
             }
         }
+    }
+
+    @Override
+    public void render(Batch batch) {
+        animate();
+        float x = position.x;
+        float y = position.y;
+        batch.draw(sprite, x, y + (yScale/2)/16f, 1 + (2/16f), (16f - yScale)/16f);
     }
 }

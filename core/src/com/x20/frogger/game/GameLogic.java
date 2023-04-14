@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.x20.frogger.FroggerDroid;
 import com.x20.frogger.events.GameStateListener;
 import com.x20.frogger.game.mobs.PointEntity;
+import com.x20.frogger.game.mobs.WaterEntity;
 import com.x20.frogger.game.tiles.TileDatabase;
 import com.x20.frogger.game.tiles.TileMap;
 
@@ -18,6 +19,8 @@ public class GameLogic {
     private int lives; // todo: consider moving this to Player
     private int score = 0;
     private int yMax = 0;
+
+    private boolean playerOnLog = false;
 
     private LinkedList<GameStateListener> gameStateListeners = new LinkedList<>();
 
@@ -88,6 +91,7 @@ public class GameLogic {
 
         // Populate entities
         tileMap.generateMobs();
+        tileMap.generateLogs();
 
         /// Player init
         this.player = new Player(tileMap.getWidth() / 2, 0);
@@ -109,7 +113,6 @@ public class GameLogic {
             return;
         }
 
-        // steps:
         // 1. update input (handled by GUI in GameScreen.java)
         // 2. update player
         // 3. update world (entities)
@@ -118,14 +121,19 @@ public class GameLogic {
         for (int i = 0; i < tileMap.getHeight(); i++) {
             for (Entity entity : tileMap.getEntitiesAtRow(i)) {
                 entity.update();
+            }for (WaterEntity entity : tileMap.getLogsAtRow(i)) {
+                entity.update();
             }
         }
 
         updateScore(false);
         // todo: test extensively. possibility that floating point errors might cause this to fail
         if (!FroggerDroid.isFlagInvulnerable()) {
-            checkForDamagingTile((int) player.position.x, (int) player.position.y);
-            checkForDamagingEntities((int) player.position.y);
+            checkForLogs((int) player.position.y);
+            if (!playerOnLog) {
+//                checkForDamagingTile((int) player.position.x, (int) player.position.y);
+                checkForDamagingEntities((int) player.position.y);
+            }
         }
 
         checkGoal((int) player.getPosition().x, (int) player.getPosition().y);
@@ -191,6 +199,18 @@ public class GameLogic {
                 playerFail();
             }
         }
+    }
+
+    public void checkForLogs(int y) {
+        for (WaterEntity entity : tileMap.getLogsAtRow(y)) {
+            if (player.getHitbox().overlaps(entity.getHitbox())) {
+                System.out.println("OVERLAP");
+                this.playerOnLog = true;
+                player.glueToLog(entity);
+                break;
+            }
+        }
+        this.playerOnLog = false;
     }
 
     public boolean isDead() {

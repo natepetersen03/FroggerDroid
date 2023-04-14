@@ -10,6 +10,7 @@ import com.x20.frogger.FroggerDroid;
 import com.x20.frogger.data.Controls;
 import com.x20.frogger.data.IntervalUpdatable;
 import com.x20.frogger.data.Renderable;
+import com.x20.frogger.game.mobs.WaterEntity;
 import com.x20.frogger.graphics.AssetManagerSingleton;
 import com.x20.frogger.utils.MiscUtils;
 
@@ -18,6 +19,7 @@ public class Player extends Entity implements Renderable {
     private Mover mover;
     private float speed = 10f;
     private float moveDist = 1f;
+    boolean movementProcessing;
 
     private Controls.MOVE moveDirEnum = Controls.MOVE.RIGHT;
 
@@ -157,6 +159,22 @@ public class Player extends Entity implements Renderable {
         );
 
         super.updateHitboxPosition();
+    }
+
+    public void glueToLog(WaterEntity entity) {
+//        velocity = (entity.getVelocity());
+        if (InputController.QUEUE_MOVEMENTS.isEmpty()) {
+            float speed = entity.getSpeed();
+            float x = position.x;
+
+            x += speed * Gdx.graphics.getDeltaTime();
+            if (x < -1 && speed < 0) {
+                x = GameLogic.getInstance().getTileMap().getWidth() + 1;
+            } else if (x > GameLogic.getInstance().getTileMap().getWidth() + 1 && speed > 0) {
+                x = -1;
+            }
+            setPosition(x, position.y);
+        }
     }
 
     public void processInput() {
