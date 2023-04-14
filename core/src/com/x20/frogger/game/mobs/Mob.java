@@ -1,6 +1,9 @@
 package com.x20.frogger.game.mobs;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.x20.frogger.game.Entity;
 import com.x20.frogger.game.GameLogic;
 
@@ -19,6 +22,13 @@ public abstract class Mob extends Entity implements PointEntity {
 
     public int getPoints() {
         return points;
+    }
+
+    public Mob(Vector2 position, float speed, int points, Rectangle hitbox) {
+        this.position = position;
+        this.speed = speed;
+        this.points = points;
+        this.hitbox = hitbox;
     }
 
     public void update() {
