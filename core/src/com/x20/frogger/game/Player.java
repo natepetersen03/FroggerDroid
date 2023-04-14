@@ -19,16 +19,19 @@ public class Player extends Entity implements Renderable {
     private Mover mover;
     private float speed = 10f;
     private float moveDist = 1f;
-    boolean movementProcessing;
 
     private Controls.MOVE moveDirEnum = Controls.MOVE.RIGHT;
 
     // debug vars
     private IntervalTimer debugTimer;
 
+    /**
+     * Creates a new Player, HORIZONTALLY CENTERED at the provided spawn position
+     * @param spawnPosition
+     */
     public Player(Vector2 spawnPosition) {
         super();
-        position = spawnPosition.cpy();
+        position = new Vector2(spawnPosition.x + (width / 2), spawnPosition.y);
         moveDir = Vector2.Zero;
         mover = new Mover(position, speed);
         velocity = new Vector2(0, 0);
@@ -68,10 +71,6 @@ public class Player extends Entity implements Renderable {
         this(new Vector2(x, y));
     }
 
-    public Player() {
-        this(Vector2.Zero);
-    }
-
     /**
      * Get instance of Mover, which drives movement as a result of player input
      * @return Mover
@@ -98,14 +97,7 @@ public class Player extends Entity implements Renderable {
     public void setPosition(Vector2 newPosition) {
         mover.cancel(newPosition);
         position = newPosition.cpy();
-        position = clampToBounds(
-            position,
-            Vector2.Zero,
-            new Vector2(
-                GameLogic.getInstance().getTileMap().getWidth() - 1,
-                GameLogic.getInstance().getTileMap().getHeight() - 1
-            )
-        );
+        stayInBounds();
         super.updateHitboxPosition();
     }
 
@@ -149,32 +141,24 @@ public class Player extends Entity implements Renderable {
         }
 
         // Bounds restriction
-        position = clampToBounds(
-            position,
-            Vector2.Zero,
-            new Vector2(
-                GameLogic.getInstance().getTileMap().getWidth() - 1,
-                GameLogic.getInstance().getTileMap().getHeight() - 1
-            )
-        );
+        stayInBounds();
 
         super.updateHitboxPosition();
     }
 
+    private void stayInBounds() {
+        position = clampToBounds(
+            position,
+            new Vector2(width / 2, 0),
+            new Vector2(
+                GameLogic.getInstance().getTileMap().getWidth() - 1 + (width / 2),
+                GameLogic.getInstance().getTileMap().getHeight() - 1
+            )
+        );
+    }
+
     public void glueToLog(WaterEntity entity) {
         velocity = (entity.getVelocity());
-        //if (InputController.QUEUE_MOVEMENTS.isEmpty()) {
-        //    float speed = entity.getSpeed();
-        //    float x = position.x;
-        //
-        //    x += speed * Gdx.graphics.getDeltaTime();
-        //    if (x < -1 && speed < 0) {
-        //        x = GameLogic.getInstance().getTileMap().getWidth() + 1;
-        //    } else if (x > GameLogic.getInstance().getTileMap().getWidth() + 1 && speed > 0) {
-        //        x = -1;
-        //    }
-        //    setPosition(x, position.y);
-        //}
     }
 
     public void processInput() {
@@ -242,8 +226,7 @@ public class Player extends Entity implements Renderable {
 
     @Override
     public void render(Batch batch) {
-        animate();
-        batch.draw(sprite, position.x, position.y, 1, 1);
+        super.render(batch);
     }
 
     @Override

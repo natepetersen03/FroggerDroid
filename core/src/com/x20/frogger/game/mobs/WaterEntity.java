@@ -36,9 +36,4 @@ public abstract class WaterEntity extends Entity implements PointEntity {
             position.x = -1;
         }
     }
-
-    @Override
-    public void render(Batch batch) {
-        animate();
-    }
 }

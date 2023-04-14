@@ -19,8 +19,12 @@ public abstract class Mob extends Entity implements PointEntity {
         return points;
     }
 
-    public Mob(Vector2 position, float speed, int points, Rectangle hitbox) {
-        this.position = position;
+    /**
+     * Creates a new Mob, HORIZONTALLY CENTERED at the provided spawn position
+     * @param spawnPosition
+     */
+    public Mob(Vector2 spawnPosition, float speed, int points, Rectangle hitbox) {
+        this.position = new Vector2(spawnPosition.x + (width / 2), spawnPosition.y);
         this.velocity = new Vector2(speed, 0);
         this.points = points;
         this.hitbox = hitbox;
@@ -29,10 +33,10 @@ public abstract class Mob extends Entity implements PointEntity {
     public void update() {
         super.updatePos();
 
-        if (position.x < -1 && velocity.x < 0) {
-            position.x = GameLogic.getInstance().getTileMap().getWidth() + 1;
-        } else if (position.x > GameLogic.getInstance().getTileMap().getWidth() + 1 && velocity.x > 0) {
-            position.x = -1;
+        if ((position.x + width / 2) < 0 && velocity.x < 0) {
+            position.x = GameLogic.getInstance().getTileMap().getWidth() + (width / 2);
+        } else if ((position.x - (width / 2)) > GameLogic.getInstance().getTileMap().getWidth() && velocity.x > 0) {
+            position.x = 0 - (width / 2);
         }
     }
 }

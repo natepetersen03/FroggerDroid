@@ -14,8 +14,19 @@ public abstract class Entity implements Updatable, Renderable, Debuggable {
     protected Vector2 position = Vector2.Zero;
     protected Vector2 velocity = Vector2.Zero;
 
+    protected float width = 1;
+    protected float height = 1;
+
     protected Rectangle hitbox;
     protected TextureRegion sprite;
+
+    public float getWidth() {
+        return width;
+    }
+
+    public float getHeight() {
+        return height;
+    }
 
     public void setPosition(float x, float y) {
         position.set(x, y);
@@ -57,7 +68,7 @@ public abstract class Entity implements Updatable, Renderable, Debuggable {
     }
 
     protected void updateHitboxPosition() {
-        float x = position.x + ((1 - hitbox.width) / 2);
+        float x = position.x - (hitbox.width / 2);
         float y = position.y;
         hitbox.setPosition(x, y);
     }
@@ -100,7 +111,7 @@ public abstract class Entity implements Updatable, Renderable, Debuggable {
     @Override
     public void render(Batch batch) {
         animate();
-        float x = position.x;
+        float x = position.x - (width / 2);
         float y = position.y;
         batch.draw(sprite, x, y, 1, 1);
     }

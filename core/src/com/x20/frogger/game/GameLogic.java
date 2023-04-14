@@ -185,14 +185,22 @@ public class GameLogic {
     }
 
     public void checkGoal(int x, int y) {
-        if (tileMap.getTile(x, y).getTileData().getName().equals("goal")) {
-            playerWin();
+        try {
+            if (tileMap.getTile(x, y).getTileData().getName().equals("goal")) {
+                playerWin();
+            }
+        } catch (IllegalArgumentException exception) {
+            Gdx.app.error("GameLogic", "Player is out of bounds!");
         }
     }
 
     public void checkForDamagingTile(int x, int y) {
-        if (tileMap.getTile(x, y).getTileData().isDamaging()) {
-            playerFail();
+        try {
+            if (tileMap.getTile(x, y).getTileData().isDamaging()) {
+                playerFail();
+            }
+        } catch (IllegalArgumentException exception) {
+            Gdx.app.error("GameLogic", "Player is out of bounds!");
         }
     }
 
@@ -209,7 +217,7 @@ public class GameLogic {
         player.setVelocity(Vector2.Zero);
         for (WaterEntity entity : tileMap.getLogsAtRow(y)) {
             if (player.getHitbox().overlaps(entity.getHitbox())) {
-                Gdx.app.debug("[GameLogic]", "Log overlap detected");
+                Gdx.app.debug("GameLogic", "Log overlap detected");
                 this.playerOnLog = true;
                 player.glueToLog(entity);
                 break;
@@ -232,7 +240,7 @@ public class GameLogic {
     }
 
     public void respawnPlayer() {
-        player.setPosition(tileMap.getWidth() / 2, 0);
+        player.setPosition(tileMap.getWidth() / 2 + (player.getWidth() / 2), 0);
     }
 
     public void playerFail() {
