@@ -50,8 +50,7 @@ public class Player extends Entity implements Renderable {
         } catch (com.badlogic.gdx.utils.GdxRuntimeException exception) {
             Gdx.app.error(
                 "Player",
-                "Sprite failed to load; Assuming headless launch",
-                exception
+                "Sprite failed to load; Assuming headless launch"
             );
         }
 

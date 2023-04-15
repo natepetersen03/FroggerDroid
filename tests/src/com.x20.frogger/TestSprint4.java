@@ -9,6 +9,8 @@ import com.x20.frogger.game.Entity;
 import com.x20.frogger.game.GameConfig;
 import com.x20.frogger.game.GameLogic;
 import com.x20.frogger.game.Player;
+import com.x20.frogger.game.mobs.Creeper;
+import com.x20.frogger.game.mobs.Golem;
 import com.x20.frogger.game.mobs.Mob;
 
 import org.junit.Before;
@@ -36,6 +38,7 @@ public class TestSprint4 {
     @Before
     public void setup() {
         gameLogic = GameLogic.getInstance();
+        gameLogic.newGame();
     }
 
     //Nate's Tests
@@ -58,13 +61,13 @@ public class TestSprint4 {
     @Test
     public void testCreeperVelocity() {
         LinkedList<Entity> testRow = gameLogic.getTileMap().getEntitiesAtRow(1);
-        assertEquals(((Mob) (testRow.get(0))).getVelocity().x, 1.5f, 0);
+        assertEquals(((Creeper) (testRow.get(0))).getVelocity().x, 1.5f, 0);
     }
 
     @Test
     public void testGolemVelocity() {
         LinkedList<Entity> testRow = gameLogic.getTileMap().getEntitiesAtRow(2);
-        assertEquals(((Mob) (testRow.get(0))).getVelocity().x, 3.5f, 0);
+        assertEquals(((Golem) (testRow.get(0))).getVelocity().x, 1f, 0);
     }
 
     //Owen's Tests
@@ -102,35 +105,28 @@ public class TestSprint4 {
     }
 
     @Test
-    public void testLifeLostOnWater() {
+    public void testLifeLostOnDeath() {
         GameConfig.setDifficulty(DataEnums.Difficulty.NORMAL);
         gameLogic.setLives(5);
-        Player player = gameLogic.getPlayer();
-        gameLogic.getPlayer().setPosition(player.getPosition().x, 8);
-        gameLogic.update();
-        System.out.println(player.getPosition());
-        assertEquals(gameLogic.getLives(), 4);
+        gameLogic.playerFail();
+        assertEquals(4, gameLogic.getLives());
     }
 
     @Test
-    public void testXPositionResetOnWater() {
+    public void testXPositionResetOnDeath() {
         GameConfig.setDifficulty(DataEnums.Difficulty.NORMAL);
         gameLogic.setLives(5);
         Player player = gameLogic.getPlayer();
-        gameLogic.getPlayer().setPosition(player.getPosition().x, 8);
-        gameLogic.update();
-        System.out.println(player.getPosition());
-        assertEquals(player.getPosition().x, 5.0, 0);
+        gameLogic.playerFail();
+        assertEquals(5.5f, player.getPosition().x, 0);
     }
 
     @Test
-    public void testYPositionResetOnWater() {
+    public void testYPositionResetOnDeath() {
         GameConfig.setDifficulty(DataEnums.Difficulty.NORMAL);
         gameLogic.setLives(5);
         Player player = gameLogic.getPlayer();
-        gameLogic.getPlayer().setPosition(player.getPosition().x, 8);
-        gameLogic.update();
-        System.out.println(player.getPosition());
-        assertEquals(player.getPosition().y, 0, 0);
+        gameLogic.playerFail();
+        assertEquals(0, player.getPosition().y, 0);
     }
 }

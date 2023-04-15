@@ -22,8 +22,7 @@ public class Golem extends Mob {
         } catch (com.badlogic.gdx.utils.GdxRuntimeException exception) {
             Gdx.app.error(
                     "Golem",
-                    "Sprite failed to load; Assuming headless launch",
-                    exception
+                    "Sprite failed to load; Assuming headless launch"
             );
         }
     }

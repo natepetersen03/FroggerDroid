@@ -21,8 +21,7 @@ public class Creeper extends Mob {
         } catch (com.badlogic.gdx.utils.GdxRuntimeException exception) {
             Gdx.app.error(
                     "Creeper",
-                    "Sprite failed to load; Assuming headless launch",
-                    exception
+                    "Sprite failed to load; Assuming headless launch"
             );
         }
 
