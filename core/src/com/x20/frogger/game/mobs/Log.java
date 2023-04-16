@@ -10,8 +10,11 @@ import com.x20.frogger.graphics.AssetManagerSingleton;
 
 public class Log extends WaterEntity {
 
-    public Log(int xPos, int yPos) {
-        super(new Vector2(xPos, yPos), 1.0f, 30, new Rectangle(xPos, yPos, 16f / 16f, 16f / 16f));
+    protected int length = 1;
+
+    public Log(int xPos, int yPos, int length) {
+        super(new Vector2(xPos, yPos), 1.0f, 30, new Rectangle(xPos, yPos, (16f / 16f) * length, 16f / 16f));
+        this.length = length;
         try {
             sprite = new TextureRegion(
                     AssetManagerSingleton.getInstance()
