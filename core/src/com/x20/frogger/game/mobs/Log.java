@@ -13,6 +13,7 @@ import com.x20.frogger.graphics.AssetManagerSingleton;
 public class Log extends WaterEntity {
 
     protected int length = 1;
+    private final static int LOG_SPRITE_HEIGHT = 12;
 
     /*
     Note: I made a weird decision that the logs are "Centered" at the bottom-center of the left-most
@@ -28,7 +29,7 @@ public class Log extends WaterEntity {
             sprite = new TextureRegion(
                     AssetManagerSingleton.getInstance()
                             .getAssetManager().get("logs/oak_log.png", Texture.class),
-                    0, 0, 16 * length, 16
+                    0, 0, 16 * length, LOG_SPRITE_HEIGHT
             );
         } catch (com.badlogic.gdx.utils.GdxRuntimeException exception) {
             Gdx.app.error(
@@ -49,8 +50,9 @@ public class Log extends WaterEntity {
     public void render(Batch batch) {
         animate();
         float x = position.x - (width / 2);
+        //float y = position.y + ((16f - LOG_SPRITE_HEIGHT) / 32f);
         float y = position.y;
-        batch.draw(sprite, x, y, width * length, height);
+        batch.draw(sprite, x, y, width * length, LOG_SPRITE_HEIGHT / 16f);
     }
 
     @Override
