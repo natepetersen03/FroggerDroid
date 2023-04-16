@@ -55,14 +55,13 @@ public class Log extends WaterEntity {
 
     @Override
     public void update() {
-        //updatePos();
-        //
-        //if (position.x < -1 && velocity.x < 0) {
-        //    position.x = GameLogic.getInstance().getTileMap().getWidth() + 1;
-        //} else if (position.x > GameLogic.getInstance().getTileMap().getWidth() + 1
-        //        && velocity.x > 0
-        //) {
-        //    position.x = -1;
-        //}
+        updatePos();
+        if (position.x < (0 - length) && velocity.x < 0) {
+            position.x = GameLogic.getInstance().getTileMap().getWidth() + 1;
+        } else if (position.x > GameLogic.getInstance().getTileMap().getWidth() + 1
+                && velocity.x > 0
+        ) {
+            position.x = (0 - length);
+        }
     }
 }

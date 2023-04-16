@@ -124,15 +124,14 @@ public class TileMap {
     }
 
     public void generateLogs() {
-        //rowEntitiesArray[9].add(new Log(0, 9, -2, 3));
-        //rowEntitiesArray[9].add(new Log(6, 9, -2, 3));
+        rowEntitiesArray[10].add(new Log(0, 10, 3, 1));
+        rowEntitiesArray[10].add(new Log(6, 10, 3, 1));
 
-        //rowEntitiesArray[8].add(new Log(3, 8, 1, 3));
-        //rowEntitiesArray[8].add(new Log(9, 8, 1, 3));
-        rowEntitiesArray[8].add(new Log(0, 8, 1, 1));
-        rowEntitiesArray[8].add(new Log(0, 8, 1, 1));
-        rowEntitiesArray[8].add(new Log(3, 8, 1, 1));
-        rowEntitiesArray[9].add(new Log(6, 9, -1, 2));
+        rowEntitiesArray[9].add(new Log(0, 9, -2, 2));
+        rowEntitiesArray[9].add(new Log(6, 9, -2, 2));
+
+        rowEntitiesArray[8].add(new Log(3, 8, 1, 3));
+        rowEntitiesArray[8].add(new Log(9, 8, 1, 3));
     }
 
     public String toString() {
