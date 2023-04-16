@@ -1,4 +1,4 @@
-package com.x20.frogger.game;
+package com.x20.frogger.game.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;

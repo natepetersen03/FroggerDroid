@@ -4,8 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.x20.frogger.FroggerDroid;
 import com.x20.frogger.events.GameStateListener;
-import com.x20.frogger.game.mobs.PointEntity;
-import com.x20.frogger.game.mobs.WaterEntity;
+import com.x20.frogger.game.entities.Entity;
+import com.x20.frogger.game.entities.Player;
+import com.x20.frogger.game.entities.PointEntity;
+import com.x20.frogger.game.entities.waterentities.WaterEntity;
 import com.x20.frogger.game.tiles.TileDatabase;
 import com.x20.frogger.game.tiles.TileMap;
 
@@ -133,11 +135,11 @@ public class GameLogic {
 
         updateScore(false);
         // todo: test extensively. possibility that floating point errors might cause this to fail
-        checkForLogs((int) player.position.y);
+        checkForLogs((int) player.getPosition().y);
         if (!FroggerDroid.isFlagInvulnerable()) {
             if (!playerOnLog) {
-                checkForDamagingTile((int) player.position.x, (int) player.position.y);
-                checkForDamagingEntities((int) player.position.y);
+                checkForDamagingTile((int) player.getPosition().x, (int) player.getPosition().y);
+                checkForDamagingEntities((int) player.getPosition().y);
             }
         }
 

@@ -18,7 +18,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.x20.frogger.data.Controls;
 import com.x20.frogger.events.GameStateListener;
-import com.x20.frogger.game.Entity;
+import com.x20.frogger.game.entities.Entity;
 import com.x20.frogger.game.GameConfig;
 import com.x20.frogger.game.GameLogic;
 import com.x20.frogger.game.InputController;
