@@ -32,14 +32,24 @@ public class AssetManagerSingleton {
 
     public void loadAssets() {
         TextureParameter textureParameter = new TextureParameter();
-        textureParameter.minFilter = Texture.TextureFilter.Linear;
+        textureParameter.minFilter = Texture.TextureFilter.Linear; // todo see if better on nearest
         textureParameter.magFilter = Texture.TextureFilter.Nearest;
         textureParameter.genMipMaps = false;
+
+        TextureParameter logParam = new TextureParameter();
+        logParam.minFilter = Texture.TextureFilter.Linear;
+        logParam.magFilter = Texture.TextureFilter.Nearest;
+        logParam.genMipMaps = false;
+        logParam.wrapU = Texture.TextureWrap.Repeat;
+        logParam.wrapV = Texture.TextureWrap.Repeat;
 
         assetManager.load("mc-style.atlas", TextureAtlas.class);
         assetManager.load("tiles.png", Texture.class, textureParameter);
         assetManager.load("players.png", Texture.class, textureParameter);
         assetManager.load("vehicles.png", Texture.class, textureParameter);
+        assetManager.load("logs/oak_log.png", Texture.class, textureParameter);
+        assetManager.load("logs/birch_log.png", Texture.class, textureParameter);
+        assetManager.load("logs/lily_pad.png", Texture.class, textureParameter);
 
         Gdx.app.log("AssetManagerSingleton", "Assets enqueued.");
     }

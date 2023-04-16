@@ -19,7 +19,7 @@ public abstract class WaterEntity extends Entity implements PointEntity {
 
 
     public WaterEntity(Vector2 position, float speed, int points, Rectangle hitbox) {
-        this.position = position;
+        this.position = new Vector2(position.x + (width / 2), position.y);
         this.velocity = new Vector2(speed, 0);
         this.points = points;
         this.hitbox = hitbox;

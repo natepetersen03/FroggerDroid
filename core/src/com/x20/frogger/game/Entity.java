@@ -14,6 +14,7 @@ public abstract class Entity implements Updatable, Renderable, Debuggable {
     protected Vector2 position = Vector2.Zero;
     protected Vector2 velocity = Vector2.Zero;
 
+    // kind of a jank solution for centering entities
     protected float width = 1;
     protected float height = 1;
 
