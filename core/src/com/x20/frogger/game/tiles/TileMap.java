@@ -125,8 +125,8 @@ public class TileMap {
 
     public void generateLogs() {
         rowEntitiesArray[10].add(new Log(0, 10, 3, 1, 2));
-        rowEntitiesArray[10].add(new Log(6, 10, 3, 2, 2));
-        rowEntitiesArray[10].add(new Log(9, 10, 3, 1, 2));
+        rowEntitiesArray[10].add(new Log(4, 10, 3, 2, 2));
+        rowEntitiesArray[10].add(new Log(10, 10, 3, 1, 2));
 
         rowEntitiesArray[9].add(new Log(0, 9, -2, 2, 1));
         rowEntitiesArray[9].add(new Log(6, 9, -2, 2, 1));

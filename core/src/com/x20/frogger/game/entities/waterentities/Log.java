@@ -1,5 +1,8 @@
 package com.x20.frogger.game.entities.waterentities;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -13,6 +16,8 @@ import com.x20.frogger.graphics.AssetManagerSingleton;
 public class Log extends WaterEntity {
     protected int length = 1;
     private static final int LOG_SPRITE_HEIGHT = 12;
+    private static final int MIN_LENGTH = 1;
+    private static final int MAX_LENGTH = 4;
 
     /*
     Note: I made a weird decision that the logs are "Centered" at the bottom-center of the left-most
@@ -26,12 +31,12 @@ public class Log extends WaterEntity {
      * @param xPos x tile coordinate for left-most piece of log
      * @param yPos y tile coordinate for left-most piece of log
      * @param speed horizontal speed. negative values mean the log moves left
-     * @param length length of log
+     * @param length length of log. min is 1, max is 4
      * @param variation default is oak, 1 is birch
      */
     public Log(int xPos, int yPos, float speed, int length, int variation) {
         super(new Vector2(xPos, yPos), speed, 30, new Rectangle(xPos, yPos, length, 1));
-        this.length = length;
+        this.length = max(min(length, MAX_LENGTH), MIN_LENGTH);
         updateHitboxPosition();
         try {
             Texture texture;
@@ -74,13 +79,17 @@ public class Log extends WaterEntity {
 
     @Override
     public void update() {
+        wrapAround();
         updatePos();
-        if (position.x < (0 - length) && velocity.x < 0) {
+    }
+
+    private void wrapAround() {
+        if (position.x < (0 - MAX_LENGTH) && velocity.x < 0) {
             position.x = GameLogic.getInstance().getTileMap().getWidth() + 1;
         } else if (position.x > GameLogic.getInstance().getTileMap().getWidth() + 1
                 && velocity.x > 0
         ) {
-            position.x = (0 - length);
+            position.x = (0 - MAX_LENGTH);
         }
     }
 }
