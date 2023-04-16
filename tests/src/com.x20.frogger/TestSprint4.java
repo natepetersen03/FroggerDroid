@@ -5,13 +5,13 @@ import static org.junit.Assert.assertEquals;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
 import com.x20.frogger.data.DataEnums;
-import com.x20.frogger.game.Entity;
+import com.x20.frogger.game.entities.Entity;
 import com.x20.frogger.game.GameConfig;
 import com.x20.frogger.game.GameLogic;
-import com.x20.frogger.game.Player;
-import com.x20.frogger.game.mobs.Creeper;
-import com.x20.frogger.game.mobs.Golem;
-import com.x20.frogger.game.mobs.Mob;
+import com.x20.frogger.game.entities.Player;
+import com.x20.frogger.game.entities.mobs.Creeper;
+import com.x20.frogger.game.entities.mobs.Golem;
+import com.x20.frogger.game.entities.mobs.Mob;
 
 import org.junit.Before;
 import org.junit.BeforeClass;

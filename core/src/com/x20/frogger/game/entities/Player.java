@@ -1,4 +1,4 @@
-package com.x20.frogger.game;
+package com.x20.frogger.game.entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,7 +10,12 @@ import com.x20.frogger.FroggerDroid;
 import com.x20.frogger.data.Controls;
 import com.x20.frogger.data.IntervalUpdatable;
 import com.x20.frogger.data.Renderable;
-import com.x20.frogger.game.mobs.WaterEntity;
+import com.x20.frogger.game.GameConfig;
+import com.x20.frogger.game.GameLogic;
+import com.x20.frogger.game.InputController;
+import com.x20.frogger.game.IntervalTimer;
+import com.x20.frogger.game.Mover;
+import com.x20.frogger.game.entities.waterentities.WaterEntity;
 import com.x20.frogger.graphics.AssetManagerSingleton;
 import com.x20.frogger.utils.MiscUtils;
 

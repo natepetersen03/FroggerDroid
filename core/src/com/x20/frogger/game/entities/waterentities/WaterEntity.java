@@ -1,9 +1,9 @@
-package com.x20.frogger.game.mobs;
+package com.x20.frogger.game.entities.waterentities;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.x20.frogger.game.Entity;
-import com.x20.frogger.game.GameLogic;
+import com.x20.frogger.game.entities.Entity;
+import com.x20.frogger.game.entities.PointEntity;
 
 // todo: update to use Entity's velocity Vector instead of speed
 // for individual mob types,
@@ -19,21 +19,10 @@ public abstract class WaterEntity extends Entity implements PointEntity {
 
 
     public WaterEntity(Vector2 position, float speed, int points, Rectangle hitbox) {
-        this.position = position;
+        this.position = new Vector2(position.x + (width / 2), position.y);
+        //this.position = position.cpy();
         this.velocity = new Vector2(speed, 0);
         this.points = points;
         this.hitbox = hitbox;
-    }
-
-    public void update() {
-        updatePos();
-
-        if (position.x < -1 && velocity.x < 0) {
-            position.x = GameLogic.getInstance().getTileMap().getWidth() + 1;
-        } else if (position.x > GameLogic.getInstance().getTileMap().getWidth() + 1
-            && velocity.x > 0
-        ) {
-            position.x = -1;
-        }
     }
 }

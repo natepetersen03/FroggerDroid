@@ -1,9 +1,10 @@
-package com.x20.frogger.game.mobs;
+package com.x20.frogger.game.entities.mobs;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.x20.frogger.game.Entity;
+import com.x20.frogger.game.entities.Entity;
 import com.x20.frogger.game.GameLogic;
+import com.x20.frogger.game.entities.PointEntity;
 
 // todo: update to use Entity's velocity Vector instead of speed
 // for individual mob types,
