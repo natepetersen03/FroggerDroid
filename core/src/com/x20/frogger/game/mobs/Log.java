@@ -13,11 +13,12 @@ import com.x20.frogger.graphics.AssetManagerSingleton;
 public class Log extends WaterEntity {
 
     protected int length = 1;
-    private final static int LOG_SPRITE_HEIGHT = 12;
+    private static final int LOG_SPRITE_HEIGHT = 12;
 
     /*
     Note: I made a weird decision that the logs are "Centered" at the bottom-center of the left-most
-    "tile" of the log. This means hitbox calculations have to be made differently, as do position wrapping calculations.
+    "tile" of the log.
+    This means hitbox calculations are different than (Water)Entity's, as is position wrapping.
     It's all quite nasty but it makes spawning them in the tilemap a lot nicer.
      */
 
