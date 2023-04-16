@@ -114,7 +114,7 @@ public abstract class Entity implements Updatable, Renderable, Debuggable {
         animate();
         float x = position.x - (width / 2);
         float y = position.y;
-        batch.draw(sprite, x, y, 1, 1);
+        batch.draw(sprite, x, y, width, height);
     }
 
     @Override

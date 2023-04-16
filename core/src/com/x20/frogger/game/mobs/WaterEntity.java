@@ -20,20 +20,9 @@ public abstract class WaterEntity extends Entity implements PointEntity {
 
     public WaterEntity(Vector2 position, float speed, int points, Rectangle hitbox) {
         this.position = new Vector2(position.x + (width / 2), position.y);
+        //this.position = position.cpy();
         this.velocity = new Vector2(speed, 0);
         this.points = points;
         this.hitbox = hitbox;
-    }
-
-    public void update() {
-        updatePos();
-
-        if (position.x < -1 && velocity.x < 0) {
-            position.x = GameLogic.getInstance().getTileMap().getWidth() + 1;
-        } else if (position.x > GameLogic.getInstance().getTileMap().getWidth() + 1
-            && velocity.x > 0
-        ) {
-            position.x = -1;
-        }
     }
 }

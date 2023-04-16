@@ -47,9 +47,9 @@ public class AssetManagerSingleton {
         assetManager.load("tiles.png", Texture.class, textureParameter);
         assetManager.load("players.png", Texture.class, textureParameter);
         assetManager.load("vehicles.png", Texture.class, textureParameter);
-        assetManager.load("logs/oak_log.png", Texture.class, textureParameter);
-        assetManager.load("logs/birch_log.png", Texture.class, textureParameter);
-        assetManager.load("logs/lily_pad.png", Texture.class, textureParameter);
+        assetManager.load("logs/oak_log.png", Texture.class, logParam);
+        assetManager.load("logs/birch_log.png", Texture.class, logParam);
+        assetManager.load("logs/lily_pad.png", Texture.class, logParam);
 
         Gdx.app.log("AssetManagerSingleton", "Assets enqueued.");
     }
