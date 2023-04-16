@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.x20.frogger.game.GameLogic;
-import com.x20.frogger.game.entities.waterentities.WaterEntity;
 import com.x20.frogger.graphics.AssetManagerSingleton;
 
 
@@ -36,15 +35,14 @@ public class Log extends WaterEntity {
         updateHitboxPosition();
         try {
             Texture texture;
-            switch (variation)
-            {
-                case 1:
-                    texture = AssetManagerSingleton.getInstance()
-                            .getAssetManager().get("logs/birch_log.png", Texture.class);
-                    break;
-                default:
-                    texture = AssetManagerSingleton.getInstance()
-                            .getAssetManager().get("logs/oak_log.png", Texture.class);
+            switch (variation) {
+            case 1:
+                texture = AssetManagerSingleton.getInstance()
+                        .getAssetManager().get("logs/birch_log.png", Texture.class);
+                break;
+            default:
+                texture = AssetManagerSingleton.getInstance()
+                        .getAssetManager().get("logs/oak_log.png", Texture.class);
             }
             sprite = new TextureRegion(
                     texture,
