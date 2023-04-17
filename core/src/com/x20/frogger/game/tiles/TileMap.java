@@ -3,9 +3,8 @@ package com.x20.frogger.game.tiles;
 import com.x20.frogger.game.entities.Entity;
 import com.x20.frogger.game.entities.mobs.Creeper;
 import com.x20.frogger.game.entities.mobs.Golem;
-import com.x20.frogger.game.entities.waterentities.Log;
 import com.x20.frogger.game.entities.mobs.Skeleton;
-import com.x20.frogger.game.entities.waterentities.WaterEntity;
+import com.x20.frogger.game.entities.waterentities.Log;
 
 import java.util.LinkedList;
 
