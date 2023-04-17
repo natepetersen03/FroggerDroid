@@ -2,6 +2,8 @@ package com.x20.frogger;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -30,6 +32,8 @@ public class GameWinScreen extends ScreenAdapter {
     private TextButton restartButton;
     private TextButton exitButton;
 
+    private Sound winSound;
+
     public GameWinScreen(final FroggerDroid game) {
         this.game = game;
         this.camera = new OrthographicCamera();
@@ -38,6 +42,10 @@ public class GameWinScreen extends ScreenAdapter {
         this.stage = new Stage(viewport);
         this.skin = game.getSkinGUI();
         constructGUI();
+
+        // Load sounds
+        winSound = AssetManagerSingleton.getInstance().getAssetManager()
+            .get("sfx/win.wav", Sound.class);
     }
 
     private void switchToGameConfigScreen() {
@@ -49,6 +57,7 @@ public class GameWinScreen extends ScreenAdapter {
     public void show() {
         // load all assets before displaying ready
         AssetManagerSingleton.getInstance().getAssetManager().finishLoading();
+        winSound.play();
     }
 
     @Override

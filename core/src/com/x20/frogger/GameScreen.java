@@ -23,6 +23,9 @@ import com.x20.frogger.game.GameConfig;
 import com.x20.frogger.game.GameLogic;
 import com.x20.frogger.game.InputController;
 import com.x20.frogger.game.tiles.TileRenderer;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
+import com.x20.frogger.graphics.AssetManagerSingleton;
 
 public class GameScreen implements Screen {
     // Game state
@@ -36,6 +39,9 @@ public class GameScreen implements Screen {
     private Viewport guiViewport;
     private Stage stage;
     private Label scoreLabel;
+
+    private Music music;
+    private Sound deathSound;
 
 
     // Game rendering
@@ -53,6 +59,13 @@ public class GameScreen implements Screen {
         if (!gameLogic.isRunning()) {
             gameLogic.newGame();
         }
+
+        // Load sounds
+        deathSound = AssetManagerSingleton.getInstance().getAssetManager()
+            .get("sfx/hit1.wav", Sound.class);
+        music = AssetManagerSingleton.getInstance().getAssetManager()
+            .get("sfx/music.wav", Music.class);
+        music.setLooping(true);
 
         // init GUI
         Gdx.app.log("GameScreen", "Loading GUI...");
@@ -72,6 +85,9 @@ public class GameScreen implements Screen {
             @Override
             public void onLivesUpdate(LivesEvent e) {
                 updateScoreLives();
+                if (e.didHurt()) {
+                    deathSound.play();
+                }
             }
 
             @Override
@@ -103,6 +119,7 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         Gdx.app.log("GameScreen", "Initializing done");
+        music.play();
     }
 
     @Override
@@ -287,7 +304,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        // now handled in FroggerDroid.java by the AssetManager
+        music.stop();
     }
 
     @Override

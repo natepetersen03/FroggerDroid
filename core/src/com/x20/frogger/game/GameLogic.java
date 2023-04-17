@@ -241,8 +241,16 @@ public class GameLogic {
             this.lives = lives;
             // notify whoever wants to know about this
             for (GameStateListener listener : gameStateListeners) {
-                listener.onLivesUpdate(new GameStateListener.LivesEvent());
+                listener.onLivesUpdate(new GameStateListener.LivesEvent(false));
             }
+        }
+    }
+
+    public void hurt() {
+        lives--;
+        // notify whoever wants to know about this
+        for (GameStateListener listener : gameStateListeners) {
+            listener.onLivesUpdate(new GameStateListener.LivesEvent(true));
         }
     }
 
@@ -251,7 +259,7 @@ public class GameLogic {
     }
 
     public void playerFail() {
-        setLives(this.lives - 1);
+        hurt();
         if (this.lives > 0) {
             updateScore(true);
             respawnPlayer();
