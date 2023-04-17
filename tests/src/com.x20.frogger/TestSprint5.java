@@ -1,13 +1,14 @@
 package com.x20.frogger;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.backends.headless.HeadlessApplicationConfiguration;
 import com.badlogic.gdx.math.Vector2;
 import com.x20.frogger.data.DataEnums;
-import com.x20.frogger.game.GameConfig;
-import com.x20.frogger.game.GameLogic;
-import com.x20.frogger.game.entities.Player;
 import com.x20.frogger.game.GameConfig;
 import com.x20.frogger.game.GameLogic;
 import com.x20.frogger.game.entities.Entity;
@@ -16,15 +17,14 @@ import com.x20.frogger.game.entities.mobs.Creeper;
 import com.x20.frogger.game.entities.mobs.Golem;
 import com.x20.frogger.game.entities.mobs.Skeleton;
 import com.x20.frogger.game.entities.waterentities.Log;
-import com.x20.frogger.game.tiles.TileMap;
 import com.x20.frogger.utils.MiscUtils;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import org.mockito.Mock;
+import org.mockito.MockedStatic;
+import org.mockito.Mockito;
 
 import java.util.LinkedList;
 
@@ -41,6 +41,14 @@ public class TestSprint5 {
         appConfig = new HeadlessApplicationConfiguration();
         appConfig.updatesPerSecond = 60;
         app = new HeadlessApplication(new FroggerDroid(), appConfig);
+
+        // Create the mock object Graphics
+        Graphics g = Mockito.spy(Graphics.class);
+
+        // mock the behavior of stock service to return the value of various stocks
+        Mockito.when(g.getDeltaTime()).thenReturn(1f / 60f);
+
+        Gdx.graphics = g;
     }
 
     @Before
