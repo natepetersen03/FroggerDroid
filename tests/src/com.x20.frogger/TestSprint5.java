@@ -179,4 +179,16 @@ public class TestSprint5 {
         LinkedList<Entity> testRow = gameLogic.getTileMap().getEntitiesAtRow(9);
         assertEquals(((Log) (testRow.get(0))).getVelocity().x, -2.0f, 0);
     }
+
+    @Test
+    public void testLog8Speed() {
+        LinkedList<Entity> testRow = gameLogic.getTileMap().getEntitiesAtRow(8);
+        assertEquals(((Log) (testRow.get(0))).getVelocity().x, 1.0f, 0);
+    }
+
+    @Test
+    public void testLog9HitBoxWidth() {
+        LinkedList<Entity> testRow = gameLogic.getTileMap().getEntitiesAtRow(9);
+        assertEquals(((Log) (testRow.get(0))).getHitbox().getWidth(), 2.0f, 0);
+    }
 }
