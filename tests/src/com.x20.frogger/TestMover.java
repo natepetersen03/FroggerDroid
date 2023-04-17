@@ -5,7 +5,7 @@ import static org.junit.Assert.assertEquals;
 import com.badlogic.gdx.backends.headless.HeadlessApplication;
 import com.badlogic.gdx.math.Vector2;
 import com.x20.frogger.game.Mover;
-import com.x20.frogger.game.Player;
+import com.x20.frogger.game.entities.Player;
 import com.x20.frogger.utils.MiscUtils;
 
 import org.junit.Before;

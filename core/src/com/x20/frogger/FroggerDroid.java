@@ -5,9 +5,13 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.x20.frogger.audio.Sfx;
 import com.x20.frogger.data.DataEnums;
 import com.x20.frogger.game.GameConfig;
 import com.x20.frogger.graphics.AssetManagerSingleton;
+import com.x20.frogger.screens.GameScreen;
+import com.x20.frogger.screens.GameWinScreen;
+import com.x20.frogger.screens.MainMenuScreen;
 import com.x20.frogger.utils.FTFSkinLoader;
 
 
@@ -29,6 +33,8 @@ public class FroggerDroid extends Game {
     private static boolean flagSkipToGame = false;
     private static boolean flagInvulnerable = false;
 
+    private static boolean flagWin = false;
+
     public FroggerDroid() {
 
     }
@@ -46,6 +52,9 @@ public class FroggerDroid extends Game {
             case "-god":
                 flagInvulnerable = true;
                 break;
+            case "-win":
+                flagWin = true;
+                break;
             default:
                 break;
             }
@@ -62,6 +71,9 @@ public class FroggerDroid extends Game {
 
     public static boolean isFlagInvulnerable() {
         return flagInvulnerable;
+    }
+    public static boolean isFlagWin() {
+        return flagWin;
     }
 
     public void create() {
@@ -82,11 +94,19 @@ public class FroggerDroid extends Game {
             Gdx.app.log("Application", "Debug mode enabled");
         }
 
+        if (FroggerDroid.isFlagWin()) {
+            Gdx.app.debug("FroggerDroid", "Skipping to WinScreen...");
+            GameConfig.setCharacter(DataEnums.Character.STEVE);
+            GameConfig.setName("Debugger");
+            GameConfig.setDifficulty(DataEnums.Difficulty.EASY);
+            this.setScreen(new GameWinScreen(this));
+        }
+
         if (FroggerDroid.isFlagSkipToGame()) {
             Gdx.app.debug("FroggerDroid", "Skipping to GameScreen...");
             GameConfig.setCharacter(DataEnums.Character.STEVE);
             GameConfig.setName("Debugger");
-            GameConfig.setDifficulty(DataEnums.Difficulty.EASY);
+            GameConfig.setDifficulty(DataEnums.Difficulty.NORMAL);
             this.setScreen(new GameScreen(this));
         } else {
             this.setScreen(new MainMenuScreen(this));
@@ -101,6 +121,7 @@ public class FroggerDroid extends Game {
         batch.dispose();
         AssetManagerSingleton.getInstance().getAssetManager().dispose();
         skinGUI.dispose();
+        Sfx.dispose();
     }
 
 }

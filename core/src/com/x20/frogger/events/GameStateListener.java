@@ -19,7 +19,13 @@ public abstract class GameStateListener implements EventListener {
     }
 
     public static class LivesEvent implements Event {
-
+        private boolean hurt = true;
+        public LivesEvent(boolean hurt) {
+            this.hurt = hurt;
+        }
+        public boolean didHurt() {
+            return hurt;
+        }
     }
 
     public static class GameEndEvent implements Event {
