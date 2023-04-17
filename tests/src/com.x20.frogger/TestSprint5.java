@@ -17,6 +17,7 @@ import com.x20.frogger.game.entities.mobs.Golem;
 import com.x20.frogger.game.entities.mobs.Skeleton;
 import com.x20.frogger.game.entities.waterentities.Log;
 import com.x20.frogger.game.tiles.TileMap;
+import com.x20.frogger.utils.MiscUtils;
 
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -130,13 +131,18 @@ public class TestSprint5 {
     @Test
     public void startup() {
         assertEquals("Test suite launched failed", 0, gameLogic.getScore());
+        for (int i = 0; i < 600; i++) {
+            float dt = Gdx.graphics.getDeltaTime();
+            String formatted = MiscUtils.getMaxPrecisionFormat().format(dt);
+            System.out.println("Delta time is: " + formatted);
+        }
     }
 
     @Test
-    public void checkLogBypassWaterKillTrigger() {
-        gameLogic.getPlayer().setPosition(3, 8);
-        gameLogic.update();
-        // todo
+    public void testLogSpeedUnequal() {
+        LinkedList<Entity> e1 = gameLogic.getTileMap().getEntitiesAtRow(9);
+        LinkedList<Entity> e2 = gameLogic.getTileMap().getEntitiesAtRow(10);
+        assertNotEquals(e1.peek().getVelocity().x, e2.peek().getVelocity());
     }
 
     @Test
