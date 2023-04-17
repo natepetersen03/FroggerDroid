@@ -16,6 +16,7 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.x20.frogger.audio.Sfx;
 import com.x20.frogger.data.Controls;
 import com.x20.frogger.events.GameStateListener;
 import com.x20.frogger.game.entities.Entity;
@@ -40,9 +41,6 @@ public class GameScreen implements Screen {
     private Stage stage;
     private Label scoreLabel;
 
-    private Music music;
-    private Sound deathSound;
-
 
     // Game rendering
     private OrthographicCamera gameCamera;
@@ -60,13 +58,6 @@ public class GameScreen implements Screen {
             gameLogic.newGame();
         }
 
-        // Load sounds
-        deathSound = AssetManagerSingleton.getInstance().getAssetManager()
-            .get("sfx/hit1.wav", Sound.class);
-        music = AssetManagerSingleton.getInstance().getAssetManager()
-            .get("sfx/music.wav", Music.class);
-        music.setLooping(true);
-
         // init GUI
         Gdx.app.log("GameScreen", "Loading GUI...");
 
@@ -79,20 +70,24 @@ public class GameScreen implements Screen {
         gameStateListener = new GameStateListener() {
             @Override
             public void onScoreUpdate(ScoreEvent e) {
+                Gdx.app.debug("GameScreen", "ScoreEvent received");
                 updateScoreLives();
             }
 
             @Override
             public void onLivesUpdate(LivesEvent e) {
+                Gdx.app.debug("GameScreen", "LivesEvent received");
                 updateScoreLives();
                 if (e.didHurt()) {
-                    deathSound.play();
+                    Sfx.playDeathSound();
                 }
             }
 
             @Override
             public void onGameEnd(GameEndEvent e) {
+                Gdx.app.debug("GameScreen", "GameEndEvent received");
                 if (e.didPlayerWin()) {
+                    Sfx.playWinSound();
                     switchToGameWinScreen();
                 } else {
                     switchToGameOverScreen();
@@ -119,7 +114,7 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
         Gdx.app.log("GameScreen", "Initializing done");
-        music.play();
+        Sfx.playMusic();
     }
 
     @Override
@@ -304,7 +299,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        music.stop();
+        Sfx.stopMusic();
     }
 
     @Override

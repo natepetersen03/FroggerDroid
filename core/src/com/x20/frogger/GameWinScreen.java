@@ -17,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.x20.frogger.audio.Sfx;
 import com.x20.frogger.game.AnimatedActor;
 import com.x20.frogger.game.GameLogic;
 import com.x20.frogger.graphics.AssetManagerSingleton;
@@ -32,8 +33,6 @@ public class GameWinScreen extends ScreenAdapter {
     private TextButton restartButton;
     private TextButton exitButton;
 
-    private Sound winSound;
-
     public GameWinScreen(final FroggerDroid game) {
         this.game = game;
         this.camera = new OrthographicCamera();
@@ -42,10 +41,6 @@ public class GameWinScreen extends ScreenAdapter {
         this.stage = new Stage(viewport);
         this.skin = game.getSkinGUI();
         constructGUI();
-
-        // Load sounds
-        winSound = AssetManagerSingleton.getInstance().getAssetManager()
-            .get("sfx/win.wav", Sound.class);
     }
 
     private void switchToGameConfigScreen() {
@@ -56,8 +51,10 @@ public class GameWinScreen extends ScreenAdapter {
     @Override
     public void show() {
         // load all assets before displaying ready
-        AssetManagerSingleton.getInstance().getAssetManager().finishLoading();
-        winSound.play();
+        // AssetManagerSingleton.getInstance().getAssetManager().finishLoading();
+        // ? this doesn't behave right after the first time this screen is shown
+        // Sfx.playWinSound();
+        Gdx.app.debug("GameWinScreen", "Player won, loaded win screen");
     }
 
     @Override

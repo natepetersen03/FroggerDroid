@@ -5,6 +5,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.x20.frogger.audio.Sfx;
 import com.x20.frogger.data.DataEnums;
 import com.x20.frogger.game.GameConfig;
 import com.x20.frogger.graphics.AssetManagerSingleton;
@@ -102,7 +103,7 @@ public class FroggerDroid extends Game {
             Gdx.app.debug("FroggerDroid", "Skipping to GameScreen...");
             GameConfig.setCharacter(DataEnums.Character.STEVE);
             GameConfig.setName("Debugger");
-            GameConfig.setDifficulty(DataEnums.Difficulty.EASY);
+            GameConfig.setDifficulty(DataEnums.Difficulty.NORMAL);
             this.setScreen(new GameScreen(this));
         } else {
             this.setScreen(new MainMenuScreen(this));
@@ -117,6 +118,7 @@ public class FroggerDroid extends Game {
         batch.dispose();
         AssetManagerSingleton.getInstance().getAssetManager().dispose();
         skinGUI.dispose();
+        Sfx.dispose();
     }
 
 }

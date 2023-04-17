@@ -3,6 +3,7 @@ package com.x20.frogger.game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.x20.frogger.FroggerDroid;
+import com.x20.frogger.data.IntervalUpdatable;
 import com.x20.frogger.events.GameStateListener;
 import com.x20.frogger.game.entities.Entity;
 import com.x20.frogger.game.entities.Player;
@@ -16,6 +17,7 @@ import java.util.LinkedList;
 public class GameLogic {
     private static GameLogic instance;
     private boolean isRunning = false;
+    private IntervalTimer debugTimer;
 
     private Player player;
     private final int defaultPoints = 5;
@@ -53,6 +55,19 @@ public class GameLogic {
 
         // init TileDatabase
         TileDatabase.initDatabase();
+
+        debugTimer = new IntervalTimer(1f);
+        if (FroggerDroid.isFlagDebug()) {
+            debugTimer.addListener(new IntervalUpdatable() {
+                @Override
+                public void intervalUpdate() {
+                    if (playerOnLog) {
+                        Gdx.app.debug("GameLogic", "Log overlap detected");
+                    }
+                }
+            });
+            debugTimer.start();
+        }
     }
 
     public static synchronized GameLogic getInstance() {
@@ -108,6 +123,9 @@ public class GameLogic {
         }
         score = 0;
         yMax = 0;
+
+        // reset listeners list
+        gameStateListeners.clear();
 
         isRunning = true;
         Gdx.app.log("GameLogic", "Game started");
@@ -223,7 +241,6 @@ public class GameLogic {
             if (entity instanceof WaterEntity) {
                 WaterEntity waterEntity = (WaterEntity) entity;
                 if (entity.getHitbox().contains(player.getPosition())) {
-                    Gdx.app.debug("GameLogic", "Log overlap detected");
                     this.playerOnLog = true;
                     player.glueToLog(waterEntity);
                     break;
