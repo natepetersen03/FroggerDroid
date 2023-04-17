@@ -19,14 +19,11 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.x20.frogger.audio.Sfx;
 import com.x20.frogger.data.Controls;
 import com.x20.frogger.events.GameStateListener;
-import com.x20.frogger.game.entities.Entity;
 import com.x20.frogger.game.GameConfig;
 import com.x20.frogger.game.GameLogic;
 import com.x20.frogger.game.InputController;
+import com.x20.frogger.game.entities.Entity;
 import com.x20.frogger.game.tiles.TileRenderer;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
-import com.x20.frogger.graphics.AssetManagerSingleton;
 
 public class GameScreen implements Screen {
     // Game state

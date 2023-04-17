@@ -2,8 +2,6 @@ package com.x20.frogger;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -17,10 +15,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.x20.frogger.audio.Sfx;
 import com.x20.frogger.game.AnimatedActor;
 import com.x20.frogger.game.GameLogic;
-import com.x20.frogger.graphics.AssetManagerSingleton;
 
 public class GameWinScreen extends ScreenAdapter {
     private final FroggerDroid game;
