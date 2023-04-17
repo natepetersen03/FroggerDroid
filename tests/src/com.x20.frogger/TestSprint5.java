@@ -228,4 +228,18 @@ public class TestSprint5 {
 
     }
 
+    @Test
+    public void testWinScreenAlive() {
+        gameLogic.setLives(5);
+        gameLogic.playerWin();
+        assertEquals(gameLogic.isDead(), false);
+    }
+    @Test
+    public void testLog8Log9OppositeDirections() {
+        LinkedList<Entity> testRow1 = gameLogic.getTileMap().getEntitiesAtRow(9);
+        LinkedList<Entity> testRow2 = gameLogic.getTileMap().getEntitiesAtRow(8);
+        float val = (((Log) (testRow1.get(2))).getVelocity().x) *
+                (((Log) (testRow2.get(2))).getVelocity().x);
+        assertEquals(val < 0, true);
+    }
 }
