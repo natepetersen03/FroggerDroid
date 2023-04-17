@@ -33,7 +33,6 @@ public class TileMap {
     // access by tilemap[x][y]
     private Tile[][] tilemap;
     private LinkedList<Entity>[] rowEntitiesArray;
-    private LinkedList<WaterEntity>[] rowLogsArray;
 
     public TileMap() {
 
