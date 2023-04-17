@@ -145,6 +145,7 @@ public class GameLogic {
         // 3. update world (entities)
 
         player.update();
+        checkPlayerOutOfBounds();
         for (int i = 0; i < tileMap.getHeight(); i++) {
             for (Entity entity : tileMap.getEntitiesAtRow(i)) {
                 entity.update();
@@ -246,6 +247,16 @@ public class GameLogic {
                     break;
                 }
             }
+        }
+    }
+
+    public void checkPlayerOutOfBounds() {
+        if (!player.checkBounds(
+            player.getPosition(),
+            -0.5f, tileMap.getWidth() + 0.5f,
+            -1, tileMap.getHeight()
+        )) {
+            playerFail();
         }
     }
 

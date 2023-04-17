@@ -75,6 +75,16 @@ public abstract class Entity implements Updatable, Renderable, Debuggable {
     }
 
     // todo: use with logs/turtles to see if player would go offscreen when moving
+
+    /**
+     * Check if a given vector is within defined bounds
+     * @param location vector to check
+     * @param xMin x min
+     * @param xMax x max
+     * @param yMin y min
+     * @param yMax y max
+     * @return true if within bounds, false if out of bounds
+     */
     public boolean checkBounds(Vector2 location, float xMin, float xMax, float yMin, float yMax) {
         // todo: update these with the proper calls from the tile board
         if (location.x < xMin || location.x > xMax || location.y < yMin || location.y > yMax) {

@@ -145,7 +145,9 @@ public class Player extends Entity implements Renderable {
         }
 
         // Bounds restriction
-        stayInBounds();
+        if (velocity.isZero()) {
+            stayInBounds();
+        }
 
         super.updateHitboxPosition();
     }
@@ -173,6 +175,16 @@ public class Player extends Entity implements Renderable {
                 moveDir = moveDirEnum.getDirection().cpy().scl(moveDist);
                 mover.setOriginPos(position);
                 mover.deriveTargetPos(moveDir);
+                mover.setTargetPos(
+                    clampToBounds(
+                        mover.getTargetPos(),
+                        new Vector2(width / 2, 0),
+                        new Vector2(
+                            GameLogic.getInstance().getTileMap().getWidth() - 1 + (width / 2),
+                            GameLogic.getInstance().getTileMap().getHeight() - 1
+                        )
+                    )
+                );
                 mover.startMoving();
             }
             InputController.QUEUE_MOVEMENTS.clear();
