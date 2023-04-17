@@ -153,6 +153,17 @@ public class TestSprint5 {
     }
 
     @Test
+    public void testWinTileAward() {
+        Player p = gameLogic.getPlayer();
+        p.setPosition(0.5f, 11);
+        gameLogic.update();
+        assertEquals(30, gameLogic.getScore());
+        p.setPosition(1.5f, 11);
+        gameLogic.update();
+        assertEquals(130, gameLogic.getScore());
+    }
+
+    @Test
     public void testPlayerLivesOnLog() {
         GameConfig.setDifficulty(DataEnums.Difficulty.NORMAL);
         gameLogic.setLives(5);
