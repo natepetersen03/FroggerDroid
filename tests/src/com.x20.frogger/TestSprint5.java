@@ -198,5 +198,25 @@ public class TestSprint5 {
     public void testLog9HitBoxWidth() {
         LinkedList<Entity> testRow = gameLogic.getTileMap().getEntitiesAtRow(9);
         assertEquals(((Log) (testRow.get(0))).getHitbox().getWidth(), 2.0f, 0);
+        assertEquals(((Log) (testRow.get(1))).getHitbox().getWidth(), 2.0f, 0);
+
     }
+
+    @Test
+    public void testLog8HitBoxWidth() {
+        LinkedList<Entity> testRow = gameLogic.getTileMap().getEntitiesAtRow(8);
+        assertEquals(((Log) (testRow.get(0))).getHitbox().getWidth(), 3.0f, 0);
+        assertEquals(((Log) (testRow.get(1))).getHitbox().getWidth(), 3.0f, 0);
+
+    }
+
+    @Test
+    public void testLog10HitBoxWidth() {
+        LinkedList<Entity> testRow = gameLogic.getTileMap().getEntitiesAtRow(10);
+        assertEquals(((Log) (testRow.get(0))).getHitbox().getWidth(), 1.0f, 0);
+        assertEquals(((Log) (testRow.get(1))).getHitbox().getWidth(), 2.0f, 0);
+        assertEquals(((Log) (testRow.get(2))).getHitbox().getWidth(), 1.0f, 0);
+
+    }
+
 }
