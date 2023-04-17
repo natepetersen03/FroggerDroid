@@ -53,18 +53,18 @@ public class TestSprint5 {
     public void loadPregeneratedLevel() {
         /// Generate tiles
         String[] worldString = new String[] {
-                "sgsgsgsgsgs",
-                "wwwwwwwwwww",
-                "wwwwwwwwwww",
-                "wwwwwwwwwww",
-                "sssssssssss",
-                "rrrrrrrrrrr",
-                "rrrrrrrrrrr",
-                "rrrrrrrrrrr",
-                "sssssssssss",
-                "rrrrrrrrrrr",
-                "rrrrrrrrrrr",
-                "sssssssssss"
+            "sgsgsgsgsgs",
+            "wwwwwwwwwww",
+            "wwwwwwwwwww",
+            "wwwwwwwwwww",
+            "sssssssssss",
+            "rrrrrrrrrrr",
+            "rrrrrrrrrrr",
+            "rrrrrrrrrrr",
+            "sssssssssss",
+            "rrrrrrrrrrr",
+            "rrrrrrrrrrr",
+            "sssssssssss"
         };
         gameLogic.getTileMap().generateTileMapFromStringArray(worldString);
 
@@ -84,8 +84,7 @@ public class TestSprint5 {
     }
 
     public void populateEntities() {
-        for (int i = 0; i < gameLogic.getTileMap().getHeight(); i++)
-        {
+        for (int i = 0; i < gameLogic.getTileMap().getHeight(); i++) {
             LinkedList<Entity> list = gameLogic.getTileMap().getEntitiesAtRow(i);
             list.clear();
             switch (i) {
@@ -123,6 +122,8 @@ public class TestSprint5 {
                 list.add(new Log(0, 10, 3, 1, 2));
                 list.add(new Log(4, 10, 3, 2, 2));
                 list.add(new Log(10, 10, 3, 1, 2));
+                break;
+            default:
                 break;
             }
         }
@@ -165,5 +166,17 @@ public class TestSprint5 {
         player.setPosition(0, 9); // set position onto pre-determined log
         gameLogic.update();
         assertNotEquals(resetPosition, player.getPosition());
+    }
+
+    @Test
+    public void testLog10Speed() {
+        LinkedList<Entity> testRow = gameLogic.getTileMap().getEntitiesAtRow(10);
+        assertEquals(((Log) (testRow.get(0))).getVelocity().x, 3.0f, 0);
+    }
+
+    @Test
+    public void testLog9Speed() {
+        LinkedList<Entity> testRow = gameLogic.getTileMap().getEntitiesAtRow(9);
+        assertEquals(((Log) (testRow.get(0))).getVelocity().x, -2.0f, 0);
     }
 }
