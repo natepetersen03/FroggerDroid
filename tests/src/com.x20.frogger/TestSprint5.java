@@ -22,8 +22,6 @@ import com.x20.frogger.utils.MiscUtils;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
-import org.mockito.Mock;
-import org.mockito.MockedStatic;
 import org.mockito.Mockito;
 
 import java.util.LinkedList;

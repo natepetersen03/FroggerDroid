@@ -261,7 +261,7 @@ public class GameLogic {
     }
 
     public void playerWin() {
-        // for now, just end the game with a win
+        score += 100;
         endGame(true);
     }
 
