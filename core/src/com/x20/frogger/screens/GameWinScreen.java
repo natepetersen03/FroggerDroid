@@ -1,4 +1,4 @@
-package com.x20.frogger;
+package com.x20.frogger.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
@@ -15,6 +15,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.x20.frogger.FroggerDroid;
+import com.x20.frogger.utils.GifDecoder;
 import com.x20.frogger.game.AnimatedActor;
 import com.x20.frogger.game.GameLogic;
 

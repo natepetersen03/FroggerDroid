@@ -1,4 +1,4 @@
-package com.x20.frogger;
+package com.x20.frogger.screens;
 
 import static com.badlogic.gdx.scenes.scene2d.Touchable.enabled;
 
@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.x20.frogger.FroggerDroid;
 import com.x20.frogger.GUI.GameConfigViewModel;
 
 public class MainMenuScreen extends ScreenAdapter {
@@ -82,7 +83,7 @@ public class MainMenuScreen extends ScreenAdapter {
         table.setTouchable(enabled);
         table.setFillParent(true);
 
-        Label label = new Label("WORK IN PROGRESS", skin, "dark-bg");
+        Label label = new Label("Chunk Crosser", skin, "dark-bg");
         setTitleLabel(table, label);
 
         table.row();

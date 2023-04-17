@@ -1,4 +1,4 @@
-package com.x20.frogger;
+package com.x20.frogger.screens;
 
 import static com.badlogic.gdx.scenes.scene2d.Touchable.enabled;
 
@@ -20,6 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.x20.frogger.FroggerDroid;
 import com.x20.frogger.GUI.CharacterRadio;
 import com.x20.frogger.GUI.DifficultyRadio;
 import com.x20.frogger.events.EnumHandler;
